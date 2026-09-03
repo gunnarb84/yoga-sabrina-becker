@@ -1,0 +1,24 @@
+# PHPStan-Regelvorlage des Harness (führend für _code.md §12).
+#
+# Unverändert ins Projekt übernehmen (README, „In ein Projekt einbinden“). Die
+# geprüften Pfade kommen vom Lauf (`harness/analyse_code.py`, Suchwurzel
+# `[pfade] pruefwurzel`) — hier stehen bewusst keine Projektpfade.
+#
+# - Ziel ist null Hinweise; Baselines sind verboten (_code.md §12).
+# - Eine Unterdrückung ist begründungspflichtig: `// phpstan:ignore <Regel-ID>`
+#   mit Grund direkt am Ort — nie eine zentrale Ignore-Liste (_code.md §12).
+# - Erzeugter Code (vendor/, bootstrap/cache, kompilierte Views) ist nach
+#   _code.md §13 nicht Gegenstand der Prüfung und bleibt ausgeschlossen.
+parameters:
+    level: max
+
+    reportUnmatchedIgnoredErrors: true
+
+    treatPhpDocTypesAsCertain: true
+
+    excludePaths:
+        analyseAndScan:
+            - */vendor/*
+            - */node_modules/*
+            - */bootstrap/cache/*
+            - */storage/framework/views/*

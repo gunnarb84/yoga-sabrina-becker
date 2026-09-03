@@ -1,0 +1,97 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "sabrina-becker/yoga",
+    "type": "project",
+    "description": "Yoga Webseite mit CMS und Verwaltung",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "dompdf/dompdf": "^3.1",
+        "laravel/framework": "^13.17",
+        "laravel/tinker": "^3.0",
+        "livewire/livewire": "^4.4",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-laravel": "^4.1"
+    },
+    "require-dev": {
+        "deptrac/deptrac": "*",
+        "fakerphp/faker": "^1.23",
+        "larastan/larastan": "*",
+        "laravel/pail": "^1.2.5",
+        "laravel/pint": "^1.27",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpstan/extension-installer": "*",
+        "phpstan/phpstan": "*",
+        "phpunit/phpunit": "^12.5.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/app/",
+            "Yoga\\Modules\\Webseite\\": "modules/Webseite/",
+            "Yoga\\Modules\\Verwaltung\\": "modules/Verwaltung/",
+            "Yoga\\Platform\\": "platform/",
+            "Database\\Factories\\": "src/database/factories/",
+            "Database\\Seeders\\": "src/database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "src/tests/",
+            "Yoga\\Modules\\Webseite\\Tests\\": "modules/Webseite/tests/",
+            "Yoga\\Modules\\Verwaltung\\Tests\\": "modules/Verwaltung/tests/"
+        }
+    },
+    "scripts": {
+        "setup": [
+            "composer install",
+            "cd src && php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "cd src && php artisan key:generate",
+            "cd src && php artisan migrate --force",
+            "cd src && npm install --ignore-scripts",
+            "cd src && npm run build"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "cd src && php artisan dev"
+        ],
+        "test": [
+            "APP_BASE_PATH=src vendor/bin/pest --configuration=src/phpunit.xml"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "cd src && php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "cd src && php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "cd src && php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "cd src && php artisan key:generate --ansi",
+            "cd src && php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "cd src && php artisan migrate --graceful --ansi"
+        ],
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": ["*"]
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

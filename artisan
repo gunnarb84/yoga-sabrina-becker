@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Wrapper fuer das Laravel-Artisan im Unterverzeichnis src/.
+ * composer.json und vendor/ liegen im Projekt-Root; die Laravel-Anwendung selbst
+ * ist unter src/ abgelegt.
+ */
+require __DIR__ . '/src/artisan';

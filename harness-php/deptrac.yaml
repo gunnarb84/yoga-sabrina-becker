@@ -1,0 +1,98 @@
+# Deptrac-Regelvorlage des Harness (führend für _design.md §1).
+#
+# Deptrac kann die Profilwerte (PROJEKT.md) nicht lesen — deshalb wird diese Vorlage
+# im Projekt **kopiert und befüllt** (README, „In ein Projekt einbinden“), und der
+# Pfad der befüllten Kopie steht im Profil unter [php] deptracConfig. Geändert wird
+# nur die Kopie im Projekt; die Vorlage hier bleibt maßgeblich für den Aufbau.
+#
+# Platzhalter:
+#   __PRAEFIX__      PSR-4-Präfix aus [projekt] kurzname (z. B. „Bsp“ → Bsp\Modules\…)
+#   __MODUL__        Modulname, klein wie das Verzeichnis unter [php] modulwurzel
+#   __MODULWURZEL__  Wert aus [php] modulwurzel (Vorgabe „modules“)
+#
+# Vorgehen je Modul: den Modul-Block unten kopieren, __MODUL__ ersetzen und — falls
+# das Modul fachliche Daten anderer Module nutzt — die fremde
+# `<Modul>.Application` in sein ruleset aufnehmen (nur die Application-Schnitt,
+# _design.md §5.4). Baselines (skip_violations) sind verboten; eine Ausnahme wird
+# durch eine Regeländerung im Harness begründet, nie vor Ort stillgelegt.
+
+deptrac:
+    paths:
+        - __MODULWURZEL__
+
+    exclude_files:
+        - '#.*[Tt]est.*#'
+
+    layers:
+        # ------------------------------------------------------------------
+        # Modul-Block (je Modul kopieren und __MODUL__ ersetzen)
+        # ------------------------------------------------------------------
+        -   name: '__MODUL__.Domain'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Modules\\__MODUL__\\Domain\\'
+        -   name: '__MODUL__.Application'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Modules\\__MODUL__\\Application\\'
+        -   name: '__MODUL__.Persistence'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Modules\\__MODUL__\\Persistence\\'
+        -   name: '__MODUL__.Ui'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Modules\\__MODUL__\\Ui\\'
+        -   name: '__MODUL__.Api'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Modules\\__MODUL__\\Api\\'
+
+        # ------------------------------------------------------------------
+        # Plattformbausteine (_design.md §2.1) — gleiche Schichten, eigener Präfix
+        # ------------------------------------------------------------------
+        -   name: 'Platform.Domain'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Platform\\[a-z0-9_]+\\Domain\\'
+        -   name: 'Platform.Application'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Platform\\[a-z0-9_]+\\Application\\'
+        -   name: 'Platform.Persistence'
+            collectors:
+                -   type: regex
+                    value: '^__PRAEFIX__\\Platform\\[a-z0-9_]+\\Persistence\\'
+
+    ruleset:
+        # Domain kennt nichts außer sich — Fachregeln bleiben bestimmbar (_design.md §3).
+        '__MODUL__.Domain': []
+
+        # Application nutzt die eigene Domain und Plattformbausteine über deren
+        # Application-Schnitt. Fremde Module ausschließlich über deren
+        # Application-Schnitt: '<Fremdmodul>.Application' hier ergänzen (_design.md §5.4).
+        '__MODUL__.Application':
+            - '__MODUL__.Domain'
+            - 'Platform.Application'
+
+        '__MODUL__.Persistence':
+            - '__MODUL__.Domain'
+
+        '__MODUL__.Ui':
+            - '__MODUL__.Application'
+
+        '__MODUL__.Api':
+            - '__MODUL__.Application'
+
+        'Platform.Domain': []
+
+        'Platform.Application':
+            - 'Platform.Domain'
+
+        'Platform.Persistence':
+            - 'Platform.Domain'
+
+    # Baselines verboten (_code.md §12, sinngemäß _design.md §1) — diese Liste bleibt leer.
+    skip_violations: []
+
+    layers_layer_name_unique: true

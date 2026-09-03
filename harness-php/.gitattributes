@@ -1,0 +1,4 @@
+# Zeilenenden im Repository einheitlich als LF ablegen, im Arbeitsbaum nach
+# Maschineneinstellung auschecken. Ohne das haengen die Zeilenenden dieses geteilten
+# Regelwerks davon ab, welche core.autocrlf-Einstellung der jeweilige Rechner hat.
+* text=auto

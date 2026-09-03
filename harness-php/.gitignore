@@ -1,0 +1,13 @@
+# Python (die Analyse-Skripte)
+__pycache__/
+*.py[cod]
+
+# Ausgabe der Analyse-Skripte — entsteht im Projekt, nie in diesem Repository
+analysis/
+
+# IDE / OS
+.idea/
+.vs/
+.vscode/
+Thumbs.db
+.DS_Store

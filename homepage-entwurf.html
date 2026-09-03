@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yoga Sabrina Becker · Besondere Orte. Bewusste Auszeiten.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tannengruen: #0B2B23;
+    --waldgruen: #123C31;
+    --gold: #C9A15B;
+    --hellgold: #E3C88A;
+    --creme: #F6F1E7;
+    --warmweiss: #FDFBF7;
+    --salbeigrau: #4A5F57;
+    --sekundaertext: #4A5F57;
+    --terrakotta: #8C4A3F;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --shadow-soft: 0 24px 60px rgba(11,43,35,.12);
+    --max-width: 1240px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--creme);
+    font-family: Lato, system-ui, sans-serif;
+    color: var(--waldgruen);
+    font-size: 17px;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { color: var(--hellgold); }
+
+  /* Typografie */
+  h1, h2, h3, h4, .label, .nav-link, button, .button {
+    font-family: Montserrat, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+
+  h1 { font-weight: 300; font-size: 52px; line-height: 1.12; letter-spacing: .06em; margin: 0 0 12px; }
+  h2 { font-weight: 400; font-size: 32px; line-height: 1.2; letter-spacing: .1em; margin: 0 0 16px; }
+  h3 { font-weight: 500; font-size: 20px; line-height: 1.3; letter-spacing: .12em; margin: 0 0 12px; }
+
+  .script {
+    font-family: Parisienne, cursive;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .script-light { color: var(--hellgold); }
+
+  .label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: .3em;
+    color: var(--gold);
+    margin: 0 0 8px;
+  }
+
+  .body-text { font-size: 17px; line-height: 1.7; color: var(--sekundaertext); max-width: 620px; }
+  .body-light { color: rgba(253,251,247,.78); }
+
+  /* Layout */
+  .container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 80px; }
+  .section { padding: 96px 0; }
+  .section-creme { background: var(--creme); }
+  .section-warmweiss { background: var(--warmweiss); }
+  .section-green { background: var(--tannengruen); color: var(--warmweiss); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Montserrat, sans-serif;
+    font-size: 13px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px 34px;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .btn-primary { background: var(--gold); color: var(--tannengruen); }
+  .btn-primary:hover { background: var(--hellgold); color: var(--tannengruen); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--waldgruen);
+    border: 1px solid rgba(18,60,49,.35);
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--hellgold);
+    border: 1px solid rgba(201,161,91,.5);
+  }
+  .btn-ghost:hover { background: rgba(201,161,91,.1); color: var(--hellgold); }
+
+  .btn-text {
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(201,161,91,.5);
+    padding-bottom: 4px;
+  }
+  .btn-text:hover { color: var(--hellgold); }
+
+  /* Header */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11,43,35,.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201,161,91,.2);
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 16px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--warmweiss);
+  }
+  .logo-mark {
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-text { font-family: Montserrat, sans-serif; font-size: 15px; letter-spacing: .22em; text-transform: uppercase; }
+  .nav { display: flex; align-items: center; gap: 34px; }
+  .nav-link {
+    font-size: 12px;
+    letter-spacing: .2em;
+    color: rgba(253,251,247,.85);
+    padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+  }
+  .nav-link:hover, .nav-link.active { color: var(--hellgold); border-bottom-color: var(--gold); }
+
+  /* Hero */
+  .hero {
+    background: var(--tannengruen);
+    color: var(--warmweiss);
+    padding: 0;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    min-height: 640px;
+  }
+  .hero-content { padding: 110px 80px 110px; display: flex; flex-direction: column; justify-content: center; }
+  .hero-label { color: var(--gold); margin-bottom: 22px; }
+  .hero-script { font-size: 34px; color: var(--hellgold); margin: 0 0 28px; }
+  .hero-divider { width: 150px; height: 26px; margin: 0 0 28px; }
+  .hero-text { font-size: 17px; line-height: 1.75; color: rgba(253,251,247,.78); max-width: 480px; margin: 0 0 36px; }
+  .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+  .hero-visual {
+    background: linear-gradient(200deg, var(--waldgruen), var(--tannengruen));
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 430px;
+  }
+  .hero-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(201,161,91,.12), transparent 45%),
+      radial-gradient(circle at 80% 70%, rgba(227,200,138,.08), transparent 50%);
+  }
+  .hero-portrait-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: rgba(227,200,138,.55);
+  }
+  .hero-portrait-placeholder svg { width: 80px; height: 80px; margin: 0 auto 12px; }
+  .hero-caption {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    background: rgba(11,43,35,.92);
+    border-top: 1px solid rgba(201,161,91,.55);
+    padding: 24px 32px;
+    text-align: center;
+  }
+  .hero-caption-script { font-size: 30px; color: var(--hellgold); margin: 0 0 6px; }
+  .hero-caption-label { font-size: 12px; letter-spacing: .24em; color: var(--warmweiss); margin: 0; }
+
+  /* Intro / Meine Idee */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: .45fr 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .intro-heading { margin-top: 8px; }
+  .intro-divider { width: 80px; height: 18px; margin: 28px 0; }
+  .intro-lead { font-size: 19px; line-height: 1.65; color: var(--waldgruen); margin: 0 0 24px; }
+
+  .highlight-card {
+    background: var(--warmweiss);
+    border: 1px solid rgba(18,60,49,.1);
+    border-radius: var(--radius-md);
+    padding: 36px;
+    margin-top: 40px;
+  }
+  .highlight-row { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .highlight-row:last-child { margin-bottom: 0; }
+  .highlight-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--tannengruen);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .highlight-icon svg { width: 30px; height: 30px; }
+
+  /* Events */
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-header .script { font-size: 30px; margin-top: 8px; display: block; }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .event-card {
+    background: var(--warmweiss);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(18,60,49,.08);
+    display: flex;
+    flex-direction: column;
+  }
+  .event-image {
+    height: 170px;
+    background: linear-gradient(160deg, var(--waldgruen), var(--tannengruen));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .event-image svg { width: 56px; height: 56px; color: rgba(227,200,138,.55); }
+  .event-body { padding: 28px 28px 30px; flex: 1; display: flex; flex-direction: column; }
+  .event-meta { font-size: 11px; letter-spacing: .22em; color: var(--gold); margin: 0 0 10px; }
+  .event-title { font-size: 18px; margin-bottom: 10px; }
+  .event-text { font-size: 15.5px; line-height: 1.7; color: var(--sekundaertext); margin: 0 0 22px; flex: 1; }
+
+  /* Kurse */
+  .courses-band {
+    background: var(--tannengruen);
+    border-radius: var(--radius-md);
+    padding: 56px 64px;
+    display: flex;
+    gap: 56px;
+    align-items: center;
+  }
+  .courses-icon {
+    width: 90px;
+    height: 90px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .courses-icon svg { width: 44px; height: 44px; }
+  .courses-content { flex: 1; }
+  .courses-content h3 { color: var(--warmweiss); margin-bottom: 14px; }
+  .courses-content p { color: rgba(253,251,247,.78); margin: 0; max-width: 560px; }
+  .courses-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  /* Audience */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .audience-card {
+    background: var(--warmweiss);
+    border: 1px solid rgba(18,60,49,.1);
+    border-radius: var(--radius-md);
+    padding: 44px;
+  }
+  .audience-list {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+  }
+  .audience-list li {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 14px;
+    color: var(--sekundaertext);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .audience-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .audience-script { font-size: 28px; line-height: 1.35; margin: 8px 0 0; display: block; }
+  .heart-divider { width: 40px; height: 34px; margin: 28px 0; }
+
+  /* Contact */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .contact-card {
+    background: rgba(253,251,247,.05);
+    border: 1px solid rgba(201,161,91,.35);
+    border-radius: var(--radius-md);
+    padding: 44px;
+  }
+  .contact-card h3 { color: var(--warmweiss); margin-bottom: 10px; }
+  .contact-card .script { font-size: 28px; margin-bottom: 32px; display: block; }
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 20px;
+    color: rgba(253,251,247,.8);
+    font-size: 16px;
+  }
+  .contact-row svg { width: 22px; height: 22px; flex: none; color: var(--hellgold); }
+  .contact-row a { color: rgba(253,251,247,.85); border-bottom: 1px solid rgba(201,161,91,.4); }
+  .contact-row a:hover { color: var(--hellgold); }
+
+  .form-card {
+    background: var(--warmweiss);
+    border-radius: var(--radius-md);
+    padding: 40px 44px;
+    border: 1px solid rgba(18,60,49,.1);
+  }
+  .form-group { margin-bottom: 22px; }
+  .form-label {
+    display: block;
+    font-family: Montserrat, sans-serif;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--sekundaertext);
+    margin: 0 0 8px;
+  }
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    font-family: Lato, sans-serif;
+    font-size: 16px;
+    color: var(--waldgruen);
+    background: var(--creme);
+    border: 1px solid rgba(18,60,49,.18);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,161,91,.18);
+  }
+  .form-textarea { resize: vertical; min-height: 110px; }
+  .form-hint {
+    background: rgba(201,161,91,.08);
+    border: 1px solid rgba(201,161,91,.35);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    margin-top: 24px;
+  }
+  .form-hint p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--waldgruen); }
+
+  /* Footer */
+  .footer {
+    background: var(--tannengruen);
+    border-top: 1px solid rgba(201,161,91,.25);
+    padding: 48px 0 56px;
+  }
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .footer-logo { color: var(--warmweiss); font-family: Montserrat, sans-serif; font-size: 14px; letter-spacing: .22em; text-transform: uppercase; }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { color: rgba(253,251,247,.65); font-size: 14px; }
+  .footer-links a:hover { color: var(--hellgold); }
+  .footer-copy { color: rgba(253,251,247,.45); font-size: 13px; }
+
+  /* Tags */
+  .tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .tag {
+    font-family: Montserrat, sans-serif;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--waldgruen);
+    border: 1px solid rgba(18,60,49,.25);
+    border-radius: 999px;
+    padding: 9px 18px;
+  }
+  .tag-gold { color: var(--tannengruen); background: var(--gold); border-color: transparent; }
+
+  /* Decorative helpers */
+  .lotus-divider { display: block; }
+  .lotus-divider svg { width: 100%; height: auto; }
+  .center { text-align: center; margin-left: auto; margin-right: auto; }
+
+  /* Mobile */
+  @media (max-width: 980px) {
+    .container { padding: 0 40px; }
+    .header-inner { padding: 14px 40px; }
+    .nav { display: none; }
+    h1 { font-size: 38px; }
+    h2 { font-size: 26px; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-content { padding: 80px 40px; }
+    .hero-visual { min-height: 360px; }
+    .intro-grid { grid-template-columns: 1fr; gap: 40px; }
+    .events-grid { grid-template-columns: 1fr; }
+    .courses-band { flex-direction: column; text-align: center; padding: 40px; }
+    .audience-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .section { padding: 72px 0; }
+    .footer-inner { padding: 0 40px; flex-direction: column; text-align: center; gap: 20px; }
+  }
+
+  @media (max-width: 520px) {
+    .container { padding: 0 24px; }
+    .header-inner { padding: 12px 24px; }
+    h1 { font-size: 32px; }
+    h2 { font-size: 22px; }
+    .hero-content { padding: 60px 24px; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .btn { width: 100%; }
+    .section { padding: 56px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo" style="gap: 16px;">
+      <img src="logo.svg" alt="Yoga Sabrina Becker" style="height: 64px; width: auto; display: block;">
+      <span class="logo-text">Yoga · Sabrina Becker</span>
+    </a>
+    <nav class="nav">
+      <a href="#idee" class="nav-link">Meine Idee</a>
+      <a href="#events" class="nav-link">Events</a>
+      <a href="#kurse" class="nav-link">Kurse</a>
+      <a href="#kontakt" class="nav-link">Kontakt</a>
+      <a href="#kontakt" class="btn btn-primary" style="padding: 12px 24px; font-size: 12px;">Anfragen</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="start">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <span class="label hero-label">Bergen &amp; Umgebung</span>
+      <h1>Besondere Orte.<br>Bewusste Auszeiten.</h1>
+      <p class="script hero-script">Gemeinsame Momente.</p>
+      <svg class="hero-divider" viewBox="0 0 120 34" aria-hidden="true">
+        <path d="M4 22 H44" stroke="#C9A15B" stroke-width="1" fill="none"/>
+        <path d="M76 22 H116" stroke="#C9A15B" stroke-width="1" fill="none"/>
+        <path d="M60 8 C66 14 66 20 60 24 C54 20 54 14 60 8 Z M60 24 C54 16 47 16 45 22 C48 26 55 27 60 24 Z M60 24 C66 16 73 16 75 22 C72 26 65 27 60 24 Z" stroke="#C9A15B" stroke-width="1" fill="none"/>
+      </svg>
+      <p class="hero-text">
+        Yoga darf mehr sein als eine regelmäßige Yogastunde. Es darf ein Erlebnis sein, das Menschen verbindet,
+        zur Ruhe bringt und lange in Erinnerung bleibt.
+      </p>
+      <div class="hero-actions">
+        <a href="#events" class="btn btn-primary">Events entdecken</a>
+        <a href="#kurse" class="btn btn-ghost">Kurse dienstags</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-portrait-placeholder">
+        <svg viewBox="0 0 40 34" aria-hidden="true">
+          <path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="currentColor" stroke-width="1.4" fill="none"/>
+        </svg>
+        <p style="font-size: 11px; letter-spacing: .2em; text-transform: uppercase;">Porträt-Platzhalter</p>
+      </div>
+      <div class="hero-caption">
+        <p class="script hero-caption-script">Yoga mit Herz.</p>
+        <p class="hero-caption-label">Für Körper, Geist &amp; Seele</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Meine Idee -->
+<section class="section section-creme" id="idee">
+  <div class="container">
+    <div class="intro-grid">
+      <div class="intro-heading">
+        <span class="label">01</span>
+        <h2>Meine Idee</h2>
+      </div>
+      <div>
+        <p class="intro-lead">
+          Mit meinen Yoga-Angeboten schaffe ich bewusste Auszeiten an besonderen Orten –
+          in einer entspannten und persönlichen Atmosphäre.
+        </p>
+        <p class="body-text">
+          Dabei steht nicht die perfekte Haltung im Mittelpunkt, sondern das eigene Wohlbefinden.
+          Egal ob Anfängerin, erfahrene Yogini, Freundesgruppe oder Unternehmen:
+          Jede Stunde wird individuell auf die Gruppe, den Ort und den Anlass angepasst.
+        </p>
+        <svg class="intro-divider" viewBox="0 0 120 34" aria-hidden="true">
+          <path d="M4 22 H44" stroke="#C9A15B" stroke-width="1" fill="none"/>
+          <path d="M76 22 H116" stroke="#C9A15B" stroke-width="1" fill="none"/>
+          <path d="M60 8 C66 14 66 20 60 24 C54 20 54 14 60 8 Z M60 24 C54 16 47 16 45 22 C48 26 55 27 60 24 Z M60 24 C66 16 73 16 75 22 C72 26 65 27 60 24 Z" stroke="#C9A15B" stroke-width="1" fill="none"/>
+        </svg>
+        <p class="label" style="color: var(--waldgruen); letter-spacing: .28em;">Ankommen. Durchatmen. Bewegen. Genießen.</p>
+
+        <div class="highlight-card">
+          <div class="highlight-row">
+            <div class="highlight-icon">
+              <svg viewBox="0 0 40 34" aria-hidden="true">
+                <path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <h4 style="font-size: 14px; letter-spacing: .16em; margin: 0 0 6px;">Yoga mit Herz</h4>
+              <p style="margin: 0; font-size: 15px; color: var(--sekundaertext); line-height: 1.6;">Für Körper, Geist &amp; Seele – in jeder Session.</p>
+            </div>
+          </div>
+          <div class="highlight-row">
+            <div class="highlight-icon">
+              <svg viewBox="0 0 40 34" aria-hidden="true" style="width: 26px; height: 26px;">
+                <circle cx="20" cy="17" r="12" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+                <path d="M20 11 V17 L24 21" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <h4 style="font-size: 14px; letter-spacing: .16em; margin: 0 0 6px;">Bewusste Auszeiten</h4>
+              <p style="margin: 0; font-size: 15px; color: var(--sekundaertext); line-height: 1.6;">Eine kleine Pause vom Alltag, um wieder mehr bei sich selbst anzukommen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Events -->
+<section class="section section-warmweiss" id="events">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">02</span>
+      <h2>Meine Yoga-Events</h2>
+      <span class="script">Für besondere Momente</span>
+      <svg class="hero-divider" viewBox="0 0 120 34" aria-hidden="true" style="margin: 24px auto 0; display: block;">
+        <path d="M4 22 H44" stroke="#C9A15B" stroke-width="1" fill="none"/>
+        <path d="M76 22 H116" stroke="#C9A15B" stroke-width="1" fill="none"/>
+        <path d="M60 8 C66 14 66 20 60 24 C54 20 54 14 60 8 Z M60 24 C54 16 47 16 45 22 C48 26 55 27 60 24 Z M60 24 C66 16 73 16 75 22 C72 26 65 27 60 24 Z" stroke="#C9A15B" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="events-grid">
+      <article class="event-card">
+        <div class="event-image">
+          <svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="event-body">
+          <p class="event-meta">Historisches Ambiente</p>
+          <h3 class="event-title">Yoga auf der Burg</h3>
+          <p class="event-text">Eine besondere Yoga-Auszeit in historischem Ambiente. Bewegung, Entspannung und eine außergewöhnliche Atmosphäre für Körper und Seele.</p>
+          <a href="#kontakt" class="btn-text">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="event-card">
+        <div class="event-image" style="background: linear-gradient(160deg, #1B4A3A, var(--tannengruen));">
+          <svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="event-body">
+          <p class="event-meta">Zwischen Weinbergen</p>
+          <h3 class="event-title">Yoga im Weingut &amp; Weinverkostung</h3>
+          <p class="event-text">Yoga zwischen Weinbergen oder im Weingut – anschließend darf gemeinsam genossen werden. Eine entspannte Yogastunde mit Weinverkostung für Freundinnen, Paare oder Gruppen.</p>
+          <a href="#kontakt" class="btn-text">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="event-card">
+        <div class="event-image" style="background: linear-gradient(160deg, var(--waldgruen), #06201A);">
+          <svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="event-body">
+          <p class="event-meta">Für die Braut &amp; Freund:innen</p>
+          <h3 class="event-title">Junggesellinnenabschied</h3>
+          <p class="event-text">Eine bewusste Auszeit für die Braut und ihre Lieblingsmenschen. Gemeinsam bewegen, lachen, entspannen und einen besonderen Moment miteinander verbringen.</p>
+          <a href="#kontakt" class="btn-text">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="event-card">
+        <div class="event-image" style="background: linear-gradient(160deg, #123C31, var(--tannengruen));">
+          <svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="event-body">
+          <p class="event-meta">Sanfte Bewegung &amp; Genuss</p>
+          <h3 class="event-title">Yoga im Teehaus</h3>
+          <p class="event-text">Sanfte Bewegung, Ruhe und Genuss. Eine entspannte Yoga-Einheit trifft auf wohltuende Teemomente – ideal, um dem Alltag für eine Weile zu entfliehen.</p>
+          <a href="#kontakt" class="btn-text">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="event-card">
+        <div class="event-image" style="background: linear-gradient(160deg, #1B4A3A, #06201A);">
+          <svg viewBox="0 0 40 34" aria-hidden="true"><path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </div>
+        <div class="event-body">
+          <p class="event-meta">Für Unternehmen</p>
+          <h3 class="event-title">Rückenyoga für Firmen</h3>
+          <p class="event-text">Gezielte Übungen für Rücken, Schultern und Nacken helfen dabei, Verspannungen vorzubeugen und einen Ausgleich zum Arbeitsalltag zu schaffen.</p>
+          <a href="#kontakt" class="btn-text">Mehr erfahren</a>
+        </div>
+      </article>
+
+      <article class="event-card" style="background: var(--tannengruen); color: var(--warmweiss);">
+        <div class="event-body" style="display: flex; flex-direction: column; justify-content: center; text-align: center;">
+          <p class="script script-light" style="font-size: 32px; margin-bottom: 16px;">Gemeinsam bewegen.<br>Durchatmen. Genießen.</p>
+          <p class="body-light" style="margin: 0 0 24px; font-size: 15px;">Private Gruppen, Freund:innen, Unternehmen und besondere Veranstaltungen sind herzlich willkommen.</p>
+          <a href="#kontakt" class="btn btn-primary" style="align-self: center;">Jetzt anfragen</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Regelmäßige Kurse -->
+<section class="section section-creme" id="kurse">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">03</span>
+      <h2>Regelmäßige Kurse</h2>
+    </div>
+
+    <div class="courses-band">
+      <div class="courses-icon">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <rect x="10" y="14" width="28" height="24" rx="3" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+          <path d="M16 20 V14 M24 20 V10 M32 20 V14" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+          <circle cx="24" cy="26" r="5" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+          <path d="M16 34 H32" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+        </svg>
+      </div>
+      <div class="courses-content">
+        <span class="label" style="color: var(--hellgold);">Wöchentlich</span>
+        <h3>Dienstags in Bergen</h3>
+        <p>
+          Neben meinen Yoga-Events finden regelmäßig Yogakurse in Bergen statt.
+          Eine kleine Auszeit vom Alltag, um den Körper zu bewegen, neue Energie zu sammeln
+          und wieder mehr bei sich selbst anzukommen.
+        </p>
+      </div>
+      <div class="courses-actions">
+        <a href="#kontakt" class="btn btn-primary">Anmeldung anfragen</a>
+        <a href="#kontakt" class="btn btn-ghost">Kursdetails</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Für wen -->
+<section class="section section-warmweiss" id="angebote">
+  <div class="container">
+    <div class="audience-grid">
+      <div>
+        <span class="label">04</span>
+        <h2>Für wen sind meine Angebote?</h2>
+        <p class="body-text" style="max-width: 520px;">
+          Meine Yoga-Events eignen sich für Anfängerinnen und Anfänger ebenso wie für Yoga-Erfahrene.
+          Die Stunden werden an die jeweilige Gruppe, den Ort und den Anlass angepasst.
+        </p>
+        <svg class="heart-divider" viewBox="0 0 40 34" aria-hidden="true">
+          <path d="M20 30 C6 20 4 12 9 8 C13 4.5 18 7 20 11 C22 7 27 4.5 31 8 C36 12 34 20 20 30 Z" stroke="#C9A15B" stroke-width="1.4" fill="none"/>
+        </svg>
+        <p class="script audience-script">Private Gruppen, Freund:innen,<br>Unternehmen und besondere<br>Veranstaltungen sind herzlich<br>willkommen.</p>
+      </div>
+      <div class="audience-card">
+        <h3 style="margin-bottom: 8px;">Das passt zu dir, wenn …</h3>
+        <ul class="audience-list">
+          <li>du Yoga in besonderen Locations erleben möchtest</li>
+          <li>du eine private Gruppe oder einen JGA planst</li>
+          <li>du mit deinem Unternehmen etwas für die Gesundheit deiner Mitarbeitenden tun willst</li>
+          <li>du regelmäßig in Bergen an deinem Wohlbefinden arbeiten möchtest</li>
+          <li>dir Ankommen, Entspannen und Genießen wichtiger sind als Perfektion</li>
+        </ul>
+        <div class="tags">
+          <span class="tag tag-gold">Anfänger:innen</span>
+          <span class="tag">Outdoor</span>
+          <span class="tag">90 Min</span>
+          <span class="tag">Firmenkurse</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Kontakt -->
+<section class="section section-green" id="kontakt">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <span class="label" style="color: var(--gold);">05</span>
+        <h3>Gerne melden</h3>
+        <span class="script script-light">Ich freue mich, euch kennenzulernen!</span>
+
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span>Telefonnummer folgt</span>
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <a href="mailto:info@yoga-sabrina-becker.de">info@yoga-sabrina-becker.de</a>
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener">@yoga_sabrina_becker</a>
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <a href="https://www.yoga-sabrina-becker.de">www.yoga-sabrina-becker.de</a>
+        </div>
+
+        <div class="form-hint" style="background: rgba(201,161,91,.12); border-color: rgba(201,161,91,.5); margin-top: 32px;">
+          <p><strong style="color: var(--hellgold);">Hinweis:</strong> Ich melde mich innerhalb von zwei Tagen persönlich zurück.</p>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <span class="label">Anfrage senden</span>
+        <h3 style="margin-bottom: 22px;">Schreib mir</h3>
+        <form action="#" method="post">
+          <div class="form-group">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-input" id="name" name="name" type="text" placeholder="Vor- und Nachname" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">E-Mail oder Telefon</label>
+            <input class="form-input" id="email" name="email" type="text" placeholder="Wie kann ich dich erreichen?" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="anlass">Anlass</label>
+            <select class="form-select" id="anlass" name="anlass">
+              <option>Private Gruppe</option>
+              <option>Yoga auf der Burg</option>
+              <option>Yoga im Weingut</option>
+              <option>Junggesellinnenabschied</option>
+              <option>Yoga im Teehaus</option>
+              <option>Rückenyoga für Firmen</option>
+              <option>Regelmäßiger Kurs Dienstag</option>
+              <option>Sonstiges</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="nachricht">Nachricht</label>
+            <textarea class="form-textarea" id="nachricht" name="nachricht" placeholder="Worauf freust du dich?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Anfrage senden</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <img src="logo.svg" alt="Yoga Sabrina Becker" style="height: 48px; width: auto; display: block;">
+    <div class="footer-links">
+      <a href="#start">Start</a>
+      <a href="#idee">Meine Idee</a>
+      <a href="#events">Events</a>
+      <a href="#kurse">Kurse</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+    <p class="footer-copy">© 2026 Yoga Sabrina Becker · Entwurf nach Design System v1.0</p>
+  </div>
+</footer>
+
+</body>
+</html>
