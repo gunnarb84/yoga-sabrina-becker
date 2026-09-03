@@ -63,7 +63,7 @@ final class CreateParticipant extends Component
         $this->reset(['email', 'firstName', 'lastName', 'addressLine1', 'addressLine2', 'postalCode', 'city', 'phone', 'dateOfBirth', 'healthNotes']);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::participant.create-participant');
     }

@@ -21,7 +21,7 @@ final class ParticipantList extends Component
         $this->participants = $query->execute();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::participant.participant-list');
     }

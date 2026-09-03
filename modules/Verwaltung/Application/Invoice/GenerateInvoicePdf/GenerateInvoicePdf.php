@@ -16,6 +16,7 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class GenerateInvoicePdf
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $invoice = Invoice::findById($request->invoiceId);

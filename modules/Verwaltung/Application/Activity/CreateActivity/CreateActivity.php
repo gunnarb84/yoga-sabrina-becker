@@ -11,8 +11,21 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class CreateActivity
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
+        if ($request->title === '') {
+            return Result::failure('activity.title_empty');
+        }
+
+        if ((float) $request->price < 0) {
+            return Result::failure('activity.price_negative');
+        }
+
+        if ($request->maxParticipants < 1) {
+            return Result::failure('activity.max_participants_too_low');
+        }
+
         $activity = new Activity([
             'typ' => $request->type->value,
             'titel' => $request->title,
@@ -27,10 +40,10 @@ final readonly class CreateActivity
 
         $activity->save();
 
-        $activity->slug = $this->uniqueSlug($request->title, $activity->getAttribute('id'));
+        $activity->slug = $this->uniqueSlug($request->title, $activity->id);
         $activity->save();
 
-        return Result::success(new Response($activity->getAttribute('id')));
+        return Result::success(new Response($activity->id));
     }
 
     private function uniqueSlug(string $title, string $id): string

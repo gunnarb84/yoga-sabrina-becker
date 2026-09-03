@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Yoga\Platform\Identity\UuidCast;
 use Yoga\Platform\Shared\Domain\PlatformEntityLifecycle;
 
+/**
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property \Carbon\Carbon|null $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property string $inhalt
+ * @property string|null $meta_beschreibung
+ * @property string $slug
+ * @property string $titel
+ * @property bool $veroeffentlicht
+ * @property int $version
+ */
 class Page extends Model
 {
     use PlatformEntityLifecycle;

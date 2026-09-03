@@ -9,5 +9,5 @@ uses(
 
 expect()->extend('toBeUuidString', function (): void {
     $this->toBeString();
-    \Ramsey\Uuid\Uuid::fromString($this->value);
+    \Ramsey\Uuid\Uuid::fromString((string) $this->value);
 });

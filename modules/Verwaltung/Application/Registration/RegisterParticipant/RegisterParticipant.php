@@ -17,6 +17,7 @@ use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentStatus;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
+use Yoga\Platform\Shared\Application\DbValue;
 use Yoga\Platform\Shared\Application\Result;
 
 final readonly class RegisterParticipant
@@ -25,9 +26,16 @@ final readonly class RegisterParticipant
     {
     }
 
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $activity = Activity::findById($request->activityId);
+
+        $method = RegistrationPaymentMethod::tryFrom($request->paymentMethod);
+
+        if ($method === null) {
+            return Result::failure('registration.invalid_payment_method');
+        }
 
         if ($activity === null) {
             return Result::failure('activity.not_found');
@@ -51,7 +59,7 @@ final readonly class RegisterParticipant
             return Result::failure('registration.already_registered');
         }
 
-        return DB::transaction(function () use ($activity, $participant, $request, $activityIdBytes): Result {
+        return DB::transaction(function () use ($activity, $participant, $method, $activityIdBytes): Result {
             $confirmedCount = Registration::whereRaw('aktivitaet_id = ?', [$activityIdBytes])
                 ->where('status', RegistrationStatus::Confirmed->value)
                 ->count();
@@ -60,39 +68,39 @@ final readonly class RegisterParticipant
             $status = $isFull ? RegistrationStatus::WaitingList : RegistrationStatus::Confirmed;
 
             $registration = new Registration([
-                'aktivitaet_id' => $activity->getAttribute('id'),
-                'teilnehmer_id' => $participant->getAttribute('id'),
+                'aktivitaet_id' => $activity->id,
+                'teilnehmer_id' => $participant->id,
                 'angemeldet_am' => now(),
                 'status' => $status->value,
-                'zahlungsart' => $request->paymentMethod->value,
-                'zahlungsstatus' => $this->initialPaymentStatus($request->paymentMethod)->value,
+                'zahlungsart' => $method->value,
+                'zahlungsstatus' => $this->initialPaymentStatus($method)->value,
             ]);
 
             $registration->save();
 
             $invoiceId = null;
 
-            if ($request->paymentMethod === RegistrationPaymentMethod::Transfer) {
+            if ($method === RegistrationPaymentMethod::Transfer) {
                 $invoiceId = $this->issueInvoice($registration, $activity, $participant);
             }
 
             $onWaitingList = false;
 
             if ($isFull) {
-                $nextRank = WaitingList::whereHas('anmeldung', function ($query) use ($activityIdBytes): void {
+                $currentMaxRank = WaitingList::whereHas('anmeldung', function ($query) use ($activityIdBytes): void {
                     $query->whereRaw('aktivitaet_id = ?', [$activityIdBytes]);
-                })->max('rang') ?? 0;
+                })->max('rang');
 
                 $waitingList = new WaitingList([
-                    'anmeldung_id' => $registration->getAttribute('id'),
-                    'rang' => $nextRank + 1,
+                    'anmeldung_id' => $registration->id,
+                    'rang' => DbValue::int($currentMaxRank ?? 0) + 1,
                 ]);
 
                 $waitingList->save();
                 $onWaitingList = true;
             }
 
-            return Result::success(new Response($registration->getAttribute('id'), $onWaitingList, $invoiceId));
+            return Result::success(new Response($registration->id, $onWaitingList, $invoiceId));
         });
     }
 
@@ -106,7 +114,7 @@ final readonly class RegisterParticipant
     private function issueInvoice(Registration $registration, Activity $activity, Participant $participant): string
     {
         $payment = new Payment([
-            'anmeldung_id' => $registration->getAttribute('id'),
+            'anmeldung_id' => $registration->id,
             'methode' => PaymentMethod::Transfer->value,
             'betrag' => $activity->preis,
             'bezahlt_am' => null,
@@ -118,7 +126,7 @@ final readonly class RegisterParticipant
 
         $invoice = new Invoice([
             'nummer' => $number,
-            'zahlung_id' => $payment->getAttribute('id'),
+            'zahlung_id' => $payment->id,
             'ausgestellt_am' => now(),
             'empfaenger' => trim($participant->vorname.' '.$participant->nachname),
             'betrag' => $activity->preis,
@@ -126,10 +134,10 @@ final readonly class RegisterParticipant
 
         $invoice->save();
 
-        $payment->setAttribute('beleg_id', $invoice->getAttribute('id'));
+        $payment->setAttribute('beleg_id', $invoice->id);
         $payment->setAttribute('beleg_art', 'rechnung');
         $payment->save();
 
-        return $invoice->getAttribute('id');
+        return $invoice->id;
     }
 }

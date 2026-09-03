@@ -11,6 +11,20 @@ use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
 use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
 use Yoga\Platform\Identity\UuidCast;
 
+/**
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property \Carbon\Carbon $ausgestellt_am
+ * @property string $betrag
+ * @property string $empfaenger
+ * @property \Carbon\Carbon|null $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property string $nummer
+ * @property int $version
+ * @property string $waehrung
+ * @property string $zahlung_id
+ */
 class CashReceipt extends Model
 {
     use EntityLifecycle;

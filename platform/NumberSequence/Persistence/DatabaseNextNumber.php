@@ -43,6 +43,10 @@ final readonly class DatabaseNextNumber implements NextNumber
                 return 1;
             }
 
+            if (! is_int($row->letzte_nummer)) {
+                throw new \RuntimeException('Sequence counter must be an integer');
+            }
+
             $next = $row->letzte_nummer + 1;
 
             $query->update([

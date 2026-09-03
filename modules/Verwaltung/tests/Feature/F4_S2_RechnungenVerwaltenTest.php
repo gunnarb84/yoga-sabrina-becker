@@ -19,7 +19,6 @@ use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Registe
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessage;
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
 use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
@@ -30,13 +29,13 @@ beforeEach(function (): void {
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $this->registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $this->participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $this->participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
-    expect($this->registration->value()->invoiceId)->toBeUuidString();
-    $this->invoiceId = $this->registration->value()->invoiceId;
+    expect($this->registration->unwrap()->invoiceId)->toBeUuidString();
+    $this->invoiceId = $this->registration->unwrap()->invoiceId;
 });
 
 it('generates a downloadable PDF for an invoice', function (): void {
@@ -44,8 +43,8 @@ it('generates a downloadable PDF for an invoice', function (): void {
     $result = $generator->execute(new GeneratePdfRequest($this->invoiceId));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->content)->not->toBe('');
-    expect($result->value()->filename)->toStartWith('Rechnung-R-');
+    expect($result->unwrap()->content)->not->toBe('');
+    expect($result->unwrap()->filename)->toStartWith('Rechnung-R-');
 });
 
 it('resends an invoice by email with a PDF attachment', function (): void {
@@ -60,7 +59,7 @@ it('resends an invoice by email with a PDF attachment', function (): void {
 
     expect($result->isSuccess())->toBeTrue();
 
-    $message = OutboundMessage::findById($result->value()->outboundMessageId);
+    $message = OutboundMessage::findById($result->unwrap()->outboundMessageId);
     expect($message)->not->toBeNull();
     expect($message->empfaenger)->toBe('rechnung@example.com');
     expect($message->betreff)->toBe('Rechnung');

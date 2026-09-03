@@ -20,7 +20,7 @@ final class StaticPage extends Component
             ->first();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('webseite::page.static-page');
     }

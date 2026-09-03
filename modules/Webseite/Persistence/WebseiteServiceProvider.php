@@ -6,6 +6,7 @@ namespace Yoga\Modules\Webseite\Persistence;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View as ViewContract;
 use Livewire\Livewire;
 use Yoga\Modules\Webseite\Domain\Navigation\NavigationItem;
 use Yoga\Modules\Webseite\Ui\Activity\ActivityDetail;
@@ -31,7 +32,7 @@ final class WebseiteServiceProvider extends ServiceProvider
         Livewire::component('webseite.anmeldung', RegisterForActivity::class);
         Livewire::component('webseite.seite', StaticPage::class);
 
-        View::composer('webseite::layouts.app', function ($view): void {
+        View::composer('webseite::layouts.app', function (ViewContract $view): void {
             $view->with('navigation', NavigationItem::where('aktiv', true)
                 ->orderBy('sortierung')
                 ->get());

@@ -6,6 +6,8 @@ namespace Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmation\Request as SendConfirmationRequest;
+use Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmation\SendRegistrationConfirmation;
 use Yoga\Modules\Verwaltung\Domain\CashReceipt\CashReceipt;
 use Yoga\Modules\Verwaltung\Domain\CashReturn\CashReturn;
 use Yoga\Modules\Verwaltung\Domain\CreditNote\CreditNote;
@@ -21,10 +23,13 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class CancelRegistration
 {
-    public function __construct(private NextNumber $numbers)
-    {
+    public function __construct(
+        private NextNumber $numbers,
+        private SendRegistrationConfirmation $confirmation,
+    ) {
     }
 
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $registration = Registration::findById($request->registrationId);
@@ -43,7 +48,7 @@ final readonly class CancelRegistration
 
         return DB::transaction(function () use ($registration): Result {
             $wasWaiting = $registration->status === RegistrationStatus::WaitingList;
-            $activityId = Uuid::fromString($registration->getAttribute('aktivitaet_id'))->getBytes();
+            $activityId = Uuid::fromString($registration->aktivitaet_id)->getBytes();
 
             if ($registration->zahlungsstatus === RegistrationPaymentStatus::Paid) {
                 $this->issueReversalDocument($registration);
@@ -56,17 +61,23 @@ final readonly class CancelRegistration
                 $registration->wartelistenEintrag->delete();
             }
 
+            $promoted = null;
+
             if (! $wasWaiting) {
-                $this->promoteFirstWaiting($activityId);
+                $promoted = $this->promoteFirstWaiting($activityId);
             }
 
-            return Result::success();
+            if ($promoted !== null) {
+                $this->confirmation->execute(new SendConfirmationRequest($promoted->id));
+            }
+
+            return Result::success(new Response($registration->id));
         });
     }
 
     private function issueReversalDocument(Registration $registration): void
     {
-        $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->getAttribute('id'))->getBytes()])->first();
+        $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->id)->getBytes()])->first();
 
         if ($payment === null) {
             return;
@@ -81,9 +92,9 @@ final readonly class CancelRegistration
 
     private function issueCreditNote(Payment $payment): void
     {
-        $invoiceId = $payment->getAttribute('beleg_id');
+        $invoiceId = $payment->beleg_id;
 
-        if ($invoiceId === null || $payment->getAttribute('beleg_art') !== 'rechnung') {
+        if ($invoiceId === null || $payment->beleg_art !== 'rechnung') {
             return;
         }
 
@@ -95,7 +106,7 @@ final readonly class CancelRegistration
 
         $creditNote = new CreditNote([
             'nummer' => $this->numbers->next('G'),
-            'rechnung_id' => $invoice->getAttribute('id'),
+            'rechnung_id' => $invoice->id,
             'ausgestellt_am' => now(),
             'empfaenger' => $invoice->empfaenger,
             'betrag' => $invoice->betrag,
@@ -106,9 +117,9 @@ final readonly class CancelRegistration
 
     private function issueCashReturn(Payment $payment): void
     {
-        $receiptId = $payment->getAttribute('beleg_id');
+        $receiptId = $payment->beleg_id;
 
-        if ($receiptId === null || $payment->getAttribute('beleg_art') !== 'bareinnahmenbeleg') {
+        if ($receiptId === null || $payment->beleg_art !== 'bareinnahmenbeleg') {
             return;
         }
 
@@ -120,7 +131,7 @@ final readonly class CancelRegistration
 
         $cashReturn = new CashReturn([
             'nummer' => $this->numbers->next('RB'),
-            'bareinnahmenbeleg_id' => $receipt->getAttribute('id'),
+            'bareinnahmenbeleg_id' => $receipt->id,
             'ausgestellt_am' => now(),
             'empfaenger' => $receipt->empfaenger,
             'betrag' => $receipt->betrag,
@@ -129,7 +140,7 @@ final readonly class CancelRegistration
         $cashReturn->save();
     }
 
-    private function promoteFirstWaiting(string $activityId): void
+    private function promoteFirstWaiting(string $activityId): ?Registration
     {
         $next = WaitingList::whereHas('anmeldung', function ($query) use ($activityId): void {
             $query->whereRaw('aktivitaet_id = ?', [$activityId])
@@ -139,13 +150,13 @@ final readonly class CancelRegistration
             ->first();
 
         if ($next === null) {
-            return;
+            return null;
         }
 
-        $registration = Registration::findById($next->getAttribute('anmeldung_id'));
+        $registration = Registration::findById($next->anmeldung_id);
 
         if ($registration === null) {
-            return;
+            return null;
         }
 
         $next->promote();
@@ -153,5 +164,7 @@ final readonly class CancelRegistration
 
         $registration->confirm();
         $registration->save();
+
+        return $registration;
     }
 }

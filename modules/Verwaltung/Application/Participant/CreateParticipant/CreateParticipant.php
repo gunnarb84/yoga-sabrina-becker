@@ -9,6 +9,7 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class CreateParticipant
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         if (Participant::where('email', $request->email)->exists()) {
@@ -31,6 +32,6 @@ final readonly class CreateParticipant
 
         $participant->save();
 
-        return Result::success(new Response($participant->getAttribute('id')));
+        return Result::success(new Response($participant->id));
     }
 }

@@ -10,6 +10,7 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class CreateSession
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $activity = Activity::findById($request->activityId);
@@ -28,6 +29,6 @@ final readonly class CreateSession
 
         $session->save();
 
-        return Result::success(new Response($session->getAttribute('id')));
+        return Result::success(new Response($session->id));
     }
 }

@@ -13,16 +13,17 @@ declare(strict_types=1);
  *   automatisch nachgerückt.
  */
 
+use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\CancelRegistration;
 use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\Request as CancelRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
+use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 
 beforeEach(function (): void {
@@ -33,27 +34,27 @@ it('sets the registration status to cancelled', function (): void {
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $response = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
     ));
 
     expect($response->isSuccess())->toBeTrue();
 
-    $cancel = new CancelRegistration(app(NextNumber::class));
+    $cancel = app(CancelRegistration::class);
     $result = $cancel->execute(new CancelRequest(
-        registrationId: $response->value()->registrationId,
+        registrationId: $response->unwrap()->registrationId,
     ));
 
     expect($result->isSuccess())->toBeTrue();
 
-    $registration = Registration::findById($response->value()->registrationId);
+    $registration = Registration::findById($response->unwrap()->registrationId);
     expect($registration)->not->toBeNull();
     expect($registration->status)->toBe(RegistrationStatus::Cancelled);
 });
 
 it('fails with not_found for a non-existing registration', function (): void {
-    $cancel = new CancelRegistration(app(NextNumber::class));
+    $cancel = app(CancelRegistration::class);
     $result = $cancel->execute(new CancelRequest(
         registrationId: '018e1234-5678-7abc-8def-0123456789ab',
     ));
@@ -66,53 +67,59 @@ it('fails with already_cancelled when the registration is already cancelled', fu
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $response = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
     ));
 
-    $cancel = new CancelRegistration(app(NextNumber::class));
-    $cancel->execute(new CancelRequest(registrationId: $response->value()->registrationId));
-    $second = $cancel->execute(new CancelRequest(registrationId: $response->value()->registrationId));
+    $cancel = app(CancelRegistration::class);
+    $cancel->execute(new CancelRequest(registrationId: $response->unwrap()->registrationId));
+    $second = $cancel->execute(new CancelRequest(registrationId: $response->unwrap()->registrationId));
 
     expect($second->isFailure())->toBeTrue();
     expect($second->error()['code'])->toBe('registration.already_cancelled');
 });
 
 it('promotes the first waiting-list entry when a confirmed registration is cancelled', function (): void {
+    Mail::fake();
+
     $first = TestFactory::createParticipant(email: 'erste@example.com');
     $second = TestFactory::createParticipant(email: 'zweite@example.com');
     $third = TestFactory::createParticipant(email: 'dritte@example.com');
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $confirmed = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $first->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $first->id,
+        paymentMethod: 'bar',
     ));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $second->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $second->id,
+        paymentMethod: 'bar',
     ));
     $waiting = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $third->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $third->id,
+        paymentMethod: 'bar',
     ));
 
-    expect($waiting->value()->onWaitingList)->toBeTrue();
+    expect($waiting->unwrap()->onWaitingList)->toBeTrue();
 
-    $cancel = new CancelRegistration(app(NextNumber::class));
-    $cancel->execute(new CancelRequest(registrationId: $confirmed->value()->registrationId));
+    $cancel = app(CancelRegistration::class);
+    $cancel->execute(new CancelRequest(registrationId: $confirmed->unwrap()->registrationId));
 
-    $promoted = Registration::findById($waiting->value()->registrationId);
+    $promoted = Registration::findById($waiting->unwrap()->registrationId);
     expect($promoted)->not->toBeNull();
     expect($promoted->status)->toBe(RegistrationStatus::Confirmed);
 
-    $waitingListEntry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString($promoted->getAttribute('id'))->getBytes()])->first();
+    $waitingListEntry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString($promoted->id)->getBytes()])->first();
     expect($waitingListEntry)->not->toBeNull();
     expect($waitingListEntry->nachgerueckt_am)->not->toBeNull();
+
+    Mail::assertSent(HtmlAttachmentMail::class, function (HtmlAttachmentMail $mail): bool {
+        return $mail->hasTo('dritte@example.com');
+    });
 });
 
 it('does not promote another entry when a waiting-list registration is cancelled', function (): void {
@@ -122,26 +129,26 @@ it('does not promote another entry when a waiting-list registration is cancelled
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $first->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $first->id,
+        paymentMethod: 'bar',
     ));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $second->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $second->id,
+        paymentMethod: 'bar',
     ));
     $waiting = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $third->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $third->id,
+        paymentMethod: 'bar',
     ));
 
-    $cancel = new CancelRegistration(app(NextNumber::class));
-    $cancel->execute(new CancelRequest(registrationId: $waiting->value()->registrationId));
+    $cancel = app(CancelRegistration::class);
+    $cancel->execute(new CancelRequest(registrationId: $waiting->unwrap()->registrationId));
 
     $firstRegistration = Registration::query()
-        ->whereRaw('teilnehmer_id = ?', [Uuid::fromString($first->getAttribute('id'))->getBytes()])
+        ->whereRaw('teilnehmer_id = ?', [Uuid::fromString($first->id)->getBytes()])
         ->first();
 
     expect($firstRegistration)->not->toBeNull();

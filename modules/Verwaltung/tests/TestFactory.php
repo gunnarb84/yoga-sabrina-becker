@@ -23,7 +23,7 @@ final class TestFactory
             'slug' => 'test-workshop-' . uniqid(),
             'kurzbeschreibung' => 'Kurzbeschreibung',
             'langbeschreibung' => 'Langbeschreibung',
-            'preis' => 45.00,
+            'preis' => '45.00',
             'waehrung' => 'EUR',
             'maximale_teilnehmerzahl' => $maxParticipants,
             'veroeffentlicht' => true,
@@ -54,7 +54,7 @@ final class TestFactory
             throw new \RuntimeException('Failed to create test participant: '.$result->error()['code']);
         }
 
-        $participant = Participant::findById($result->value()->participantId);
+        $participant = Participant::findById($result->unwrap()->participantId);
         if ($participant === null) {
             throw new \RuntimeException('Created participant not found');
         }
@@ -65,7 +65,7 @@ final class TestFactory
     public static function createSession(Activity $activity, Carbon $beginn, ?Carbon $ende = null, string $ort = ''): Session
     {
         $session = new Session([
-            'aktivitaet_id' => $activity->getAttribute('id'),
+            'aktivitaet_id' => $activity->id,
             'beginn' => $beginn,
             'ende' => $ende ?? $beginn->clone()->addHour(),
             'ort' => $ort,

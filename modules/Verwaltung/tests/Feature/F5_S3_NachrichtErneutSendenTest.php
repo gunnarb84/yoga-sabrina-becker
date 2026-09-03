@@ -28,11 +28,11 @@ it('creates a new pending message when resending a failed message', function ():
     $original->save();
 
     $resend = new ResendOutboundMessage();
-    $result = $resend->execute(new ResendRequest(messageId: $original->getAttribute('id')));
+    $result = $resend->execute(new ResendRequest(messageId: $original->id));
 
     expect($result->isSuccess())->toBeTrue();
 
-    $newMessage = OutboundMessage::findById($result->value()->newMessageId);
+    $newMessage = OutboundMessage::findById($result->unwrap()->newMessageId);
     expect($newMessage)->not->toBeNull();
     expect($newMessage->status)->toBe(OutboundMessageStatus::Pending);
     expect($newMessage->empfaenger)->toBe('anna@example.com');

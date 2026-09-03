@@ -9,8 +9,8 @@
             <img src="{{ $activity->bild }}" alt="{{ $activity->titel }}" class="yoga-activity-image">
         @endif
 
-        @if ($activity->longbeschreibung)
-            <div class="yoga-activity-description">{!! nl2br(e($activity->longbeschreibung)) !!}</div>
+        @if ($activity->langbeschreibung)
+            <div class="yoga-activity-description">{!! nl2br(e($activity->langbeschreibung)) !!}</div>
         @elseif ($activity->kurzbeschreibung)
             <p>{{ $activity->kurzbeschreibung }}</p>
         @endif

@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\Activity\Activities;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class ActivitiesQuery
 {
@@ -29,22 +30,29 @@ final readonly class ActivitiesQuery
             ->limit($limit)
             ->get();
 
-        return $rows->map(function (object $row): object {
+        $result = [];
+        foreach ($rows as $row) {
+            if (! is_string($row->id)) {
+                continue;
+            }
+
             $sessionCount = DB::table('verwaltung_termine')
                 ->where('aktivitaet_id', $row->id)
                 ->count();
 
-            return (object) [
+            $result[] = (object) [
                 'id' => Uuid::fromBytes($row->id)->toString(),
-                'typ' => $row->typ,
-                'titel' => $row->titel,
-                'kurzbeschreibung' => $row->kurzbeschreibung,
-                'preis' => $row->preis,
-                'maximale_teilnehmerzahl' => (int) $row->maximale_teilnehmerzahl,
-                'status' => $row->status,
-                'veroeffentlicht' => (bool) $row->veroeffentlicht,
-                'anzahl_termine' => $sessionCount,
+                'typ' => DbValue::string($row->typ),
+                'titel' => DbValue::string($row->titel),
+                'kurzbeschreibung' => DbValue::nullableString($row->kurzbeschreibung),
+                'preis' => DbValue::string($row->preis),
+                'maximale_teilnehmerzahl' => DbValue::int($row->maximale_teilnehmerzahl),
+                'status' => DbValue::string($row->status),
+                'veroeffentlicht' => DbValue::bool($row->veroeffentlicht),
+                'anzahl_termine' => DbValue::int($sessionCount),
             ];
-        })->toArray();
+        }
+
+        return $result;
     }
 }

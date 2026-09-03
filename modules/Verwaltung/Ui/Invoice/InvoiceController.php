@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Ui\Invoice;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoicePdf;
@@ -28,7 +29,7 @@ final readonly class InvoiceController
             abort(404);
         }
 
-        $pdf = $result->value();
+        $pdf = $result->unwrap();
 
         return response($pdf->content, 200, [
             'Content-Type' => 'application/pdf',
@@ -36,7 +37,7 @@ final readonly class InvoiceController
         ]);
     }
 
-    public function sendEmail(string $id)
+    public function sendEmail(string $id): RedirectResponse
     {
         $invoice = Invoice::findById($id);
 

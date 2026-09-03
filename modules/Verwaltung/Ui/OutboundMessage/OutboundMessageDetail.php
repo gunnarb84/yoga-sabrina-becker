@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Ui\OutboundMessage;
 
+use Illuminate\Support\Facades\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\OutboundMessageDetail\OutboundMessageDetailQuery;
@@ -26,7 +27,7 @@ final class OutboundMessageDetail extends Component
     {
         $this->messageId = $id;
         $this->message = $query->execute($id);
-        $this->status = $this->message?->status ?? '';
+        $this->status = $this->message !== null ? $this->message->status : '';
     }
 
     public function resend(ResendOutboundMessageOperation $operation, OutboundMessageDetailQuery $query): void
@@ -39,9 +40,9 @@ final class OutboundMessageDetail extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::outbound-message.detail', [
+        return View::make('verwaltung::outbound-message.detail', [
             'canResend' => in_array($this->status, [OutboundMessageStatus::Pending->value, OutboundMessageStatus::Failed->value], true),
         ]);
     }

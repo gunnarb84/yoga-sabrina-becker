@@ -26,7 +26,6 @@ use Yoga\Modules\Verwaltung\Domain\Invoice\Invoice;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
 use Yoga\Modules\Verwaltung\Domain\Payment\PaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentStatus;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
@@ -44,14 +43,14 @@ it('records a cash payment and issues a receipt with the next number', function 
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
     ));
 
     $record = new RecordPayment(app(NextNumber::class));
     $result = $record->execute(new RecordPaymentRequest(
-        registrationId: $registration->value()->registrationId,
+        registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
@@ -59,9 +58,9 @@ it('records a cash payment and issues a receipt with the next number', function 
     ));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->documentNumber)->toBe('B-2026-00001');
+    expect($result->unwrap()->documentNumber)->toBe('B-2026-00001');
 
-    $payment = Payment::findById($result->value()->paymentId);
+    $payment = Payment::findById($result->unwrap()->paymentId);
     expect($payment)->not->toBeNull();
     expect($payment->methode)->toBe(PaymentMethod::Cash);
     expect($payment->betrag)->toBe('45.0000');
@@ -70,7 +69,7 @@ it('records a cash payment and issues a receipt with the next number', function 
     expect($receipt)->not->toBeNull();
     expect($receipt->empfaenger)->toBe('Max Mustermann');
 
-    $registrationRecord = Registration::findById($registration->value()->registrationId);
+    $registrationRecord = Registration::findById($registration->unwrap()->registrationId);
     expect($registrationRecord)->not->toBeNull();
     expect($registrationRecord->zahlungsstatus)->toBe(RegistrationPaymentStatus::Paid);
 });
@@ -79,18 +78,18 @@ it('creates an invoice at registration time for transfer payments', function ():
     $participant = TestFactory::createParticipant(vorname: 'Max', nachname: 'Mustermann', email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
     expect($registration->isSuccess())->toBeTrue();
 
-    $registrationRecord = Registration::findById($registration->value()->registrationId);
+    $registrationRecord = Registration::findById($registration->unwrap()->registrationId);
     expect($registrationRecord)->not->toBeNull();
     expect($registrationRecord->zahlungsstatus)->toBe(RegistrationPaymentStatus::Open);
 
-    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->value()->registrationId)->getBytes()])->first();
+    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->unwrap()->registrationId)->getBytes()])->first();
     expect($payment)->not->toBeNull();
     expect($payment->methode)->toBe(PaymentMethod::Transfer);
     expect($payment->bezahlt_am)->toBeNull();
@@ -99,7 +98,7 @@ it('creates an invoice at registration time for transfer payments', function ():
     expect($invoice)->not->toBeNull();
     expect($invoice->empfaenger)->toBe('Max Mustermann');
     expect($invoice->betrag)->toBe($this->activity->preis);
-    expect($invoice->zahlung_id)->toBe($payment->getAttribute('id'));
+    expect($invoice->zahlung_id)->toBe($payment->id);
 });
 
 it('increments document numbers for consecutive payments', function (): void {
@@ -108,35 +107,35 @@ it('increments document numbers for consecutive payments', function (): void {
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $firstRegistration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $firstParticipant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $firstParticipant->id,
+        paymentMethod: 'bar',
     ));
     $secondRegistration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $secondParticipant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $secondParticipant->id,
+        paymentMethod: 'bar',
     ));
 
     $record = new RecordPayment(app(NextNumber::class));
 
     $first = $record->execute(new RecordPaymentRequest(
-        registrationId: $firstRegistration->value()->registrationId,
+        registrationId: $firstRegistration->unwrap()->registrationId,
         method: PaymentMethod::Cash,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
     ));
     $second = $record->execute(new RecordPaymentRequest(
-        registrationId: $secondRegistration->value()->registrationId,
+        registrationId: $secondRegistration->unwrap()->registrationId,
         method: PaymentMethod::Cash,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
     ));
 
-    expect($first->value()->documentNumber)->toBe('B-2026-00001');
-    expect($second->value()->documentNumber)->toBe('B-2026-00002');
+    expect($first->unwrap()->documentNumber)->toBe('B-2026-00001');
+    expect($second->unwrap()->documentNumber)->toBe('B-2026-00002');
 });
 
 it('fails with not_found for a non-existing registration', function (): void {
@@ -157,14 +156,14 @@ it('fails with already_paid when a payment was already recorded', function (): v
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
     ));
 
     $record = new RecordPayment(app(NextNumber::class));
     $record->execute(new RecordPaymentRequest(
-        registrationId: $registration->value()->registrationId,
+        registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
@@ -172,7 +171,7 @@ it('fails with already_paid when a payment was already recorded', function (): v
     ));
 
     $second = $record->execute(new RecordPaymentRequest(
-        registrationId: $registration->value()->registrationId,
+        registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
@@ -187,14 +186,14 @@ it('fails when trying to record a transfer payment directly', function (): void 
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
     $record = new RecordPayment(app(NextNumber::class));
     $result = $record->execute(new RecordPaymentRequest(
-        registrationId: $registration->value()->registrationId,
+        registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Transfer,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',

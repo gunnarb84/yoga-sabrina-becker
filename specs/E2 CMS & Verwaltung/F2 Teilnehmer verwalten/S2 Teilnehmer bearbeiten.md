@@ -1,7 +1,7 @@
 # Teilnehmer bearbeiten
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich Teilnehmerdaten bearbeiten können, damit ich falsche oder

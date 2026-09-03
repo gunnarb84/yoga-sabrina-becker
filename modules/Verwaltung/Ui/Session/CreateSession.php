@@ -53,7 +53,7 @@ final class CreateSession extends Component
         $this->reset(['startsAt', 'endsAt', 'location', 'note']);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::session.create-session');
     }

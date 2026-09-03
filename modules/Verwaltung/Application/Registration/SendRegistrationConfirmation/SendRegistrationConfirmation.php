@@ -27,6 +27,7 @@ final readonly class SendRegistrationConfirmation
     {
     }
 
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $registration = Registration::findById($request->registrationId);
@@ -45,18 +46,17 @@ final readonly class SendRegistrationConfirmation
         $pdfAttachment = null;
 
         if ($registration->zahlungsart === RegistrationPaymentMethod::Transfer) {
-            $registrationIdBytes = Uuid::fromString($registration->getAttribute('id'))->getBytes();
+            $registrationIdBytes = Uuid::fromString($registration->id)->getBytes();
             $payment = Payment::whereRaw('anmeldung_id = ?', [$registrationIdBytes])
                 ->where('methode', PaymentMethod::Transfer->value)
                 ->where('beleg_art', 'rechnung')
                 ->first();
 
-            if ($payment !== null) {
+            if ($payment !== null && $payment->beleg_id !== null) {
                 $pdfResult = $this->pdfGenerator->execute(new GeneratePdfRequest($payment->beleg_id));
 
                 if ($pdfResult->isSuccess()) {
-                    $pdf = $pdfResult->value();
-                    assert($pdf instanceof \Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Response);
+                    $pdf = $pdfResult->unwrap();
 
                     $pdfAttachment = [
                         'filename' => $pdf->filename,
@@ -88,7 +88,7 @@ final readonly class SendRegistrationConfirmation
         $subject = 'Anmeldebestätigung: '.$activity->titel;
 
         $message = new OutboundMessage([
-            'anmeldung_id' => $registration->getAttribute('id'),
+            'anmeldung_id' => $registration->id,
             'empfaenger' => $participant->email,
             'betreff' => $subject,
             'inhalt' => $html,
@@ -107,6 +107,6 @@ final readonly class SendRegistrationConfirmation
             $message->save();
         }
 
-        return Result::success(new Response($message->getAttribute('id')));
+        return Result::success(new Response($message->id));
     }
 }

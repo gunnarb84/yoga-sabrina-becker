@@ -29,7 +29,7 @@ final class Invoices extends Component
         $this->invoices = $query->execute();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::invoice.invoices');
     }

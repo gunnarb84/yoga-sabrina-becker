@@ -9,6 +9,8 @@ use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\Activity\Activities\ActivitiesQuery;
 use Yoga\Modules\Verwaltung\Application\Activity\PublishActivity\PublishActivity as PublishActivityOperation;
 use Yoga\Modules\Verwaltung\Application\Activity\PublishActivity\Request as PublishActivityRequest;
+use Yoga\Modules\Verwaltung\Application\Activity\UnpublishActivity\Request as UnpublishActivityRequest;
+use Yoga\Modules\Verwaltung\Application\Activity\UnpublishActivity\UnpublishActivity as UnpublishActivityOperation;
 
 #[Layout('verwaltung::layouts.app')]
 final class ActivityList extends Component
@@ -18,6 +20,8 @@ final class ActivityList extends Component
      */
     public array $activities = [];
 
+    public string $message = '';
+
     public function mount(ActivitiesQuery $query): void
     {
         $this->activities = $query->execute();
@@ -25,17 +29,33 @@ final class ActivityList extends Component
 
     public function publish(string $activityId, PublishActivityOperation $publish, ActivitiesQuery $query): void
     {
+        $this->message = '';
         $result = $publish->execute(new PublishActivityRequest($activityId));
 
         if ($result->isFailure()) {
-            // In der Vollversion sollte ein Fehler angezeigt werden.
+            $this->message = 'Fehler: ' . json_encode($result->error());
+
             return;
         }
 
         $this->activities = $query->execute();
     }
 
-    public function render()
+    public function unpublish(string $activityId, UnpublishActivityOperation $unpublish, ActivitiesQuery $query): void
+    {
+        $this->message = '';
+        $result = $unpublish->execute(new UnpublishActivityRequest($activityId));
+
+        if ($result->isFailure()) {
+            $this->message = 'Fehler: ' . json_encode($result->error());
+
+            return;
+        }
+
+        $this->activities = $query->execute();
+    }
+
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::activity.activity-list');
     }

@@ -1,7 +1,7 @@
 # Anmeldung stornieren
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich eine Anmeldung im Backend stornieren können, damit die
@@ -15,8 +15,8 @@ erste Wartelisten-Eintrag automatisch nach.
 ## Akzeptanzkriterien
 - Die Aktion „Stornieren" ist in der Anmeldungsmaske verfügbar.
 - Der Vorgang `CancelRegistration` setzt den Status auf `CANCELLED`.
-- `CancelRegistration` scheitert mit `NOT_FOUND`, wenn die Anmeldung nicht existiert.
-- `CancelRegistration` scheitert mit `ALREADY_CANCELLED`, wenn der Status bereits `CANCELLED`
+- `CancelRegistration` scheitert mit `registration.not_found`, wenn die Anmeldung nicht existiert.
+- `CancelRegistration` scheitert mit `registration.already_cancelled`, wenn der Status bereits `CANCELLED`
   ist.
 - Bei einer Stornierung eines festen Platzes wird der erste Eintrag der Warteliste
   automatisch nachgerückt (`PromoteWaitingListEntry`).

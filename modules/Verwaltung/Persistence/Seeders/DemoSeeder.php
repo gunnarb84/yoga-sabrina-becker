@@ -16,7 +16,6 @@ use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request
 use Yoga\Modules\Verwaltung\Application\Session\CreateSession\CreateSession as CreateSessionOperation;
 use Yoga\Modules\Verwaltung\Application\Session\CreateSession\Request as CreateSessionRequest;
 use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 
 final class DemoSeeder extends Seeder
 {
@@ -37,7 +36,7 @@ final class DemoSeeder extends Seeder
             image: null,
         ));
 
-        $activityId = $createResult->value()->activityId;
+        $activityId = $createResult->unwrap()->activityId;
 
         $sessionResult = $createSession->execute(new CreateSessionRequest(
             activityId: $activityId,
@@ -74,12 +73,12 @@ final class DemoSeeder extends Seeder
             throw new \RuntimeException('Participant creation failed: ' . json_encode($participantResult->error()));
         }
 
-        $participantId = $participantResult->value()->participantId;
+        $participantId = $participantResult->unwrap()->participantId;
 
         $registrationResult = $registerParticipant->execute(new RegisterParticipantRequest(
             activityId: $activityId,
             participantId: $participantId,
-            paymentMethod: RegistrationPaymentMethod::Cash,
+            paymentMethod: 'bar',
         ));
 
         if ($registrationResult->isFailure()) {

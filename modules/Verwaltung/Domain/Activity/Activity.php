@@ -8,10 +8,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
+use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\Session\Session;
 use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
 use Yoga\Platform\Identity\UuidCast;
 
+/**
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property string|null $bild
+ * @property \Carbon\Carbon|null $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property string|null $kurzbeschreibung
+ * @property string|null $langbeschreibung
+ * @property int $maximale_teilnehmerzahl
+ * @property string $preis
+ * @property string|null $slug
+ * @property ActivityStatus $status
+ * @property string $titel
+ * @property ActivityType $typ
+ * @property bool $veroeffentlicht
+ * @property int $version
+ * @property string $waehrung
+ */
 class Activity extends Model
 {
     use EntityLifecycle;
@@ -64,6 +84,12 @@ class Activity extends Model
         $this->veroeffentlicht = true;
     }
 
+    public function unpublish(): void
+    {
+        $this->status = ActivityStatus::Draft;
+        $this->veroeffentlicht = false;
+    }
+
     public function complete(): void
     {
         $this->status = ActivityStatus::Completed;
@@ -72,5 +98,14 @@ class Activity extends Model
     public function cancel(): void
     {
         $this->status = ActivityStatus::Cancelled;
+    }
+
+    public function hasRegistrations(): bool
+    {
+        $activityIdBytes = Uuid::fromString($this->id)->getBytes();
+
+        return Registration::whereRaw('aktivitaet_id = ?', [$activityIdBytes])
+            ->whereIn('status', [RegistrationStatus::Confirmed->value, RegistrationStatus::WaitingList->value])
+            ->exists();
     }
 }

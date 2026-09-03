@@ -23,6 +23,12 @@ final class LoginController
             'password' => ['required'],
         ]);
 
+        if (! is_array($credentials)) {
+            return back()->withErrors([
+                'email' => 'Die Anmeldedaten sind nicht korrekt.',
+            ]);
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 

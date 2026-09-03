@@ -1,0 +1,24 @@
+includes:
+    - harness-php/phpstan.neon
+    - vendor/pestphp/pest/phpstan-pest-extension.neon
+
+parameters:
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    paths:
+        - modules
+        - platform
+        - src/app
+    excludePaths:
+        - modules/*/tests
+        - modules/*/tests/*
+        - src/tests
+        - src/config (?)
+        - src/bootstrap (?)
+        - src/public (?)
+        - tests (?)
+        - tests-e2e (?)
+        - docs (?)
+        - specs (?)
+        - ideas (?)
+        - phpstan-bootstrap.php

@@ -1,7 +1,7 @@
 # Veranstaltung anlegen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich eine neue Veranstaltung anlegen können, damit sie später auf
@@ -17,10 +17,10 @@ den Status „Entwurf".
 - Die Maske enthält die Pflichtfelder `title`, `type`, `price`, `maxParticipants`.
 - Die Maske enthält die optionalen Felder `shortDescription`, `longDescription`, `image`.
 - Der Vorgang `CreateActivity` legt die Veranstaltung mit dem Status `DRAFT` an.
-- Der Vorgang `CreateActivity` verweigert die Anlage mit dem Fehlercode `TITLE_EMPTY`, wenn
-  `title` leer ist.
-- Der Vorgang `CreateActivity` verweigert die Anlage mit dem Fehlercode `PRICE_NEGATIVE`,
+- Der Vorgang `CreateActivity` verweigert die Anlage mit dem Fehlercode `activity.title_empty`,
+  wenn `title` leer ist.
+- Der Vorgang `CreateActivity` verweigert die Anlage mit dem Fehlercode `activity.price_negative`,
   wenn `price` kleiner als 0 ist.
 - Der Vorgang `CreateActivity` verweigert die Anlage mit dem Fehlercode
-  `MAX_PARTICIPANTS_TOO_LOW`, wenn `maxParticipants` kleiner als 1 ist.
+  `activity.max_participants_too_low`, wenn `maxParticipants` kleiner als 1 ist.
 - Nach erfolgreicher Anlage erscheint die neue Veranstaltung in der Liste.

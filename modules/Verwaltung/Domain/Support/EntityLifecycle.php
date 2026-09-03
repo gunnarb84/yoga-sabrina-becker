@@ -36,7 +36,12 @@ trait EntityLifecycle
         });
 
         static::updating(function (Model $model): void {
-            $model->setAttribute('version', (int) $model->getAttribute('version') + 1);
+            $version = $model->getAttribute('version');
+            if (! is_int($version)) {
+                throw new \RuntimeException('Version must be an integer');
+            }
+
+            $model->setAttribute('version', $version + 1);
         });
     }
 }

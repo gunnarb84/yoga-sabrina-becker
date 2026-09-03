@@ -16,6 +16,21 @@ use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Platform\Identity\UuidCast;
 
+/**
+ * @property string $aktivitaet_id
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property \Carbon\Carbon $angemeldet_am
+ * @property \Carbon\Carbon|null $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property RegistrationStatus $status
+ * @property string $teilnehmer_id
+ * @property int $version
+ * @property string|null $zahlung_id
+ * @property RegistrationPaymentMethod $zahlungsart
+ * @property RegistrationPaymentStatus $zahlungsstatus
+ */
 class Registration extends Model
 {
     use EntityLifecycle;

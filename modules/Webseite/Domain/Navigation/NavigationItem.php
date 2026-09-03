@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Yoga\Platform\Identity\UuidCast;
 use Yoga\Platform\Shared\Domain\PlatformEntityLifecycle;
 
+/**
+ * @property bool $aktiv
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property string $bezeichnung
+ * @property bool $extern
+ * @property \Carbon\Carbon|null $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property int $sortierung
+ * @property string $url
+ * @property int $version
+ */
 class NavigationItem extends Model
 {
     use PlatformEntityLifecycle;

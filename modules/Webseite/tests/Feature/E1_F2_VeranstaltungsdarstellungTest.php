@@ -13,6 +13,9 @@ declare(strict_types=1);
  */
 
 use Carbon\Carbon;
+use Yoga\Modules\Verwaltung\Application\Activity\PublicDetail\ActivityDetailQuery;
+use Yoga\Modules\Verwaltung\Application\Activity\PublicOverview\ActivityOverviewQuery;
+use Yoga\Modules\Verwaltung\Application\Activity\PublicPublishedActivities\PublishedActivitiesQuery;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\Activity\ActivityStatus;
 use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
@@ -20,9 +23,6 @@ use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
-use Yoga\Modules\Webseite\Application\Activity\ActivityDetail\ActivityDetailQuery;
-use Yoga\Modules\Webseite\Application\Activity\ActivityOverview\ActivityOverviewQuery;
-use Yoga\Modules\Webseite\Application\Activity\PublishedActivities\PublishedActivitiesQuery;
 
 beforeEach(function (): void {
     $this->future = Carbon::now()->addDays(7);
@@ -89,8 +89,8 @@ it('shows waiting list hint for fully booked activities', function (): void {
     $waiting = TestFactory::createParticipant(email: 'waiting@example.com');
 
     new Registration([
-        'aktivitaet_id' => $activity->getAttribute('id'),
-        'teilnehmer_id' => $confirmed->getAttribute('id'),
+        'aktivitaet_id' => $activity->id,
+        'teilnehmer_id' => $confirmed->id,
         'angemeldet_am' => now(),
         'status' => RegistrationStatus::Confirmed->value,
         'zahlungsart' => RegistrationPaymentMethod::Cash->value,
@@ -98,8 +98,8 @@ it('shows waiting list hint for fully booked activities', function (): void {
     ])->save();
 
     new Registration([
-        'aktivitaet_id' => $activity->getAttribute('id'),
-        'teilnehmer_id' => $waiting->getAttribute('id'),
+        'aktivitaet_id' => $activity->id,
+        'teilnehmer_id' => $waiting->id,
         'angemeldet_am' => now(),
         'status' => RegistrationStatus::WaitingList->value,
         'zahlungsart' => RegistrationPaymentMethod::Cash->value,
@@ -121,8 +121,8 @@ it('shows activity details by slug with free seats and sessions', function (): v
 
     $participant = TestFactory::createParticipant(email: 'detail@example.com');
     new Registration([
-        'aktivitaet_id' => $activity->getAttribute('id'),
-        'teilnehmer_id' => $participant->getAttribute('id'),
+        'aktivitaet_id' => $activity->id,
+        'teilnehmer_id' => $participant->id,
         'angemeldet_am' => now(),
         'status' => RegistrationStatus::Confirmed->value,
         'zahlungsart' => RegistrationPaymentMethod::Cash->value,
@@ -134,7 +134,7 @@ it('shows activity details by slug with free seats and sessions', function (): v
 
     expect($result->isSuccess())->toBeTrue();
 
-    $detail = $result->value();
+    $detail = $result->unwrap();
     expect($detail->slug)->toBe($activity->slug);
     expect($detail->freie_plaetze)->toBe(2);
     expect($detail->ausgebucht)->toBeFalse();
@@ -150,6 +150,6 @@ it('marks activity as not bookable when it has no future sessions', function ():
     $result = $query->execute($activity->slug);
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->buchbar)->toBeFalse();
-    expect($result->value()->termine)->toBeEmpty();
+    expect($result->unwrap()->buchbar)->toBeFalse();
+    expect($result->unwrap()->termine)->toBeEmpty();
 });

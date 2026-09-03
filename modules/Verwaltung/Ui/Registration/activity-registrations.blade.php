@@ -3,6 +3,10 @@
 
     <p><a href="{{ route('verwaltung.registration.create', ['id' => $activityId]) }}">Teilnehmer anmelden</a></p>
 
+    @if ($message !== '')
+        <p class="verwaltung-message">{{ $message }}</p>
+    @endif
+
     @if (empty($registrations))
         <p>Noch keine Anmeldungen vorhanden.</p>
     @else
@@ -35,7 +39,9 @@
                             @elseif ($registration->zahlungsart === 'ueberweisung' && $registration->zahlungsstatus !== 'bezahlt')
                                 <span>Rechnung offen</span>
                             @endif
-                            <button type="button" wire:click="cancel('{{ $registration->id }}')">Stornieren</button>
+                            @if ($registration->status !== 'storniert')
+                                <button type="button" wire:click="cancel('{{ $registration->id }}')">Stornieren</button>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

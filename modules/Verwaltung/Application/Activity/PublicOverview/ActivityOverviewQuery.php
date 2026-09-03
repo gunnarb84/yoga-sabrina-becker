@@ -2,30 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Yoga\Modules\Webseite\Application\Activity\ActivityOverview;
+namespace Yoga\Modules\Verwaltung\Application\Activity\PublicOverview;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
+use Yoga\Modules\Verwaltung\Domain\Activity\ActivityStatus;
 use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
+use Yoga\Modules\Verwaltung\Domain\Session\Session;
 
 final readonly class ActivityOverviewQuery
 {
     /**
-     * @return list<object{
-     *     id: string,
-     *     slug: string,
-     *     typ: string,
-     *     typLabel: string,
-     *     titel: string,
-     *     kurzbeschreibung: string|null,
-     *     preis: string,
-     *     bild: string|null,
-     *     naechster_termin: string|null,
-     *     freie_plaetze: int,
-     *     warteliste_anzahl: int,
-     *     ausgebucht: bool
-     * }>
+     * @return list<object>
      */
     public function execute(?string $typeFilter = null): array
     {
@@ -40,79 +30,68 @@ final readonly class ActivityOverviewQuery
             return [];
         }
 
-        $query = DB::table('verwaltung_aktivitaeten')
-            ->select([
-                'id',
-                'slug',
-                'typ',
-                'titel',
-                'kurzbeschreibung',
-                'preis',
-                'maximale_teilnehmerzahl',
-                'bild',
-            ])
-            ->where('veroeffentlicht', true)
-            ->where('status', 'veroeffentlicht')
+        $query = Activity::where('veroeffentlicht', true)
+            ->where('status', ActivityStatus::Published->value)
             ->whereIn('id', $activityIdsWithFutureSessions);
 
         if ($typeFilter !== null && $typeFilter !== '') {
             $query->where('typ', $typeFilter);
         }
 
-        $rows = $query->orderBy('titel')->get();
+        $activities = $query->orderBy('titel')->get();
 
-        $items = $rows->map(function (object $row) use ($now): object {
-            $activityIdBytes = $row->id;
+        $items = [];
+
+        foreach ($activities as $activity) {
+            $activityIdBytes = Uuid::fromString($activity->id)->getBytes();
 
             $confirmedCount = DB::table('verwaltung_anmeldungen')
                 ->whereRaw('aktivitaet_id = ?', [$activityIdBytes])
                 ->where('status', RegistrationStatus::Confirmed->value)
                 ->count();
 
-            $freeSeats = max(0, (int) $row->maximale_teilnehmerzahl - (int) $confirmedCount);
+            $freeSeats = max(0, $activity->maximale_teilnehmerzahl - $confirmedCount);
 
             $waitingListCount = DB::table('verwaltung_anmeldungen')
                 ->whereRaw('aktivitaet_id = ?', [$activityIdBytes])
                 ->where('status', RegistrationStatus::WaitingList->value)
                 ->count();
 
-            $nextSession = DB::table('verwaltung_termine')
-                ->select('beginn')
+            $nextSession = Session::select('beginn')
                 ->whereRaw('aktivitaet_id = ?', [$activityIdBytes])
                 ->where('beginn', '>=', $now)
                 ->orderBy('beginn')
                 ->first();
 
-            $type = ActivityType::tryFrom($row->typ);
+            $type = $activity->typ;
 
-            return (object) [
-                'id' => Uuid::fromBytes($activityIdBytes)->toString(),
-                'slug' => $row->slug,
-                'typ' => $row->typ,
+            $items[] = (object) [
+                'id' => $activity->id,
+                'slug' => $activity->slug,
+                'typ' => $type->value,
                 'typLabel' => $this->typeLabel($type),
-                'titel' => $row->titel,
-                'kurzbeschreibung' => $row->kurzbeschreibung,
-                'preis' => $row->preis,
-                'bild' => $row->bild,
-                'naechster_termin' => $nextSession?->beginn,
+                'titel' => $activity->titel,
+                'kurzbeschreibung' => $activity->kurzbeschreibung,
+                'preis' => $activity->preis,
+                'bild' => $activity->bild,
+                'naechster_termin' => $nextSession?->beginn?->format('Y-m-d H:i:s'),
                 'freie_plaetze' => $freeSeats,
-                'warteliste_anzahl' => (int) $waitingListCount,
+                'warteliste_anzahl' => $waitingListCount,
                 'ausgebucht' => $freeSeats === 0,
             ];
-        })->toArray();
+        }
 
         usort($items, fn (object $a, object $b): int => ($a->naechster_termin ?? '') <=> ($b->naechster_termin ?? ''));
 
         return $items;
     }
 
-    private function typeLabel(?ActivityType $type): string
+    private function typeLabel(ActivityType $type): string
     {
         return match ($type) {
             ActivityType::Course => 'Kurs',
             ActivityType::Event => 'Event',
             ActivityType::Workshop => 'Workshop',
-            default => $type?->value ?? '',
         };
     }
 }

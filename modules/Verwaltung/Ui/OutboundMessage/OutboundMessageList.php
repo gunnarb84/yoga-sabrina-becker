@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Ui\OutboundMessage;
 
+use Illuminate\Support\Facades\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\OutboundMessages\OutboundMessagesQuery;
@@ -33,8 +34,8 @@ final class OutboundMessageList extends Component
         );
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::outbound-message.list');
+        return View::make('verwaltung::outbound-message.list');
     }
 }

@@ -20,6 +20,8 @@ final class ActivityRegistrations extends Component
      */
     public array $registrations = [];
 
+    public string $message = '';
+
     public function mount(string $id, RegistrationsByActivityQuery $query): void
     {
         $this->activityId = $id;
@@ -28,17 +30,25 @@ final class ActivityRegistrations extends Component
 
     public function cancel(string $registrationId, CancelRegistrationOperation $operation, RegistrationsByActivityQuery $query): void
     {
+        $this->message = '';
         $result = $operation->execute(new CancelRegistrationRequest($registrationId));
 
         if ($result->isFailure()) {
-            // Fehleranzeige in Vollversion ergaenzen.
+            $error = $result->error();
+
+            $this->message = match ($error !== null ? $error['code'] : '') {
+                'registration.not_found' => 'Die Anmeldung wurde nicht gefunden.',
+                'registration.already_cancelled' => 'Die Anmeldung ist bereits storniert.',
+                default => 'Die Stornierung ist fehlgeschlagen.',
+            };
+
             return;
         }
 
         $this->registrations = $query->execute($this->activityId);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::registration.activity-registrations');
     }

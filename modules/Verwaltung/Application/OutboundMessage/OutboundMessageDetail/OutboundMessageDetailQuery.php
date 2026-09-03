@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\OutboundMessage\OutboundMessageDet
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class OutboundMessageDetailQuery
 {
@@ -36,16 +37,20 @@ final readonly class OutboundMessageDetailQuery
             return null;
         }
 
+        if (! is_string($row->id)) {
+            return null;
+        }
+
         return (object) [
             'id' => Uuid::fromBytes($row->id)->toString(),
-            'anmeldung_id' => $row->anmeldung_id === null ? null : Uuid::fromBytes($row->anmeldung_id)->toString(),
-            'aktivitaet_id' => $row->aktivitaet_id === null ? null : Uuid::fromBytes($row->aktivitaet_id)->toString(),
-            'empfaenger' => $row->empfaenger,
-            'betreff' => $row->betreff,
-            'inhalt' => $row->inhalt,
-            'status' => $row->status,
-            'versendet_am' => $row->versendet_am,
-            'fehlermeldung' => $row->fehlermeldung,
+            'anmeldung_id' => is_string($row->anmeldung_id) ? Uuid::fromBytes($row->anmeldung_id)->toString() : null,
+            'aktivitaet_id' => is_string($row->aktivitaet_id) ? Uuid::fromBytes($row->aktivitaet_id)->toString() : null,
+            'empfaenger' => DbValue::string($row->empfaenger),
+            'betreff' => DbValue::string($row->betreff),
+            'inhalt' => DbValue::string($row->inhalt),
+            'status' => DbValue::string($row->status),
+            'versendet_am' => DbValue::nullableString($row->versendet_am),
+            'fehlermeldung' => DbValue::nullableString($row->fehlermeldung),
         ];
     }
 }

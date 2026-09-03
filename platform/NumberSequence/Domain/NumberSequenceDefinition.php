@@ -9,10 +9,20 @@ use Yoga\Platform\Identity\UuidCast;
 use Yoga\Platform\Shared\Domain\PlatformEntityLifecycle;
 
 /**
- * Zentrale, fachlich neutrale Definition eines fortlaufenden Nummernkreises.
- * Keine Modulbegriffe, keine Tabellennamen von Anwendungsmodulen.
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property string $bezeichnung
+ * @property string $code
+ * @property \Carbon\Carbon $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property int $jahr_stellen
+ * @property int $laenge_nummer
+ * @property string $prefix
+ * @property int $start_nummer
+ * @property int $version
  */
-final class NumberSequenceDefinition extends Model
+class NumberSequenceDefinition extends Model
 {
     use PlatformEntityLifecycle;
 

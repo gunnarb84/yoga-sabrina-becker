@@ -14,6 +14,7 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class MarkTransferPaid
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $invoice = Invoice::findById($request->invoiceId);
@@ -22,13 +23,13 @@ final readonly class MarkTransferPaid
             return Result::failure('invoice.not_found');
         }
 
-        $payment = Payment::findById($invoice->getAttribute('zahlung_id'));
+        $payment = Payment::findById($invoice->zahlung_id);
 
         if ($payment === null) {
             return Result::failure('payment.not_found');
         }
 
-        $registration = Registration::findById($payment->getAttribute('anmeldung_id'));
+        $registration = Registration::findById($payment->anmeldung_id);
 
         if ($registration === null) {
             return Result::failure('registration.not_found');
@@ -55,7 +56,7 @@ final readonly class MarkTransferPaid
                 : RegistrationPaymentStatus::Open;
             $registration->save();
 
-            return Result::success(new Response($payment->getAttribute('id'), $newStatus));
+            return Result::success(new Response($payment->id, $newStatus));
         });
     }
 }

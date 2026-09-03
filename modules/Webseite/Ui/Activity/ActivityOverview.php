@@ -6,14 +6,13 @@ namespace Yoga\Modules\Webseite\Ui\Activity;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
-use Yoga\Modules\Webseite\Application\Activity\ActivityOverview\ActivityOverviewQuery;
+use Yoga\Modules\Verwaltung\Application\Activity\PublicOverview\ActivityOverviewQuery;
 
 #[Layout('webseite::layouts.app')]
 final class ActivityOverview extends Component
 {
     /**
-     * @var list<object{id: string, slug: string, typ: string, typLabel: string, titel: string, kurzbeschreibung: string|null, preis: string, bild: string|null, naechster_termin: string|null, freie_plaetze: int, warteliste_anzahl: int, ausgebucht: bool}>
+     * @var list<object>
      */
     public array $activities = [];
 
@@ -29,7 +28,7 @@ final class ActivityOverview extends Component
         $this->activities = $query->execute($this->typeFilter);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('webseite::activity.activity-overview', [
             'typeOptions' => $this->typeOptions(),
@@ -43,9 +42,9 @@ final class ActivityOverview extends Component
     {
         return [
             ['value' => '', 'label' => 'Alle'],
-            ['value' => ActivityType::Course->value, 'label' => 'Kurs'],
-            ['value' => ActivityType::Event->value, 'label' => 'Event'],
-            ['value' => ActivityType::Workshop->value, 'label' => 'Workshop'],
+            ['value' => 'kurs', 'label' => 'Kurs'],
+            ['value' => 'event', 'label' => 'Event'],
+            ['value' => 'workshop', 'label' => 'Workshop'],
         ];
     }
 }

@@ -11,6 +11,8 @@ use Ramsey\Uuid\Uuid;
 /**
  * Wandelt UUIDs zwischen binaerer Speicherung (binary(16)) und textueller
  * Darstellung im Modell um.
+ *
+ * @implements CastsAttributes<string, string|null>
  */
 final class UuidCast implements CastsAttributes
 {

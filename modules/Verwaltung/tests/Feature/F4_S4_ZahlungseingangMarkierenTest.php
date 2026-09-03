@@ -22,7 +22,6 @@ use Yoga\Modules\Verwaltung\Domain\Invoice\Invoice;
 use Yoga\Modules\Verwaltung\Domain\Invoice\InvoiceStatus;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentStatus;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
@@ -40,33 +39,33 @@ it('marks a transfer invoice as paid and updates the registration payment status
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
-    $registrationRecord = Registration::findById($registration->value()->registrationId);
+    $registrationRecord = Registration::findById($registration->unwrap()->registrationId);
     expect($registrationRecord->zahlungsstatus)->toBe(RegistrationPaymentStatus::Open);
 
-    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->value()->registrationId)->getBytes()])->first();
+    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->unwrap()->registrationId)->getBytes()])->first();
     expect($payment)->not->toBeNull();
 
-    $invoice = Invoice::whereRaw('zahlung_id = ?', [Uuid::fromString($payment->getAttribute('id'))->getBytes()])->first();
+    $invoice = Invoice::whereRaw('zahlung_id = ?', [Uuid::fromString($payment->id)->getBytes()])->first();
     expect($invoice)->not->toBeNull();
     expect($invoice->status)->toBe(InvoiceStatus::Open);
 
     $mark = new MarkTransferPaid();
     $result = $mark->execute(new MarkTransferPaidRequest(
-        invoiceId: $invoice->getAttribute('id'),
+        invoiceId: $invoice->id,
         userId: '018e1234-5678-7abc-8def-0123456789ab',
     ));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->status)->toBe(InvoiceStatus::Paid);
+    expect($result->unwrap()->status)->toBe(InvoiceStatus::Paid);
 
     $invoice = $invoice->fresh();
     expect($invoice->status)->toBe(InvoiceStatus::Paid);
-    expect($invoice->getAttribute('geaendert_von'))->toBe('018e1234-5678-7abc-8def-0123456789ab');
+    expect($invoice->geaendert_von)->toBe('018e1234-5678-7abc-8def-0123456789ab');
 
     $payment = $payment->fresh();
     expect($payment->bezahlt_am)->not->toBeNull();
@@ -79,20 +78,20 @@ it('toggles a paid invoice back to open', function (): void {
     $participant = TestFactory::createParticipant(email: 'teilnehmer@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
-    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->value()->registrationId)->getBytes()])->first();
-    $invoice = Invoice::whereRaw('zahlung_id = ?', [Uuid::fromString($payment->getAttribute('id'))->getBytes()])->first();
+    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->unwrap()->registrationId)->getBytes()])->first();
+    $invoice = Invoice::whereRaw('zahlung_id = ?', [Uuid::fromString($payment->id)->getBytes()])->first();
 
     $mark = new MarkTransferPaid();
-    $mark->execute(new MarkTransferPaidRequest(invoiceId: $invoice->getAttribute('id')));
-    $result = $mark->execute(new MarkTransferPaidRequest(invoiceId: $invoice->getAttribute('id')));
+    $mark->execute(new MarkTransferPaidRequest(invoiceId: $invoice->id));
+    $result = $mark->execute(new MarkTransferPaidRequest(invoiceId: $invoice->id));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->status)->toBe(InvoiceStatus::Open);
+    expect($result->unwrap()->status)->toBe(InvoiceStatus::Open);
 
     $invoice = $invoice->fresh();
     expect($invoice->status)->toBe(InvoiceStatus::Open);
@@ -100,7 +99,7 @@ it('toggles a paid invoice back to open', function (): void {
     $payment = $payment->fresh();
     expect($payment->bezahlt_am)->toBeNull();
 
-    $registration = Registration::findById($registration->value()->registrationId);
+    $registration = Registration::findById($registration->unwrap()->registrationId);
     expect($registration->zahlungsstatus)->toBe(RegistrationPaymentStatus::Open);
 });
 

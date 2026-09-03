@@ -10,6 +10,7 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class ResendOutboundMessage
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $original = OutboundMessage::findById($request->messageId);
@@ -23,7 +24,7 @@ final readonly class ResendOutboundMessage
         }
 
         $resend = new OutboundMessage([
-            'anmeldung_id' => $original->getAttribute('anmeldung_id'),
+            'anmeldung_id' => $original->anmeldung_id,
             'empfaenger' => $original->empfaenger,
             'betreff' => $original->betreff,
             'inhalt' => $original->inhalt,
@@ -32,6 +33,6 @@ final readonly class ResendOutboundMessage
 
         $resend->save();
 
-        return Result::success(new Response($resend->getAttribute('id')));
+        return Result::success(new Response($resend->id));
     }
 }

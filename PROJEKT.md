@@ -25,14 +25,14 @@ dokuUser  = "docs/user"
 dokuDev   = "docs/dev"
 analyse   = "analysis"
 harness   = "harness-php"
-pruefwurzel = "src/app"
+pruefwurzel = "."
 
 [php]
 wurzel      = "."
 modulwurzel = "modules"
-phpstanConfig = "harness-php/phpstan.neon"
-pintConfig    = "harness-php/pint.json"
-deptracConfig = "harness-php/deptrac.yaml"
+phpstanConfig = "phpstan.neon"
+pintConfig    = "pint.json"
+deptracConfig = "deptrac.yaml"
 
 [ui]
 stylesheet = "src/public/css/yoga-ui.css"

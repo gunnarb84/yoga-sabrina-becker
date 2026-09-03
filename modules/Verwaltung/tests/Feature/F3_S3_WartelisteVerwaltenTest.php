@@ -19,7 +19,6 @@ use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
@@ -36,29 +35,29 @@ it('creates a waiting-list entry with the next rank when the activity is full', 
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $first->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $first->id,
+        paymentMethod: 'bar',
     ));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $second->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $second->id,
+        paymentMethod: 'bar',
     ));
     $waiting = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $third->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $third->id,
+        paymentMethod: 'bar',
     ));
 
     expect($waiting->isSuccess())->toBeTrue();
-    expect($waiting->value()->onWaitingList)->toBeTrue();
+    expect($waiting->unwrap()->onWaitingList)->toBeTrue();
 
-    $registration = Registration::findById($waiting->value()->registrationId);
+    $registration = Registration::findById($waiting->unwrap()->registrationId);
     expect($registration)->not->toBeNull();
     expect($registration->status)->toBe(RegistrationStatus::WaitingList);
 
-    $entry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->getAttribute('id'))->getBytes()])->first();
+    $entry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->id)->getBytes()])->first();
     expect($entry)->not->toBeNull();
     expect($entry->rang)->toBe(1);
 });
@@ -71,29 +70,29 @@ it('assigns increasing ranks for multiple waiting-list entries', function (): vo
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participants[0]->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participants[0]->id,
+        paymentMethod: 'bar',
     ));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participants[1]->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participants[1]->id,
+        paymentMethod: 'bar',
     ));
 
     $firstWaiting = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participants[2]->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participants[2]->id,
+        paymentMethod: 'bar',
     ));
     $secondWaiting = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participants[3]->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $participants[3]->id,
+        paymentMethod: 'bar',
     ));
 
-    $firstEntry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString(Registration::findById($firstWaiting->value()->registrationId)->getAttribute('id'))->getBytes()])->first();
-    $secondEntry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString(Registration::findById($secondWaiting->value()->registrationId)->getAttribute('id'))->getBytes()])->first();
+    $firstEntry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString(Registration::findById($firstWaiting->unwrap()->registrationId)->id)->getBytes()])->first();
+    $secondEntry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString(Registration::findById($secondWaiting->unwrap()->registrationId)->id)->getBytes()])->first();
 
     expect($firstEntry->rang)->toBe(1);
     expect($secondEntry->rang)->toBe(2);

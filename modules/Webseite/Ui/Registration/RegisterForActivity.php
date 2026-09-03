@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Webseite\Ui\Registration;
 
+use Illuminate\Support\Facades\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Yoga\Modules\Verwaltung\Application\Activity\PublicDetail\ActivityDetailQuery;
 use Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant\Request as UpsertParticipantRequest;
 use Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant\UpsertParticipant as UpsertParticipantOperation;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant as RegisterParticipantOperation;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterParticipantRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmation\Request as SendConfirmationRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmation\SendRegistrationConfirmation;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
-use Yoga\Modules\Webseite\Application\Activity\ActivityDetail\ActivityDetailQuery;
 
 #[Layout('webseite::layouts.app')]
 final class RegisterForActivity extends Component
 {
     public string $activityId = '';
 
+    /**
+     * @var object{id: string, slug: string, typ: string, typLabel: string, titel: string, kurzbeschreibung: string|null, langbeschreibung: string|null, preis: string, maximale_teilnehmerzahl: int, freie_plaetze: int, warteliste_anzahl: int, ausgebucht: bool, buchbar: bool, bild: string|null, termine: list<object{id: string, beginn: \Carbon\Carbon, ende: \Carbon\Carbon, ort: string|null, hinweis: string|null}>}|null
+     */
     public ?object $activity = null;
 
     public string $firstName = '';
@@ -62,13 +65,13 @@ final class RegisterForActivity extends Component
             return;
         }
 
-        $this->activity = $result->value();
+        $this->activity = $result->unwrap();
         $this->activityId = $this->activity->id;
 
         if ((float) $this->activity->preis === 0.0) {
-            $this->paymentMethod = RegistrationPaymentMethod::Free->value;
+            $this->paymentMethod = 'kostenlos';
         } else {
-            $this->paymentMethod = RegistrationPaymentMethod::Transfer->value;
+            $this->paymentMethod = 'ueberweisung';
         }
     }
 
@@ -82,9 +85,7 @@ final class RegisterForActivity extends Component
             return;
         }
 
-        $method = RegistrationPaymentMethod::tryFrom($this->paymentMethod);
-
-        if ($method === null) {
+        if (! in_array($this->paymentMethod, ['bar', 'ueberweisung', 'kostenlos'], true)) {
             $this->error = 'Bitte eine gueltige Zahlungsart waehlen.';
 
             return;
@@ -112,8 +113,8 @@ final class RegisterForActivity extends Component
 
         $registerResult = $register->execute(new RegisterParticipantRequest(
             activityId: $this->activityId,
-            participantId: $upsertResult->value()->participantId,
-            paymentMethod: $method,
+            participantId: $upsertResult->unwrap()->participantId,
+            paymentMethod: $this->paymentMethod,
         ));
 
         if ($registerResult->isFailure()) {
@@ -123,16 +124,16 @@ final class RegisterForActivity extends Component
         }
 
         $this->submitted = true;
-        $this->onWaitingList = $registerResult->value()->onWaitingList;
+        $this->onWaitingList = $registerResult->unwrap()->onWaitingList;
 
         $confirmation->execute(new SendConfirmationRequest(
-            registrationId: $registerResult->value()->registrationId,
+            registrationId: $registerResult->unwrap()->registrationId,
         ));
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
-        return view('webseite::registration.register-for-activity', [
+        return View::make('webseite::registration.register-for-activity', [
             'paymentMethods' => $this->paymentMethodOptions(),
         ]);
     }
@@ -142,23 +143,9 @@ final class RegisterForActivity extends Component
      */
     private function paymentMethodOptions(): array
     {
-        $options = [];
-
-        foreach (RegistrationPaymentMethod::cases() as $method) {
-            if ($method === RegistrationPaymentMethod::Free) {
-                continue;
-            }
-
-            $options[] = [
-                'value' => $method->value,
-                'label' => match ($method) {
-                    RegistrationPaymentMethod::Cash => 'Barzahlung vor Ort',
-                    RegistrationPaymentMethod::Transfer => 'Überweisung',
-                    default => $method->value,
-                },
-            ];
-        }
-
-        return $options;
+        return [
+            ['value' => 'bar', 'label' => 'Barzahlung vor Ort'],
+            ['value' => 'ueberweisung', 'label' => 'Überweisung'],
+        ];
     }
 }

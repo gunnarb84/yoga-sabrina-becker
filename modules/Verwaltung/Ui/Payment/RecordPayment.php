@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Ui\Payment;
 
+use Illuminate\Support\Facades\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\RecordPayment as RecordPaymentOperation;
@@ -41,22 +42,22 @@ final class RecordPayment extends Component
         }
 
         if ($registration->zahlungsstatus === RegistrationPaymentStatus::Paid) {
-            $this->redirect(route('verwaltung.activity.registrations', ['id' => $registration->getAttribute('aktivitaet_id')]), navigate: true);
+            $this->redirect(route('verwaltung.activity.registrations', ['id' => $registration->aktivitaet_id]), navigate: true);
 
             return;
         }
 
         if ($registration->zahlungsart === RegistrationPaymentMethod::Transfer) {
-            $this->redirect(route('verwaltung.activity.registrations', ['id' => $registration->getAttribute('aktivitaet_id')]), navigate: true);
+            $this->redirect(route('verwaltung.activity.registrations', ['id' => $registration->aktivitaet_id]), navigate: true);
 
             return;
         }
 
-        $this->activityId = $registration->getAttribute('aktivitaet_id');
+        $this->activityId = $registration->aktivitaet_id;
         $activity = Activity::findById($this->activityId);
-        $participant = Participant::findById($registration->getAttribute('teilnehmer_id'));
+        $participant = Participant::findById($registration->teilnehmer_id);
 
-        $this->amount = (string) ($activity?->preis ?? '');
+        $this->amount = $activity !== null ? (string) $activity->preis : '';
         $this->paidAt = now()->format('Y-m-d\TH:i');
         $this->recipient = $participant === null ? '' : trim($participant->vorname.' '.$participant->nachname);
     }
@@ -78,8 +79,8 @@ final class RecordPayment extends Component
         $this->redirect(route('verwaltung.activity.registrations', ['id' => $this->activityId]), navigate: true);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::payment.record-payment');
+        return View::make('verwaltung::payment.record-payment');
     }
 }

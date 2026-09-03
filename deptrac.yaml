@@ -1,0 +1,117 @@
+deptrac:
+    paths:
+        - modules
+        - platform
+
+    exclude_files:
+        - '#.*[Tt]est.*#'
+
+    layers:
+        # ------------------------------------------------------------------
+        # Verwaltung
+        # ------------------------------------------------------------------
+        -   name: 'Verwaltung.Domain'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Domain\\\\~'
+        -   name: 'Verwaltung.Application'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Application\\\\~'
+        -   name: 'Verwaltung.Persistence'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Persistence\\\\~'
+        -   name: 'Verwaltung.Ui'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Ui\\\\~'
+        -   name: 'Verwaltung.Api'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Api\\\\~'
+
+        # ------------------------------------------------------------------
+        # Webseite
+        # ------------------------------------------------------------------
+        -   name: 'Webseite.Domain'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Domain\\\\~'
+        -   name: 'Webseite.Application'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Application\\\\~'
+        -   name: 'Webseite.Persistence'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Persistence\\\\~'
+        -   name: 'Webseite.Ui'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Ui\\\\~'
+        -   name: 'Webseite.Api'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Api\\\\~'
+
+        # ------------------------------------------------------------------
+        # Plattformbausteine
+        # ------------------------------------------------------------------
+        -   name: 'Platform.Domain'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Platform\\\\[a-z0-9_]+\\\\Domain\\\\~'
+        -   name: 'Platform.Application'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Platform\\\\[a-z0-9_]+\\\\Application\\\\~'
+        -   name: 'Platform.Persistence'
+            collectors:
+                -   type: classNameRegex
+                    value: '~^Yoga\\\\Platform\\\\[a-z0-9_]+\\\\Persistence\\\\~'
+
+    ruleset:
+        # Domain kennt nichts außer sich — Fachregeln bleiben bestimmbar.
+        'Verwaltung.Domain': []
+        'Webseite.Domain': []
+
+        # Application nutzt die eigene Domain und Plattformbausteine über deren
+        # Application-Schnitt. Webseite darf Verwaltung.Application nutzen.
+        'Verwaltung.Application':
+            - 'Verwaltung.Domain'
+            - 'Platform.Application'
+
+        'Webseite.Application':
+            - 'Webseite.Domain'
+            - 'Platform.Application'
+            - 'Verwaltung.Application'
+
+        'Verwaltung.Persistence':
+            - 'Verwaltung.Domain'
+
+        'Webseite.Persistence':
+            - 'Webseite.Domain'
+
+        'Verwaltung.Ui':
+            - 'Verwaltung.Application'
+
+        'Webseite.Ui':
+            - 'Webseite.Application'
+            - 'Verwaltung.Application'
+
+        'Verwaltung.Api':
+            - 'Verwaltung.Application'
+
+        'Webseite.Api':
+            - 'Webseite.Application'
+
+        'Platform.Domain': []
+
+        'Platform.Application':
+            - 'Platform.Domain'
+
+        'Platform.Persistence':
+            - 'Platform.Domain'
+
+    skip_violations: []

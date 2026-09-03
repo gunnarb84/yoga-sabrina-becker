@@ -10,6 +10,17 @@ use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
 use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
 use Yoga\Platform\Identity\UuidCast;
 
+/**
+ * @property \Carbon\Carbon $angelegt_am
+ * @property string|null $angelegt_von
+ * @property string $anmeldung_id
+ * @property \Carbon\Carbon|null $geaendert_am
+ * @property string|null $geaendert_von
+ * @property string $id
+ * @property \Carbon\Carbon|null $nachgerueckt_am
+ * @property int $rang
+ * @property int $version
+ */
 class WaitingList extends Model
 {
     use EntityLifecycle;

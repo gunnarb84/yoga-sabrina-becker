@@ -56,5 +56,16 @@
     </footer>
 
     @livewireScripts
+    <script>
+        (function () {
+            function markReady() {
+                document.body.setAttribute('data-livewire-ready', 'true');
+            }
+            if (window.Livewire) {
+                markReady();
+            }
+            document.addEventListener('livewire:initialized', markReady);
+        })();
+    </script>
 </body>
 </html>

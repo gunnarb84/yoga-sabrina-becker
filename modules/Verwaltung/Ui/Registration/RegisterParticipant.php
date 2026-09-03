@@ -50,7 +50,7 @@ final class RegisterParticipant extends Component
         $result = $operation->execute(new RegisterParticipantRequest(
             activityId: $this->activityId,
             participantId: $this->participantId,
-            paymentMethod: $method,
+            paymentMethod: $method->value,
         ));
 
         if ($result->isFailure()) {
@@ -63,7 +63,7 @@ final class RegisterParticipant extends Component
         $this->participantId = '';
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::registration.register-participant', [
             'methods' => array_map(fn (RegistrationPaymentMethod $m): array => ['value' => $m->value, 'label' => ucfirst($m->value)], RegistrationPaymentMethod::cases()),

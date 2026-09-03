@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\Participant\Participants;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class ParticipantsQuery
 {
@@ -28,15 +29,22 @@ final readonly class ParticipantsQuery
             ->limit($limit)
             ->get();
 
-        return $rows->map(function (object $row): object {
-            return (object) [
+        $result = [];
+        foreach ($rows as $row) {
+            if (! is_string($row->id)) {
+                continue;
+            }
+
+            $result[] = (object) [
                 'id' => Uuid::fromBytes($row->id)->toString(),
-                'email' => $row->email,
-                'vorname' => $row->vorname,
-                'nachname' => $row->nachname,
-                'telefon' => $row->telefon,
-                'stadt' => $row->stadt,
+                'email' => DbValue::string($row->email),
+                'vorname' => DbValue::string($row->vorname),
+                'nachname' => DbValue::string($row->nachname),
+                'telefon' => DbValue::nullableString($row->telefon),
+                'stadt' => DbValue::nullableString($row->stadt),
             ];
-        })->toArray();
+        }
+
+        return $result;
     }
 }

@@ -30,7 +30,6 @@ use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
 use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentStatus;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
@@ -58,30 +57,30 @@ it('creates a new participant and a confirmed registration for transfer payment'
     ));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->wasCreated)->toBeTrue();
+    expect($result->unwrap()->wasCreated)->toBeTrue();
 
-    $participant = Participant::findById($result->value()->participantId);
+    $participant = Participant::findById($result->unwrap()->participantId);
     expect($participant)->not->toBeNull();
     expect($participant->email)->toBe('neu@example.com');
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $result->value()->participantId,
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $result->unwrap()->participantId,
+        paymentMethod: 'ueberweisung',
     ));
 
     expect($registration->isSuccess())->toBeTrue();
-    expect($registration->value()->onWaitingList)->toBeFalse();
+    expect($registration->unwrap()->onWaitingList)->toBeFalse();
 
-    $registrationRecord = Registration::findById($registration->value()->registrationId);
+    $registrationRecord = Registration::findById($registration->unwrap()->registrationId);
     expect($registrationRecord)->not->toBeNull();
     expect($registrationRecord->status)->toBe(RegistrationStatus::Confirmed);
 
-    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->value()->registrationId)->getBytes()])->first();
+    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->unwrap()->registrationId)->getBytes()])->first();
     expect($payment)->not->toBeNull();
 
-    $invoice = Invoice::whereRaw('zahlung_id = ?', [Uuid::fromString($payment->getAttribute('id'))->getBytes()])->first();
+    $invoice = Invoice::whereRaw('zahlung_id = ?', [Uuid::fromString($payment->id)->getBytes()])->first();
     expect($invoice)->not->toBeNull();
 });
 
@@ -108,7 +107,7 @@ it('updates an existing participant by email', function (): void {
     ));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->wasCreated)->toBeFalse();
+    expect($result->unwrap()->wasCreated)->toBeFalse();
 
     $existing = $existing->fresh();
     expect($existing->vorname)->toBe('Neu');
@@ -121,28 +120,28 @@ it('places registration on waiting list when activity is full', function (): voi
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $first->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $first->id,
+        paymentMethod: 'bar',
     ));
     $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $second->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $second->id,
+        paymentMethod: 'bar',
     ));
     $waiting = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $third->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Cash,
+        activityId: $this->activity->id,
+        participantId: $third->id,
+        paymentMethod: 'bar',
     ));
 
     expect($waiting->isSuccess())->toBeTrue();
-    expect($waiting->value()->onWaitingList)->toBeTrue();
+    expect($waiting->unwrap()->onWaitingList)->toBeTrue();
 
-    $registrationRecord = Registration::findById($waiting->value()->registrationId);
+    $registrationRecord = Registration::findById($waiting->unwrap()->registrationId);
     expect($registrationRecord->status)->toBe(RegistrationStatus::WaitingList);
 
-    $entry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString($waiting->value()->registrationId)->getBytes()])->first();
+    $entry = WaitingList::whereRaw('anmeldung_id = ?', [Uuid::fromString($waiting->unwrap()->registrationId)->getBytes()])->first();
     expect($entry)->not->toBeNull();
 });
 
@@ -160,17 +159,17 @@ it('does not create a payment for free registrations', function (): void {
 
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $freeActivity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Free,
+        activityId: $freeActivity->id,
+        participantId: $participant->id,
+        paymentMethod: 'kostenlos',
     ));
 
     expect($registration->isSuccess())->toBeTrue();
 
-    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->value()->registrationId)->getBytes()])->first();
+    $payment = Payment::whereRaw('anmeldung_id = ?', [Uuid::fromString($registration->unwrap()->registrationId)->getBytes()])->first();
     expect($payment)->toBeNull();
 
-    $registrationRecord = Registration::findById($registration->value()->registrationId);
+    $registrationRecord = Registration::findById($registration->unwrap()->registrationId);
     expect($registrationRecord->zahlungsstatus)->toBe(RegistrationPaymentStatus::Paid);
 });
 
@@ -178,19 +177,19 @@ it('generates a PDF for a transfer invoice', function (): void {
     $participant = TestFactory::createParticipant(email: 'rechnung@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
-    expect($registration->value()->invoiceId)->toBeUuidString();
+    expect($registration->unwrap()->invoiceId)->toBeUuidString();
 
     $generator = new GenerateInvoicePdf();
-    $result = $generator->execute(new GeneratePdfRequest($registration->value()->invoiceId));
+    $result = $generator->execute(new GeneratePdfRequest($registration->unwrap()->invoiceId));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->value()->content)->not->toBe('');
-    expect($result->value()->filename)->toStartWith('Rechnung-R-');
+    expect($result->unwrap()->content)->not->toBe('');
+    expect($result->unwrap()->filename)->toStartWith('Rechnung-R-');
 });
 
 it('sends a confirmation email and creates an outbound message for a transfer registration', function (): void {
@@ -203,19 +202,19 @@ it('sends a confirmation email and creates an outbound message for a transfer re
     );
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $this->activity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Transfer,
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'ueberweisung',
     ));
 
     $confirmation = new SendRegistrationConfirmation(new GenerateInvoicePdf());
     $result = $confirmation->execute(new ConfirmationRequest(
-        registrationId: $registration->value()->registrationId,
+        registrationId: $registration->unwrap()->registrationId,
     ));
 
     expect($result->isSuccess())->toBeTrue();
 
-    $message = OutboundMessage::findById($result->value()->outboundMessageId);
+    $message = OutboundMessage::findById($result->unwrap()->outboundMessageId);
     expect($message)->not->toBeNull();
     expect($message->status)->toBe(OutboundMessageStatus::Sent);
     expect($message->empfaenger)->toBe('mail@example.com');
@@ -240,19 +239,19 @@ it('sends a confirmation email without attachment for a free registration', func
     $participant = TestFactory::createParticipant(email: 'kostenlos@example.com');
     $register = new RegisterParticipant(app(NextNumber::class));
     $registration = $register->execute(new RegisterRequest(
-        activityId: $freeActivity->getAttribute('id'),
-        participantId: $participant->getAttribute('id'),
-        paymentMethod: RegistrationPaymentMethod::Free,
+        activityId: $freeActivity->id,
+        participantId: $participant->id,
+        paymentMethod: 'kostenlos',
     ));
 
     $confirmation = new SendRegistrationConfirmation(new GenerateInvoicePdf());
     $result = $confirmation->execute(new ConfirmationRequest(
-        registrationId: $registration->value()->registrationId,
+        registrationId: $registration->unwrap()->registrationId,
     ));
 
     expect($result->isSuccess())->toBeTrue();
 
-    $message = OutboundMessage::findById($result->value()->outboundMessageId);
+    $message = OutboundMessage::findById($result->unwrap()->outboundMessageId);
     expect($message)->not->toBeNull();
     expect($message->status)->toBe(OutboundMessageStatus::Sent);
 

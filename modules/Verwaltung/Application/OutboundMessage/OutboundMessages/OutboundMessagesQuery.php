@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\OutboundMessage\OutboundMessages;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class OutboundMessagesQuery
 {
@@ -37,15 +38,22 @@ final readonly class OutboundMessagesQuery
             ->orderByDesc('verwaltung_ausgehende_nachrichten.id')
             ->get();
 
-        return $rows->map(function (object $row): object {
-            return (object) [
+        $result = [];
+        foreach ($rows as $row) {
+            if (! is_string($row->id)) {
+                continue;
+            }
+
+            $result[] = (object) [
                 'id' => Uuid::fromBytes($row->id)->toString(),
-                'anmeldung_id' => $row->anmeldung_id === null ? null : Uuid::fromBytes($row->anmeldung_id)->toString(),
-                'empfaenger' => $row->empfaenger,
-                'betreff' => $row->betreff,
-                'status' => $row->status,
-                'versendet_am' => $row->versendet_am,
+                'anmeldung_id' => is_string($row->anmeldung_id) ? Uuid::fromBytes($row->anmeldung_id)->toString() : null,
+                'empfaenger' => DbValue::string($row->empfaenger),
+                'betreff' => DbValue::string($row->betreff),
+                'status' => DbValue::string($row->status),
+                'versendet_am' => DbValue::nullableString($row->versendet_am),
             ];
-        })->toArray();
+        }
+
+        return $result;
     }
 }

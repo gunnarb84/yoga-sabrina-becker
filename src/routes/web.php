@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Yoga\Modules\Verwaltung\Ui\Activity\ActivityList;
 use Yoga\Modules\Verwaltung\Ui\Activity\CreateActivity;
+use Yoga\Modules\Verwaltung\Ui\Activity\EditActivity;
 use Yoga\Modules\Verwaltung\Ui\Auth\LoginController;
 use Yoga\Modules\Verwaltung\Ui\Dashboard;
 use Yoga\Modules\Verwaltung\Ui\Invoice\InvoiceController;
@@ -12,6 +13,7 @@ use Yoga\Modules\Verwaltung\Ui\Invoice\Invoices;
 use Yoga\Modules\Verwaltung\Ui\OutboundMessage\OutboundMessageDetail;
 use Yoga\Modules\Verwaltung\Ui\OutboundMessage\OutboundMessageList;
 use Yoga\Modules\Verwaltung\Ui\Participant\CreateParticipant;
+use Yoga\Modules\Verwaltung\Ui\Participant\EditParticipant;
 use Yoga\Modules\Verwaltung\Ui\Participant\ParticipantList;
 use Yoga\Modules\Verwaltung\Ui\Payment\RecordPayment;
 use Yoga\Modules\Verwaltung\Ui\Registration\ActivityRegistrations;
@@ -36,6 +38,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/verwaltung/dashboard', Dashboard::class)->name('verwaltung.dashboard');
     Route::get('/verwaltung/aktivitaeten', ActivityList::class)->name('verwaltung.activities');
     Route::get('/verwaltung/aktivitaeten/neu', CreateActivity::class)->name('verwaltung.activity.create');
+    Route::get('/verwaltung/aktivitaeten/{id}/bearbeiten', EditActivity::class)->name('verwaltung.activity.edit');
     Route::get('/verwaltung/aktivitaeten/{id}/termine/neu', CreateSession::class)->name('verwaltung.session.create');
     Route::get('/verwaltung/aktivitaeten/{id}/anmeldungen', ActivityRegistrations::class)->name('verwaltung.activity.registrations');
     Route::get('/verwaltung/aktivitaeten/{id}/anmeldungen/neu', RegisterParticipant::class)->name('verwaltung.registration.create');
@@ -47,11 +50,15 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/verwaltung/nachrichten/{id}', OutboundMessageDetail::class)->name('verwaltung.outbound-message.detail');
     Route::get('/verwaltung/teilnehmer', ParticipantList::class)->name('verwaltung.participants');
     Route::get('/verwaltung/teilnehmer/neu', CreateParticipant::class)->name('verwaltung.participant.create');
+    Route::get('/verwaltung/teilnehmer/{id}/bearbeiten', EditParticipant::class)->name('verwaltung.participant.edit');
 });
 
 Route::post('/verwaltung/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
     ->name('verwaltung.logout');
+
+Route::get('/login', fn (): \Illuminate\Http\RedirectResponse => redirect()->route('verwaltung.login'))
+    ->name('login');
 
 Route::get('/{slug}', StaticPage::class)
     ->where('slug', '[^/]+')

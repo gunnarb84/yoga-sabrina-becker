@@ -6,13 +6,13 @@ namespace Yoga\Modules\Webseite\Ui\Activity;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Yoga\Modules\Webseite\Application\Activity\PublishedActivities\PublishedActivitiesQuery;
+use Yoga\Modules\Verwaltung\Application\Activity\PublicPublishedActivities\PublishedActivitiesQuery;
 
 #[Layout('webseite::layouts.app')]
 final class PublishedActivities extends Component
 {
     /**
-     * @var list<object{id: string, typ: string, titel: string, kurzbeschreibung: string|null, preis: string, maximale_teilnehmerzahl: int, status: string, bild: string|null}>
+     * @var list<object>
      */
     public array $activities = [];
 
@@ -21,7 +21,7 @@ final class PublishedActivities extends Component
         $this->activities = $query->execute();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('webseite::activity.published-activities');
     }

@@ -18,7 +18,11 @@
             <tbody>
                 @foreach ($participants as $participant)
                     <tr>
-                        <td>{{ $participant->vorname }} {{ $participant->nachname }}</td>
+                        <td>
+                            <a href="{{ route('verwaltung.participant.edit', ['id' => $participant->id]) }}">
+                                {{ $participant->vorname }} {{ $participant->nachname }}
+                            </a>
+                        </td>
                         <td>{{ $participant->email }}</td>
                         <td>{{ $participant->telefon }}</td>
                         <td>{{ $participant->stadt }}</td>

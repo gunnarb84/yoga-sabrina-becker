@@ -24,6 +24,7 @@ final readonly class SendInvoice
     {
     }
 
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $invoice = Invoice::findById($request->invoiceId);
@@ -54,14 +55,18 @@ final readonly class SendInvoice
         $pdfResult = $this->pdfGenerator->execute(new GeneratePdfRequest($request->invoiceId));
 
         if ($pdfResult->isFailure()) {
-            return $pdfResult;
+            $error = $pdfResult->error();
+            if ($error === null) {
+                return Result::failure('pdf.failed');
+            }
+
+            return Result::failure($error['code'], $error['errors']);
         }
 
-        $pdf = $pdfResult->value();
-        assert($pdf instanceof \Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Response);
+        $pdf = $pdfResult->unwrap();
 
         $message = new OutboundMessage([
-            'anmeldung_id' => $registration->getAttribute('id'),
+            'anmeldung_id' => $registration->id,
             'empfaenger' => $participant->email,
             'betreff' => $request->subject,
             'inhalt' => $request->body,
@@ -88,6 +93,6 @@ final readonly class SendInvoice
             $message->save();
         }
 
-        return Result::success(new Response($message->getAttribute('id')));
+        return Result::success(new Response($message->id));
     }
 }

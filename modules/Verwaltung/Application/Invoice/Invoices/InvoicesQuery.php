@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\Invoice\Invoices;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class InvoicesQuery
 {
@@ -28,17 +29,24 @@ final readonly class InvoicesQuery
             ->orderByDesc('verwaltung_rechnungen.ausgestellt_am')
             ->get();
 
-        return $rows->map(function (object $row): object {
-            return (object) [
+        $result = [];
+        foreach ($rows as $row) {
+            if (! is_string($row->id) || ! is_string($row->zahlung_id)) {
+                continue;
+            }
+
+            $result[] = (object) [
                 'id' => Uuid::fromBytes($row->id)->toString(),
-                'nummer' => $row->nummer,
-                'ausgestellt_am' => $row->ausgestellt_am,
-                'empfaenger' => $row->empfaenger,
-                'betrag' => $row->betrag,
-                'waehrung' => $row->waehrung,
-                'status' => $row->status,
+                'nummer' => DbValue::string($row->nummer),
+                'ausgestellt_am' => DbValue::string($row->ausgestellt_am),
+                'empfaenger' => DbValue::string($row->empfaenger),
+                'betrag' => DbValue::string($row->betrag),
+                'waehrung' => DbValue::string($row->waehrung),
+                'status' => DbValue::string($row->status),
                 'zahlung_id' => Uuid::fromBytes($row->zahlung_id)->toString(),
             ];
-        })->toArray();
+        }
+
+        return $result;
     }
 }

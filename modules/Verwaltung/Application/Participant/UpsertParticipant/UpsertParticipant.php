@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant;
 
+use Carbon\Carbon;
 use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 use Yoga\Platform\Shared\Application\Result;
 
 final readonly class UpsertParticipant
 {
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         $participant = Participant::where('email', $request->email)->first();
@@ -28,7 +30,7 @@ final readonly class UpsertParticipant
         $participant->postleitzahl = $request->postalCode;
         $participant->stadt = $request->city;
         $participant->telefon = $request->phone;
-        $participant->geburtsdatum = $request->dateOfBirth;
+        $participant->geburtsdatum = $request->dateOfBirth !== null ? Carbon::parse($request->dateOfBirth) : null;
 
         if ($request->healthNotes !== null && $request->healthNotesConsent) {
             $participant->gesundheitsinformationen = $request->healthNotes;
@@ -37,6 +39,6 @@ final readonly class UpsertParticipant
 
         $participant->save();
 
-        return Result::success(new Response($participant->getAttribute('id'), $wasCreated));
+        return Result::success(new Response($participant->id, $wasCreated));
     }
 }

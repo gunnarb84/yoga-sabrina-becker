@@ -19,6 +19,7 @@ final readonly class RecordPayment
     {
     }
 
+    /** @return Result<Response> */
     public function execute(Request $request): Result
     {
         if ($request->method !== PaymentMethod::Cash) {

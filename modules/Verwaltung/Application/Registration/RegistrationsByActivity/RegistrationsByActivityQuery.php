@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\Registration\RegistrationsByActivi
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class RegistrationsByActivityQuery
 {
@@ -36,18 +37,28 @@ final readonly class RegistrationsByActivityQuery
             ->orderBy('verwaltung_anmeldungen.angemeldet_am')
             ->get();
 
-        return $rows->map(function (object $row): object {
-            return (object) [
+        $result = [];
+        foreach ($rows as $row) {
+            if (! is_string($row->id) || ! is_string($row->teilnehmer_id)) {
+                continue;
+            }
+
+            $firstName = DbValue::nullableString($row->vorname) ?? '';
+            $lastName = DbValue::nullableString($row->nachname) ?? '';
+
+            $result[] = (object) [
                 'id' => Uuid::fromBytes($row->id)->toString(),
                 'teilnehmer_id' => Uuid::fromBytes($row->teilnehmer_id)->toString(),
-                'teilnehmer_name' => trim($row->vorname . ' ' . $row->nachname),
-                'email' => $row->email,
-                'status' => $row->status,
-                'angemeldet_am' => $row->angemeldet_am,
-                'zahlungsart' => $row->zahlungsart,
-                'zahlungsstatus' => $row->zahlungsstatus,
-                'rang' => $row->rang === null ? null : (int) $row->rang,
+                'teilnehmer_name' => trim($firstName . ' ' . $lastName),
+                'email' => DbValue::string($row->email),
+                'status' => DbValue::string($row->status),
+                'angemeldet_am' => DbValue::string($row->angemeldet_am),
+                'zahlungsart' => DbValue::string($row->zahlungsart),
+                'zahlungsstatus' => DbValue::string($row->zahlungsstatus),
+                'rang' => DbValue::nullableInt($row->rang),
             ];
-        })->toArray();
+        }
+
+        return $result;
     }
 }

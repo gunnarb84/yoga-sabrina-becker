@@ -41,7 +41,7 @@ final class HtmlAttachmentMail extends Mailable
     }
 
     /**
-     * @return list\Attachment
+     * @return list<Attachment>
      */
     public function attachments(): array
     {
