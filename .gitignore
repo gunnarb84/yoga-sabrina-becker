@@ -26,5 +26,8 @@ phpunit.xml.dist
 /src/storage/framework/views
 /src/storage/logs
 /src/bootstrap/cache/*.php
+/storage/logs
+/storage/framework
 .DS_Store
 analysis/*.json
+phpstan-bootstrap.php
