@@ -1,7 +1,7 @@
 # Termine erfassen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich zu einer Veranstaltung einzelne Termine erfassen können, damit

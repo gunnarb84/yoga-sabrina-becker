@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Domain\Session;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
 use Yoga\Platform\Identity\UuidCast;
@@ -40,6 +41,11 @@ class Session extends Model
         'ende' => 'datetime',
         'version' => 'int',
     ];
+
+    public static function findById(string $id): ?self
+    {
+        return self::whereRaw('id = ?', [Uuid::fromString($id)->getBytes()])->first();
+    }
 
     /**
      * @return BelongsTo<Activity, $this>

@@ -2,22 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Yoga\Modules\Verwaltung\Application\Session\CreateSession;
+namespace Yoga\Modules\Verwaltung\Application\Session\UpdateSession;
 
 use Carbon\Carbon;
-use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\Session\Session;
 use Yoga\Platform\Shared\Application\Result;
 
-final readonly class CreateSession
+final readonly class UpdateSession
 {
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
-        $activity = Activity::findById($request->activityId);
+        $session = Session::findById($request->sessionId);
 
-        if ($activity === null) {
-            return Result::failure('activity.not_found');
+        if ($session === null) {
+            return Result::failure('session.not_found');
         }
 
         if ($request->startsAt === '') {
@@ -35,14 +34,10 @@ final readonly class CreateSession
             return Result::failure('session.ends_at_not_after_starts_at');
         }
 
-        $session = new Session([
-            'aktivitaet_id' => $request->activityId,
-            'beginn' => $startsAt,
-            'ende' => $endsAt,
-            'ort' => $request->location,
-            'hinweis' => $request->note,
-        ]);
-
+        $session->beginn = $startsAt;
+        $session->ende = $endsAt;
+        $session->ort = $request->location;
+        $session->hinweis = $request->note;
         $session->save();
 
         return Result::success(new Response($session->id));
