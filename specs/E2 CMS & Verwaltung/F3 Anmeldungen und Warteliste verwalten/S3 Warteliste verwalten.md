@@ -1,7 +1,7 @@
 # Warteliste verwalten
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich die Warteliste einer Veranstaltung einsehen und bei Bedarf
