@@ -17,6 +17,7 @@ use Yoga\Modules\Verwaltung\Ui\Participant\EditParticipant;
 use Yoga\Modules\Verwaltung\Ui\Participant\ParticipantList;
 use Yoga\Modules\Verwaltung\Ui\Payment\RecordPayment;
 use Yoga\Modules\Verwaltung\Ui\Registration\ActivityRegistrations;
+use Yoga\Modules\Verwaltung\Ui\Registration\AllRegistrations;
 use Yoga\Modules\Verwaltung\Ui\Registration\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Ui\Session\CreateSession;
 use Yoga\Modules\Webseite\Ui\Activity\ActivityDetail;
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/verwaltung/aktivitaeten/{id}/termine/neu', CreateSession::class)->name('verwaltung.session.create');
     Route::get('/verwaltung/aktivitaeten/{id}/anmeldungen', ActivityRegistrations::class)->name('verwaltung.activity.registrations');
     Route::get('/verwaltung/aktivitaeten/{id}/anmeldungen/neu', RegisterParticipant::class)->name('verwaltung.registration.create');
+    Route::get('/verwaltung/anmeldungen', AllRegistrations::class)->name('verwaltung.registrations');
     Route::get('/verwaltung/anmeldungen/{id}/zahlung/neu', RecordPayment::class)->name('verwaltung.payment.create');
     Route::get('/verwaltung/rechnungen', Invoices::class)->name('verwaltung.invoices');
     Route::get('/verwaltung/rechnungen/{id}/pdf', [InvoiceController::class, 'download'])->name('verwaltung.rechnung.pdf');

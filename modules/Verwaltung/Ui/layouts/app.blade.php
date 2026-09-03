@@ -14,6 +14,7 @@
         <nav>
             <a href="{{ route('verwaltung.dashboard') }}">Dashboard</a>
             <a href="{{ route('verwaltung.activities') }}">Aktivitaeten</a>
+            <a href="{{ route('verwaltung.registrations') }}">Anmeldungen</a>
             <a href="{{ route('verwaltung.participants') }}">Teilnehmer</a>
             <a href="{{ route('verwaltung.invoices') }}">Rechnungen</a>
             <a href="{{ route('verwaltung.outbound-messages') }}">Nachrichten</a>

@@ -1,7 +1,7 @@
 # Anmeldungen anzeigen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich alle Anmeldungen zu einer Veranstaltung sehen, damit ich den
