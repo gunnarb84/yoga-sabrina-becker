@@ -3,6 +3,8 @@
 
     <p><a href="{{ route('verwaltung.participant.create') }}">Neuen Teilnehmer anlegen</a></p>
 
+    <input type="search" wire:model.live.debounce.250ms="search" placeholder="Suchen..." aria-label="Teilnehmer suchen">
+
     @if (empty($participants))
         <p>Noch keine Teilnehmer vorhanden.</p>
     @else

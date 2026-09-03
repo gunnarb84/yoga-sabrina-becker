@@ -34,8 +34,13 @@ final class TestFactory
         return $activity;
     }
 
-    public static function createParticipant(string $email, string $vorname = 'Max', string $nachname = 'Mustermann'): Participant
-    {
+    public static function createParticipant(
+        string $email,
+        string $vorname = 'Max',
+        string $nachname = 'Mustermann',
+        ?string $phone = null,
+        ?string $city = null,
+    ): Participant {
         $operation = new CreateParticipantOperation();
         $result = $operation->execute(new CreateParticipantRequest(
             email: $email,
@@ -44,8 +49,8 @@ final class TestFactory
             addressLine1: null,
             addressLine2: null,
             postalCode: null,
-            city: null,
-            phone: null,
+            city: $city,
+            phone: $phone,
             dateOfBirth: null,
             healthNotes: null,
         ));

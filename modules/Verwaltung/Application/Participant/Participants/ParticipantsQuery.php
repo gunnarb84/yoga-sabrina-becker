@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Application\Participant\Participants;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Yoga\Platform\Shared\Application\DbValue;
@@ -13,9 +14,9 @@ final readonly class ParticipantsQuery
     /**
      * @return list<object{id: string, email: string, vorname: string, nachname: string, telefon: string|null, stadt: string|null}>
      */
-    public function execute(int $limit = 100): array
+    public function execute(?string $search = null, int $limit = 100): array
     {
-        $rows = DB::table('verwaltung_teilnehmer')
+        $query = DB::table('verwaltung_teilnehmer')
             ->select([
                 'id',
                 'email',
@@ -23,8 +24,18 @@ final readonly class ParticipantsQuery
                 'nachname',
                 'telefon',
                 'stadt',
-            ])
-            ->orderBy('nachname')
+            ]);
+
+        if ($search !== null && $search !== '') {
+            $term = '%'.addcslashes($search, '%_\\').'%';
+            $query->where(function (Builder $q) use ($term): void {
+                $q->where('vorname', 'like', $term)
+                    ->orWhere('nachname', 'like', $term)
+                    ->orWhere('email', 'like', $term);
+            });
+        }
+
+        $rows = $query->orderBy('nachname')
             ->orderBy('vorname')
             ->limit($limit)
             ->get();

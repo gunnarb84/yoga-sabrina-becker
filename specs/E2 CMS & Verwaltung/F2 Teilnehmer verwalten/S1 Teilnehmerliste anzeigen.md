@@ -1,7 +1,7 @@
 # Teilnehmerliste anzeigen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich alle Teilnehmer/innen in einer Übersicht sehen, damit ich

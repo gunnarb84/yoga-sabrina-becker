@@ -16,9 +16,16 @@ final class ParticipantList extends Component
      */
     public array $participants = [];
 
+    public string $search = '';
+
     public function mount(ParticipantsQuery $query): void
     {
         $this->participants = $query->execute();
+    }
+
+    public function updatedSearch(ParticipantsQuery $query): void
+    {
+        $this->participants = $query->execute($this->search);
     }
 
     public function render(): \Illuminate\Contracts\View\View
