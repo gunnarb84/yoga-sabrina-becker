@@ -41,6 +41,8 @@ final class EditParticipant extends Component
 
     public bool $saved = false;
 
+    public bool $showHealthNotes = false;
+
     /**
      * @var list<object{id: string, aktivitaet_titel: string, status: string, anmeldedatum: string}>
      */

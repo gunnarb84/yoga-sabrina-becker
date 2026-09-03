@@ -1,7 +1,7 @@
 # Gesundheitsinformationen schützen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich Gesundheitsinformationen besonders geschützt speichern, damit

@@ -56,16 +56,24 @@
         </div>
 
         <div>
-            <label for="healthNotes">Gesundheitsinformationen</label>
-            <textarea id="healthNotes" wire:model="healthNotes" rows="4"></textarea>
-        </div>
-
-        <div>
             <label>
                 <input type="checkbox" wire:model="healthNotesConsent">
                 Einwilligung zur Speicherung der Gesundheitsinformationen liegt vor
             </label>
         </div>
+
+        <div>
+            <button type="button" wire:click="$toggle('showHealthNotes')">
+                {{ $showHealthNotes ? 'Gesundheitsinformationen ausblenden' : 'Gesundheitsinformationen anzeigen' }}
+            </button>
+        </div>
+
+        @if ($showHealthNotes)
+            <div>
+                <label for="healthNotes">Gesundheitsinformationen</label>
+                <textarea id="healthNotes" wire:model="healthNotes" rows="4"></textarea>
+            </div>
+        @endif
 
         <button type="submit">Speichern</button>
         <a href="{{ route('verwaltung.participants') }}">Zurueck zur Liste</a>
