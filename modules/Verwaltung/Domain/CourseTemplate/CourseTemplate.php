@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoga\Modules\Verwaltung\Domain\CourseTemplate;
 
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
 use Yoga\Platform\Identity\UuidCast;
 
@@ -21,6 +22,7 @@ use Yoga\Platform\Identity\UuidCast;
  * @property int $maximale_teilnehmerzahl
  * @property string|null $ort
  * @property string $preis
+ * @property string $startzeit
  * @property string $titel
  * @property int $version
  * @property string $waehrung
@@ -33,6 +35,11 @@ class CourseTemplate extends Model
     protected $table = 'verwaltung_kursvorlagen';
 
     protected $guarded = [];
+
+    public static function findById(string $id): ?self
+    {
+        return self::query()->whereRaw('id = ?', [Uuid::fromString($id)->getBytes()])->first();
+    }
 
     protected $casts = [
         'id' => UuidCast::class,

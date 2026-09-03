@@ -1,7 +1,7 @@
 # Wiederkehrende Kurse aus Vorlage erzeugen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich aus einer Kursvorlage automatisch Termine erzeugen können,

@@ -10,6 +10,9 @@ use Yoga\Modules\Verwaltung\Application\NumberSequence\VerwaltungNumberSequenceR
 use Yoga\Modules\Verwaltung\Ui\Activity\ActivityList;
 use Yoga\Modules\Verwaltung\Ui\Activity\CreateActivity;
 use Yoga\Modules\Verwaltung\Ui\Activity\EditActivity as EditActivityComponent;
+use Yoga\Modules\Verwaltung\Ui\CourseTemplate\CourseTemplateList as CourseTemplateListComponent;
+use Yoga\Modules\Verwaltung\Ui\CourseTemplate\CreateCourseTemplate as CreateCourseTemplateComponent;
+use Yoga\Modules\Verwaltung\Ui\CourseTemplate\EditCourseTemplate as EditCourseTemplateComponent;
 use Yoga\Modules\Verwaltung\Ui\Dashboard;
 use Yoga\Modules\Verwaltung\Ui\Invoice\Invoices as InvoicesComponent;
 use Yoga\Modules\Verwaltung\Ui\OutboundMessage\OutboundMessageDetail as OutboundMessageDetailComponent;
@@ -38,6 +41,9 @@ final class VerwaltungServiceProvider extends ServiceProvider
         Livewire::component('verwaltung.dashboard', Dashboard::class);
         Livewire::component('verwaltung.aktivitaeten', ActivityList::class);
         Livewire::component('verwaltung.aktivitaet.neu', CreateActivity::class);
+        Livewire::component('verwaltung.kursvorlagen', CourseTemplateListComponent::class);
+        Livewire::component('verwaltung.kursvorlage.neu', CreateCourseTemplateComponent::class);
+        Livewire::component('verwaltung.kursvorlage.bearbeiten', EditCourseTemplateComponent::class);
         Livewire::component('verwaltung.aktivitaet.bearbeiten', EditActivityComponent::class);
         Livewire::component('verwaltung.termin.neu', CreateSession::class);
         Livewire::component('verwaltung.teilnehmer', ParticipantList::class);
