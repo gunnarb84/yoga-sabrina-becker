@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\WaitingList;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Platform\Identity\UuidCast;
 
 /**
@@ -21,10 +20,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property int $rang
  * @property int $version
  */
-class WaitingList extends Model
+class WaitingList extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_warteliste';
 
     protected $guarded = [];

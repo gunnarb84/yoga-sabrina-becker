@@ -1,0 +1,531 @@
+/* ==========================================================================
+   Referenz-Stylesheet für Fachanwendungen (Laravel Livewire)
+   Stand 26.08.2026 · Regelwerk: _uiux.md
+
+   Verwendung
+   - Diese Datei wird unverändert unter dem im Projektprofil festgelegten
+     Zielnamen in das Projekt kopiert. Keine projektspezifischen Änderungen.
+   - Farben und Schriften eines konkreten Projekts stehen ausschließlich in
+     der Theme-Datei des Projekts; diese überschreibt nur --au-* Tokens.
+   - Klassenprefix au-. Keine fachlichen Styles.
+   - Regel: außerhalb des :root-Blocks kommt kein Farbliteral vor
+     (kein #, kein rgb()/rgba()) — nur var(--au-*).
+   - Keine externen Ressourcen zur Laufzeit: keine @import-URL, keine
+     Web-Font-Referenz. Schriften liegen lokal im Projekt und werden über
+     --au-font / --au-mono gesetzt (Fallback-Stack unten).
+   ========================================================================== */
+
+:root {
+  /* --- Flächen -------------------------------------------------------- */
+  --au-canvas:          #f7f6f3;   /* Anwendungshintergrund              */
+  --au-panel:           #ffffff;   /* Panelfläche, Eingabefläche         */
+  --au-panel-sunken:    #fdfcfa;   /* Fußzeilen, Kennzahlkarten          */
+  --au-panel-hover:     #f4f1ea;   /* Zeilen-/Menü-Hover, offener Button */
+  --au-search-bg:       #f6f3ec;   /* Filter-/Suchfeld in Toolbars       */
+
+  /* --- Linien --------------------------------------------------------- */
+  --au-line:            #dcd7cb;   /* Panelrand, Bereichstrenner         */
+  --au-line-soft:       #e9e5db;   /* Listenzeilen, Menütrenner          */
+  --au-line-strong:     #d2ccbf;   /* Buttonrand, Overlayrand            */
+  --au-line-input:      #948d7c;   /* Kontur Eingabefeld                 */
+  --au-line-input-hover:#857e6b;   /* Kontur Eingabefeld, Hover          */
+  --au-line-focus:      #a2762f;   /* Kontur im Fokus                    */
+
+  /* --- Eingabezustände ------------------------------------------------ */
+  --au-input-bg:        #ffffff;   /* editierbar                         */
+  --au-input-bg-ro:     #f2efe8;   /* gesperrt / berechnet               */
+  --au-input-bg-dirty:  #fffdf7;   /* geändert, ungespeichert            */
+  --au-input-bg-invalid:#fffaf9;   /* fehlerhaft                         */
+  --au-input-ph:        #787365;   /* Platzhalter — §9 gilt auch hier    */
+
+  /* --- Text ----------------------------------------------------------- */
+  --au-text:            #1a1917;   /* Primärtext, Feldwerte              */
+  --au-text-2:          #3a3833;   /* Buttonlabel, Sekundärtext          */
+  --au-text-3:          #5c5952;   /* Fließtext                          */
+  --au-muted:           #5f5c55;   /* Metadaten, Statuswort              */
+  --au-label:           #4a473f;   /* Feldlabel, Spaltenkopf, Kürzel     */
+  --au-faint:           #a49e91;   /* nur Zierzeichen (Kreuz, Pfeil)     */
+  --au-adorn:           #9a9488;   /* Feldsymbol (Auswahl, gesperrt)     */
+
+  /* --- Akzent (Orientierung, nicht Aktion) ---------------------------- */
+  --au-accent:          #a2762f;   /* NUR Linien und Flächen: Tabunter-  */
+                                   /* strich, Konturen, Punkte, Balken   */
+  --au-accent-ink:      #8a6524;   /* Akzent als TEXT: Modulnummer,      */
+                                   /* Gruppentitel, Verweis              */
+  --au-accent-soft:     #f4efe4;   /* Selektion Navigation, Chip         */
+  --au-accent-row:      #faf7f0;   /* selektierte Listenzeile            */
+  --au-accent-mark:     #f0e6d2;   /* Kürzelmarke der selektierten Zeile */
+  --au-accent-fill:     #8a6524;   /* gefüllte Akzentfläche, die Text trägt */
+  --au-on-accent:       #ffffff;   /* Text auf --au-accent-fill           */
+
+  /* --- Aktion --------------------------------------------------------- */
+  --au-action:          #1f1e1b;   /* Primärbutton                       */
+  --au-action-hover:    #34322d;
+  --au-on-action:       #ffffff;
+  --au-on-action-key:   rgba(255,255,255,.65);  /* Kürzel im Primärbutton */
+
+  /* --- Status (immer Punkt + Wort) ------------------------------------ */
+  --au-ok:              #2e6f52;
+  --au-warn:            #b07d2b;
+  --au-warn-ink:        #8f631c;   /* Warnung als TEXT (Entwurfsvermerk) */
+  --au-error:           #a7453a;
+  --au-neutral:         #a49e91;
+  --au-ok-soft:         #eaf2ed;   /* Fläche erreichter Statusschritt    */
+  --au-on-error:        #ffffff;   /* Schrift auf Fehlerfläche           */
+  --au-on-error-key:    rgba(255,255,255,.7);
+
+  /* --- Overlay -------------------------------------------------------- */
+  --au-scrim:           rgba(26,25,23,.34);
+  --au-shadow-panel:    0 1px 2px rgba(26,25,23,.03);
+  --au-shadow-pop:      0 20px 44px -18px rgba(26,25,23,.34);
+  --au-focus-ring:      0 0 0 3px rgba(162,118,47,.35);
+  --au-focus-ring-soft: 0 0 0 2px rgba(162,118,47,.22);
+
+  /* --- Schriften (lokal, Fallback-Stack) ----------------------------- */
+  --au-font:            'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --au-mono:            'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+
+  /* --- Größenstufen -------------------------------------------------- */
+  --au-fs-xs:           11px;
+  --au-fs-key:          11px;
+  --au-fs-sm:           13px;
+  --au-fs-md:           14px;
+  --au-fs-lg:           16px;
+  --au-fs-xl:           20px;
+  --au-fs-2xl:          28px;
+  --au-lh-tight:        1.25;
+  --au-lh-text:         1.55;
+
+  /* --- Radien --------------------------------------------------------- */
+  --au-r-sm:            3px;
+  --au-r-md:            6px;
+  --au-r-lg:            10px;
+  --au-r-xl:            16px;
+  --au-r-chip:          999px;
+
+  /* --- Abstände ------------------------------------------------------- */
+  --au-s-1:             4px;
+  --au-s-2:             8px;
+  --au-s-3:             16px;
+  --au-s-4:             24px;
+  --au-s-5:             40px;
+  --au-gap:             var(--au-s-3);
+  --au-pad:             var(--au-s-3);
+
+  /* --- Höhen ---------------------------------------------------------- */
+  --au-row-h:           40px;
+  --au-row-h-dense:     32px;
+  --au-control-h:       32px;
+  --au-input-h:         36px;
+  --au-touch-h:         44px;
+
+  /* --- Zonen ---------------------------------------------------------- */
+  --au-topbar-h:        48px;
+  --au-tabbar-h:        40px;
+  --au-statusbar-h:     28px;
+  --au-footer-h:        44px;
+  --au-sidebar-w:       220px;
+  --au-rail-w:          56px;
+  --au-navigator-w:     260px;
+  --au-list-w:          420px;
+  --au-list-min-w:      280px;
+  --au-detail-min-w:    420px;
+  --au-menu-w:          220px;
+  --au-palette-w:       260px;
+
+  /* --- Detailmaße ----------------------------------------------------- */
+  --au-burger-w:        32px;
+  --au-burger-line-w:   18px;
+  --au-burger-line-h:   2px;
+  --au-dot:             8px;
+  --au-avatar:          28px;
+  --au-mark:            18px;
+  --au-cell-pad:        10px 12px;
+  --au-chip-h:          24px;
+  --au-arrow-w:         14px;
+  --au-icon:            18px;
+  --au-icon-sm:         14px;
+
+  /* --- Belegraster etc. ----------------------------------------------- */
+  --au-cellbox-h:       28px;
+  --au-cellbox-r:       4px;
+  --au-cellbox-gap:     4px;
+  --au-sums-w:          150px;
+  --au-lookup-w:        240px;
+  --au-preview-w:       320px;
+  --au-sheet-w:         420px;
+  --au-refcard-media-h: 120px;
+  --au-login-w:         404px;
+  --au-facets-w:        220px;
+  --au-context-w:       260px;
+  --au-matrix-col:      110px;
+  --au-badge:           18px;
+  --au-progress-h:      6px;
+  --au-toast-w:         360px;
+
+  /* --- Feldraster ----------------------------------------------------- */
+  --au-field-cols:      repeat(12, 1fr);
+  --au-cols:            repeat(12, 1fr);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: var(--au-font);
+  font-size: var(--au-fs-md);
+  line-height: var(--au-lh-text);
+  color: var(--au-text);
+  background: var(--au-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- App-Shell (Minimalversion für Verwaltung) ---- */
+.au-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.au-topbar {
+  height: var(--au-topbar-h);
+  background: var(--au-panel);
+  border-bottom: 1px solid var(--au-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--au-s-3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.au-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--au-s-2);
+  font-weight: 600;
+  color: var(--au-text);
+  text-decoration: none;
+}
+
+.au-topbar__brand img {
+  height: 32px;
+  width: auto;
+}
+
+.au-topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--au-s-2);
+}
+
+.au-topbar__nav a,
+.au-topbar__nav button {
+  font-size: var(--au-fs-sm);
+  color: var(--au-text-2);
+  text-decoration: none;
+  padding: var(--au-s-1) var(--au-s-2);
+  border-radius: var(--au-r-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.au-topbar__nav a:hover,
+.au-topbar__nav button:hover {
+  background: var(--au-panel-hover);
+  color: var(--au-text);
+}
+
+.au-work {
+  flex: 1;
+  padding: var(--au-s-3);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---- Panels ---- */
+.au-panel {
+  background: var(--au-panel);
+  border: 1px solid var(--au-line);
+  border-radius: var(--au-r-lg);
+  box-shadow: var(--au-shadow-panel);
+  margin-bottom: var(--au-s-3);
+}
+
+.au-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--au-s-3);
+  border-bottom: 1px solid var(--au-line-soft);
+}
+
+.au-panel__title {
+  font-size: var(--au-fs-xl);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.au-panel__body {
+  padding: var(--au-s-3);
+}
+
+/* ---- Listen ---- */
+.au-list {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--au-fs-md);
+}
+
+.au-list th,
+.au-list td {
+  text-align: left;
+  padding: var(--au-cell-pad);
+  border-bottom: 1px solid var(--au-line-soft);
+  vertical-align: top;
+}
+
+.au-list th {
+  font-size: var(--au-fs-key);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--au-label);
+  background: var(--au-panel-sunken);
+  font-weight: 600;
+}
+
+.au-list tr:hover td {
+  background: var(--au-panel-hover);
+}
+
+.au-list tr.is-selected td {
+  background: var(--au-accent-row);
+}
+
+/* ---- Buttons ---- */
+.au-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--au-s-1);
+  height: var(--au-input-h);
+  padding: 0 var(--au-s-3);
+  border-radius: var(--au-r-md);
+  border: 1px solid var(--au-line-strong);
+  background: var(--au-panel);
+  color: var(--au-text-2);
+  font-family: var(--au-font);
+  font-size: var(--au-fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.au-btn:hover {
+  background: var(--au-panel-hover);
+  border-color: var(--au-line-input);
+}
+
+.au-btn--primary {
+  background: var(--au-action);
+  border-color: var(--au-action);
+  color: var(--au-on-action);
+}
+
+.au-btn--primary:hover {
+  background: var(--au-action-hover);
+  border-color: var(--au-action-hover);
+}
+
+.au-btn--sm {
+  height: var(--au-control-h);
+  padding: 0 var(--au-s-2);
+  font-size: var(--au-fs-xs);
+}
+
+/* ---- Formulare ---- */
+.au-field {
+  margin-bottom: var(--au-s-3);
+}
+
+.au-field__label {
+  display: block;
+  font-size: var(--au-fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--au-label);
+  margin-bottom: var(--au-s-1);
+}
+
+.au-field__input,
+.au-field__select,
+.au-field__textarea {
+  width: 100%;
+  min-height: var(--au-input-h);
+  padding: var(--au-s-1) var(--au-s-2);
+  border: 1px solid var(--au-line-input);
+  border-radius: var(--au-r-md);
+  background: var(--au-input-bg);
+  color: var(--au-text);
+  font-family: var(--au-font);
+  font-size: var(--au-fs-md);
+}
+
+.au-field__input:focus,
+.au-field__select:focus,
+.au-field__textarea:focus {
+  outline: none;
+  border-color: var(--au-line-focus);
+  box-shadow: var(--au-focus-ring);
+}
+
+.au-field__textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ---- Status ---- */
+.au-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--au-s-1);
+  font-size: var(--au-fs-sm);
+  font-weight: 500;
+}
+
+.au-status::before {
+  content: '';
+  width: var(--au-dot);
+  height: var(--au-dot);
+  border-radius: 50%;
+  background: var(--au-neutral);
+}
+
+.au-status--ok::before { background: var(--au-ok); }
+.au-status--warn::before { background: var(--au-warn); }
+.au-status--error::before { background: var(--au-error); }
+
+/* ---- Anmeldung ---- */
+.au-body--login {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.au-login {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--au-s-5);
+  background: var(--au-canvas);
+}
+
+.au-login__card {
+  width: var(--au-login-w);
+  display: flex;
+  flex-direction: column;
+  gap: var(--au-s-4);
+  padding: var(--au-s-5);
+  background: var(--au-panel);
+  border: 1px solid var(--au-line);
+  border-radius: var(--au-r-lg);
+  box-shadow: var(--au-shadow-panel);
+}
+
+.au-login__firm {
+  margin: 0 0 var(--au-s-1);
+  font-size: var(--au-fs-sm);
+  color: var(--au-accent-ink);
+}
+
+.au-login__title {
+  margin: 0;
+  font-size: var(--au-fs-2xl);
+  line-height: var(--au-lh-tight);
+  font-weight: 600;
+}
+
+.au-login__error {
+  padding: var(--au-s-2) var(--au-s-3);
+  background: var(--au-input-bg-invalid);
+  border: 1px solid var(--au-error);
+  border-radius: var(--au-r-md);
+  color: var(--au-error);
+  font-size: var(--au-fs-sm);
+}
+
+.au-login__error p {
+  margin: 0;
+}
+
+.au-login__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--au-s-5);
+  flex-wrap: wrap;
+  padding: var(--au-s-2) var(--au-s-5);
+  background: var(--au-panel);
+  border-top: 1px solid var(--au-line);
+  font-size: var(--au-fs-sm);
+  color: var(--au-muted);
+}
+
+.au-login__state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--au-s-2);
+}
+
+.au-login__state::before {
+  content: '';
+  width: var(--au-dot);
+  height: var(--au-dot);
+  border-radius: 50%;
+  background: var(--au-ok);
+  flex: none;
+}
+
+.au-login__state[data-state="warn"]::before { background: var(--au-warn); }
+.au-login__state[data-state="error"]::before { background: var(--au-error); }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .au-topbar {
+    height: auto;
+    min-height: var(--au-topbar-h);
+    flex-wrap: wrap;
+    gap: var(--au-s-2);
+    padding: var(--au-s-2);
+  }
+
+  .au-topbar__nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .au-work {
+    padding: var(--au-s-2);
+  }
+
+  .au-list {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .au-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--au-s-2);
+  }
+}

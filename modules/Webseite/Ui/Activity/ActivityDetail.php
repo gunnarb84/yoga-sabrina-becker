@@ -32,6 +32,6 @@ final class ActivityDetail extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return View::make('webseite::activity.activity-detail');
+        return View::make('webseite::Activity.activity-detail');
     }
 }

@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# Build-Artefakte und Abhängigkeiten (werden im Container neu installiert)
+vendor
+src/node_modules
+src/vendor
+
+# Test- und Entwicklungswerkzeuge
+tests-e2e
+analysis
+.phpunit.result.cache
+.phpstan.cache
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lokale Umgebung
+src/.env
+src/.env.testing
+.env
+.env.*
+!docker/.env.docker
+
+# Logs und Cache
+*.log
+src/storage/logs/*
+src/storage/framework/cache/*
+src/storage/framework/sessions/*
+src/storage/framework/views/*
+src/bootstrap/cache/*

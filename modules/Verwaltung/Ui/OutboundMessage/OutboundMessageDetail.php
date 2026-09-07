@@ -42,7 +42,7 @@ final class OutboundMessageDetail extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return View::make('verwaltung::outbound-message.detail', [
+        return View::make('verwaltung::OutboundMessage.outbound-message-detail', [
             'canResend' => in_array($this->status, [OutboundMessageStatus::Pending->value, OutboundMessageStatus::Failed->value], true),
         ]);
     }

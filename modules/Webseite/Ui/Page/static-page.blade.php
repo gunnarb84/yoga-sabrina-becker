@@ -1,3 +1,4 @@
+<div class="yoga-section yoga-section--creme yoga-section--flush">
 <div class="yoga-static-page">
     @if ($page === null)
         @php(abort(404))
@@ -12,4 +13,5 @@
     <h1>{{ $page->titel }}</h1>
 
     <div class="yoga-page-content">{!! $page->inhalt !!}</div>
+</div>
 </div>

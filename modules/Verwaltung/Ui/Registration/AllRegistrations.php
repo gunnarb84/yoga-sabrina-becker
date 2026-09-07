@@ -54,7 +54,7 @@ final class AllRegistrations extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::registration.all-registrations', [
+        return view('verwaltung::Registration.all-registrations', [
             'statusOptions' => array_map(fn (RegistrationStatus $s): array => ['value' => $s->value, 'label' => ucfirst($s->value)], RegistrationStatus::cases()),
             'typeLabel' => fn (string $payment): string => match ($payment) {
                 'bar' => 'Bar',

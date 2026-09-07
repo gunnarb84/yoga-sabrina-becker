@@ -29,7 +29,7 @@ export async function angelegteOeffentlicheAktivitaet(
     await page.getByLabel('Maximale Teilnehmerzahl').fill('10');
     await page.getByRole('button', { name: 'Speichern' }).click();
 
-    await page.getByText('Die Aktivitaet wurde angelegt.').waitFor();
+    await page.getByText('Die Aktivität wurde angelegt.').waitFor();
 
     // Add a future session.
     await page.goto(`${baseURL}/verwaltung/aktivitaeten`);
@@ -54,16 +54,16 @@ export async function angelegteOeffentlicheAktivitaet(
     await page.goto(`${baseURL}/verwaltung/aktivitaeten`);
     await page.locator('body[data-livewire-ready="true"]').waitFor();
 
-    await zeile.getByRole('button', { name: 'Veroeffentlichen' }).click();
+    await zeile.getByRole('button', { name: 'Veröffentlichen' }).click();
 
     // Wait for the status to update; published rows no longer show the publish button.
-    await zeile.getByRole('button', { name: 'Veroeffentlichen' }).waitFor({ state: 'detached' });
+    await zeile.getByRole('button', { name: 'Veröffentlichen' }).waitFor({ state: 'detached' });
 
     // Discover the public slug from the public site list.
     await page.goto(`${baseURL}/kurse`);
     await page.locator('body[data-livewire-ready="true"]').waitFor();
 
-    const link = page.getByRole('article').filter({ hasText: titel }).getByRole('link');
+    const link = page.getByRole('article').filter({ hasText: titel }).getByRole('link', { name: titel });
     const href = await link.getAttribute('href');
 
     if (href === null) {

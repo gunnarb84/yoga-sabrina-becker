@@ -65,7 +65,7 @@ final class RegisterParticipant extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::registration.register-participant', [
+        return view('verwaltung::Registration.register-participant', [
             'methods' => array_map(fn (RegistrationPaymentMethod $m): array => ['value' => $m->value, 'label' => ucfirst($m->value)], RegistrationPaymentMethod::cases()),
         ]);
     }

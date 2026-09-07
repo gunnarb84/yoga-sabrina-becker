@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
                 'password' => 'yoga2026',
             ]
         );
+
+        $this->call(LegalPagesSeeder::class);
+        $this->call(ContentPagesSeeder::class);
     }
 }

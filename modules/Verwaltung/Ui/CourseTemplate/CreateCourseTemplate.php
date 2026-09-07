@@ -70,7 +70,7 @@ final class CreateCourseTemplate extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::course-template.create-course-template', [
+        return view('verwaltung::CourseTemplate.create-course-template', [
             'weekdayOptions' => $this->weekdayOptions(),
         ]);
     }

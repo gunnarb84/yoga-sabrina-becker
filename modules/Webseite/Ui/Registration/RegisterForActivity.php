@@ -133,7 +133,7 @@ final class RegisterForActivity extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return View::make('webseite::registration.register-for-activity', [
+        return View::make('webseite::Registration.register-for-activity', [
             'paymentMethods' => $this->paymentMethodOptions(),
         ]);
     }

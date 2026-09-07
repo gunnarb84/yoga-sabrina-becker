@@ -31,3 +31,5 @@ phpunit.xml.dist
 .DS_Store
 analysis/*.json
 phpstan-bootstrap.php
+/test-results
+/src/public/build

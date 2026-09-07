@@ -13,16 +13,6 @@ use Yoga\Platform\Identity\Uuid7;
  */
 trait EntityLifecycle
 {
-    public const CREATED_AT = 'angelegt_am';
-
-    public const UPDATED_AT = 'geaendert_am';
-
-    public $incrementing = false;
-
-    public $timestamps = true;
-
-    protected $keyType = 'string';
-
     protected static function bootEntityLifecycle(): void
     {
         static::creating(function (Model $model): void {

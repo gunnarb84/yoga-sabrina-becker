@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\CashReceipt;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Platform\Identity\UuidCast;
 
 /**
@@ -25,10 +24,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property string $waehrung
  * @property string $zahlung_id
  */
-class CashReceipt extends Model
+class CashReceipt extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_bareinnahmenbelege';
 
     protected $guarded = [];

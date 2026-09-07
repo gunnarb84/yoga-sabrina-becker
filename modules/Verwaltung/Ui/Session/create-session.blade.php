@@ -1,35 +1,44 @@
-<div class="verwaltung-create-session">
-    <h1>Neuen Termin anlegen</h1>
+<div class="au-panel">
+    <div class="au-panel__header">
+        <h1 class="au-panel__title">Neuen Termin anlegen</h1>
+    </div>
 
-    @if ($message)
-        <p class="message">{{ $message }}</p>
-    @endif
+    <div class="au-panel__body">
+        @if ($message)
+            <div class="au-status au-status--error yoga-mb-2" role="alert">{{ $message }}</div>
+        @endif
 
-    @if ($created)
-        <p class="success">Der Termin wurde angelegt.</p>
-    @endif
+        @if ($created)
+            <div class="au-status au-status--ok yoga-mb-2" role="alert">Der Termin wurde angelegt.</div>
+        @endif
 
-    <form wire:submit="save">
-        <label>
-            Beginn
-            <input type="datetime-local" wire:model="startsAt" required>
-        </label>
+        <form wire:submit="save" class="yoga-form">
+            <div class="yoga-form-grid">
+                <label class="au-field">
+                    <span class="au-field__label">Beginn</span>
+                    <input type="datetime-local" wire:model="startsAt" class="au-field__input" required>
+                </label>
 
-        <label>
-            Ende
-            <input type="datetime-local" wire:model="endsAt" required>
-        </label>
+                <label class="au-field">
+                    <span class="au-field__label">Ende</span>
+                    <input type="datetime-local" wire:model="endsAt" class="au-field__input" required>
+                </label>
 
-        <label>
-            Ort
-            <input type="text" wire:model="location">
-        </label>
+                <label class="au-field">
+                    <span class="au-field__label">Ort</span>
+                    <input type="text" wire:model="location" class="au-field__input">
+                </label>
+            </div>
 
-        <label>
-            Hinweis
-            <textarea wire:model="note"></textarea>
-        </label>
+            <label class="au-field yoga-mt-2">
+                <span class="au-field__label">Hinweis</span>
+                <textarea wire:model="note" class="au-field__input" rows="4"></textarea>
+            </label>
 
-        <button type="submit">Speichern</button>
-    </form>
+            <div class="yoga-form-actions yoga-mt-3">
+                <button type="submit" class="au-btn au-btn--primary">Speichern</button>
+                <a href="{{ route('verwaltung.activity.edit', ['id' => $activityId]) }}" class="au-btn">Zurück</a>
+            </div>
+        </form>
+    </div>
 </div>

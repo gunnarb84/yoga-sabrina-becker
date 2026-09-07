@@ -78,6 +78,7 @@ final readonly class ActivityOverviewQuery
                 'freie_plaetze' => $freeSeats,
                 'warteliste_anzahl' => $waitingListCount,
                 'ausgebucht' => $freeSeats === 0,
+                'buchbar' => $freeSeats > 0,
             ];
         }
 

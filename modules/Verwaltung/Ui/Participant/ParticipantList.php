@@ -30,6 +30,6 @@ final class ParticipantList extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::participant.participant-list');
+        return view('verwaltung::Participant.participant-list');
     }
 }

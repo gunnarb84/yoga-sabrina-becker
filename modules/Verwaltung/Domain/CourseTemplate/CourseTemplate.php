@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\CourseTemplate;
 
-use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Platform\Identity\UuidCast;
 
 /**
@@ -28,10 +27,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property string $waehrung
  * @property string $wochentag
  */
-class CourseTemplate extends Model
+class CourseTemplate extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_kursvorlagen';
 
     protected $guarded = [];

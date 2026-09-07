@@ -57,6 +57,6 @@ final class ActivityList extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::activity.activity-list');
+        return view('verwaltung::Activity.activity-list');
     }
 }

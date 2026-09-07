@@ -81,6 +81,6 @@ final class RecordPayment extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return View::make('verwaltung::payment.record-payment');
+        return View::make('verwaltung::Payment.record-payment');
     }
 }

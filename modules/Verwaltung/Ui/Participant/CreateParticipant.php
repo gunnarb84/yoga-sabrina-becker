@@ -65,6 +65,6 @@ final class CreateParticipant extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::participant.create-participant');
+        return view('verwaltung::Participant.create-participant');
     }
 }

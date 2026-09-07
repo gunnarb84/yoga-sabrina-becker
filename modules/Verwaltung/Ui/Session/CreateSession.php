@@ -55,6 +55,6 @@ final class CreateSession extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::session.create-session');
+        return view('verwaltung::Session.create-session');
     }
 }

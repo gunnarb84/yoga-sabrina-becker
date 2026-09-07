@@ -1,0 +1,174 @@
+/* ==========================================================================
+   Yoga Sabrina Becker — Theme-Überschreibungen für au-* Tokens
+   Projektprofil: [ui] theme = src/public/css/theme.css
+   Überschreibt nur die neutralen Referenzwerte aus yoga-ui.css.
+   ========================================================================== */
+
+:root {
+  /* Yoga-Farben */
+  --yoga-green-dark: #0B2B23;
+  --yoga-green: #123C31;
+  --yoga-gold: #C9A15B;
+  --yoga-gold-dark: #A8823F;
+  --yoga-gold-light: #E3C88A;
+  --yoga-cream: #F6F1E7;
+  --yoga-warm-white: #FDFBF7;
+  --yoga-sage: #4A5F57;
+  --yoga-terracotta: #8C4A3F;
+
+  /* --- Flächen -------------------------------------------------------- */
+  --au-canvas:          var(--yoga-cream);
+  --au-panel:           var(--yoga-warm-white);
+  --au-panel-sunken:    #f3ebdd;
+  --au-panel-hover:     #f0e6d2;
+  --au-search-bg:       #f3ebdd;
+
+  /* --- Linien --------------------------------------------------------- */
+  --au-line:            #e3d6c2;
+  --au-line-soft:       #ebe1d1;
+  --au-line-strong:     #d4c4a8;
+  --au-line-input:      #9e8f7a;
+  --au-line-input-hover:#8c7d68;
+  --au-line-focus:      var(--yoga-gold);
+
+  /* --- Eingabezustände ------------------------------------------------ */
+  --au-input-bg:        var(--yoga-warm-white);
+  --au-input-bg-ro:     #f0e6d2;
+  --au-input-bg-dirty:  #fff9eb;
+  --au-input-bg-invalid:#fff4f2;
+  --au-input-ph:        #8a7b68;
+
+  /* --- Text ----------------------------------------------------------- */
+  --au-text:            var(--yoga-green);
+  --au-text-2:          #2b3d36;
+  --au-text-3:          var(--yoga-sage);
+  --au-muted:           var(--yoga-sage);
+  --au-label:           #3d5249;
+  --au-faint:           #a89b87;
+  --au-adorn:           #9a8d7a;
+
+  /* --- Akzent (Orientierung) ------------------------------------------ */
+  --au-accent:          var(--yoga-gold);
+  --au-accent-ink:      var(--yoga-gold-dark);
+  --au-accent-soft:     #f4e9d6;
+  --au-accent-row:      #faf4ea;
+  --au-accent-mark:     #f0e2c8;
+  --au-accent-fill:     var(--yoga-gold-dark);
+  --au-on-accent:       var(--yoga-warm-white);
+
+  /* --- Aktion --------------------------------------------------------- */
+  --au-action:          var(--yoga-green-dark);
+  --au-action-hover:    #1a4236;
+  --au-on-action:       var(--yoga-warm-white);
+  --au-on-action-key:   rgba(253, 251, 247, 0.7);
+
+  /* --- Status --------------------------------------------------------- */
+  --au-ok:              #2e6f52;
+  --au-warn:            var(--yoga-gold-dark);
+  --au-warn-ink:        #8f631c;
+  --au-error:           var(--yoga-terracotta);
+  --au-neutral:         #a49e91;
+  --au-ok-soft:         #eaf2ed;
+  --au-on-error:        var(--yoga-warm-white);
+  --au-on-error-key:    rgba(253, 251, 247, 0.7);
+
+  /* --- Overlay -------------------------------------------------------- */
+  --au-scrim:           rgba(11, 43, 35, 0.34);
+  --au-shadow-panel:    0 1px 2px rgba(11, 43, 35, 0.04);
+  --au-shadow-pop:      0 20px 44px -18px rgba(11, 43, 35, 0.28);
+  --au-focus-ring:      0 0 0 3px rgba(201, 161, 91, 0.3);
+  --au-focus-ring-soft: 0 0 0 2px rgba(201, 161, 91, 0.18);
+}
+
+/* ==========================================================================
+   Projekt-spezifische Hilfsklassen für Backend-Views
+   ========================================================================== */
+
+.yoga-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--au-s-3);
+}
+
+@media (max-width: 640px) {
+  .yoga-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.yoga-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--au-s-2);
+  align-items: center;
+}
+
+.yoga-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--au-s-3);
+  align-items: flex-end;
+  margin-bottom: var(--au-s-3);
+}
+
+.yoga-filter .au-field {
+  margin: 0;
+  min-width: 220px;
+  flex: 1 1 auto;
+}
+
+.yoga-filter-actions {
+  display: flex;
+  gap: var(--au-s-2);
+}
+
+.yoga-empty {
+  color: var(--au-text-3);
+  padding: var(--au-s-4) 0;
+}
+
+.yoga-subtitle {
+  font-size: var(--au-fs-lg);
+  font-weight: 600;
+  color: var(--au-text);
+  margin: var(--au-s-4) 0 var(--au-s-2);
+}
+
+.yoga-dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--au-s-1) var(--au-s-3);
+  margin: 0 0 var(--au-s-3);
+}
+
+.yoga-dl dt {
+  color: var(--au-text-3);
+  font-weight: 500;
+}
+
+.yoga-dl dd {
+  margin: 0;
+}
+
+.yoga-pre {
+  background: var(--au-panel-sunken);
+  border: 1px solid var(--au-line);
+  border-radius: var(--au-r-sm);
+  padding: var(--au-s-3);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: var(--au-fs-sm);
+}
+
+.yoga-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--au-s-3);
+}
+
+.yoga-mt-2 { margin-top: var(--au-s-2); }
+.yoga-mt-3 { margin-top: var(--au-s-3); }
+.yoga-mb-2 { margin-bottom: var(--au-s-2); }
+.yoga-mb-3 { margin-bottom: var(--au-s-3); }
+

@@ -1,36 +1,44 @@
-<div class="verwaltung-participants">
-    <h1>Teilnehmer</h1>
+<div class="au-panel">
+    <div class="au-panel__header">
+        <h1 class="au-panel__title">Teilnehmer</h1>
+        <a href="{{ route('verwaltung.participant.create') }}" class="au-btn au-btn--primary">Neuen Teilnehmer anlegen</a>
+    </div>
 
-    <p><a href="{{ route('verwaltung.participant.create') }}">Neuen Teilnehmer anlegen</a></p>
+    <div class="au-panel__body">
+        <label class="au-field au-field--inline">
+            <span class="au-field__label">Suchen</span>
+            <input type="search" wire:model.live.debounce.250ms="search" placeholder="Teilnehmer suchen..." aria-label="Teilnehmer suchen" class="au-field__input">
+        </label>
 
-    <input type="search" wire:model.live.debounce.250ms="search" placeholder="Suchen..." aria-label="Teilnehmer suchen">
-
-    @if (empty($participants))
-        <p>Noch keine Teilnehmer vorhanden.</p>
-    @else
-        <table class="verwaltung-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>E-Mail</th>
-                    <th>Telefon</th>
-                    <th>Ort</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($participants as $participant)
-                    <tr>
-                        <td>
-                            <a href="{{ route('verwaltung.participant.edit', ['id' => $participant->id]) }}">
-                                {{ $participant->vorname }} {{ $participant->nachname }}
-                            </a>
-                        </td>
-                        <td>{{ $participant->email }}</td>
-                        <td>{{ $participant->telefon }}</td>
-                        <td>{{ $participant->stadt }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
+        @if (empty($participants))
+            <p class="yoga-empty">Noch keine Teilnehmer vorhanden.</p>
+        @else
+            <div style="overflow-x:auto">
+                <table class="au-list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>E-Mail</th>
+                            <th>Telefon</th>
+                            <th>Ort</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($participants as $participant)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('verwaltung.participant.edit', ['id' => $participant->id]) }}">
+                                        {{ $participant->vorname }} {{ $participant->nachname }}
+                                    </a>
+                                </td>
+                                <td>{{ $participant->email }}</td>
+                                <td>{{ $participant->telefon }}</td>
+                                <td>{{ $participant->stadt }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
 </div>

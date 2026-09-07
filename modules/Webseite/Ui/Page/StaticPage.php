@@ -22,6 +22,6 @@ final class StaticPage extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('webseite::page.static-page');
+        return view('webseite::Page.static-page');
     }
 }

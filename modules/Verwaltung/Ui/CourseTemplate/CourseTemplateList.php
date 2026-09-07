@@ -65,7 +65,7 @@ final class CourseTemplateList extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::course-template.course-template-list', [
+        return view('verwaltung::CourseTemplate.course-template-list', [
             'weekdayLabels' => $this->weekdayLabels(),
         ]);
     }

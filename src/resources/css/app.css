@@ -7,3 +7,1451 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ============================================================
+   Yoga Sabrina Becker — Design System (öffentliche Webseite)
+   Farben und Typografie abgeleitet aus Design System Yoga Sabrina Becker.dc.html
+   Schriften: System-Fonts statt externer Google Fonts (Harness-Vorgabe).
+   ============================================================ */
+
+:root {
+    --yoga-green-dark: #0B2B23;
+    --yoga-green: #123C31;
+    --yoga-green-deep: #06201A;
+    --yoga-gold: #C9A15B;
+    --yoga-gold-dark: #A8823F;
+    --yoga-gold-light: #E3C88A;
+    --yoga-cream: #F6F1E7;
+    --yoga-warm-white: #FDFBF7;
+    --yoga-sage: #4A5F57;
+    --yoga-terracotta: #8C4A3F;
+    --yoga-text: #123C31;
+    --yoga-text-muted: #4A5F57;
+    --yoga-text-light: #8A9B94;
+    --yoga-line: rgba(18, 60, 49, 0.12);
+    --yoga-line-strong: rgba(18, 60, 49, 0.25);
+    --yoga-shadow: rgba(18, 60, 49, 0.08);
+    --yoga-radius: 8px;
+    --yoga-radius-sm: 4px;
+    --yoga-radius-lg: 12px;
+    --yoga-radius-full: 999px;
+    --yoga-font-head: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --yoga-font-body: 'Lato', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --yoga-font-script: 'Parisienne', 'Brush Script MT', cursive;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--yoga-font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--yoga-text);
+    background: var(--yoga-cream);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--yoga-font-head);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 0.6em;
+    color: var(--yoga-text);
+    line-height: 1.2;
+}
+
+p {
+    margin: 0 0 1em;
+}
+
+a {
+    color: var(--yoga-gold-dark);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+a:hover {
+    color: var(--yoga-gold);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ---- Site-Navigation ---- */
+.yoga-site-header {
+    background: var(--yoga-green-dark);
+    color: var(--yoga-warm-white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px var(--yoga-shadow);
+}
+
+.yoga-site-header .yoga-nav-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 72px;
+}
+
+.yoga-site-header .yoga-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--yoga-warm-white);
+    text-decoration: none;
+}
+
+.yoga-site-header .yoga-brand img {
+    height: 52px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(201, 161, 91, 0.25));
+}
+
+.yoga-site-header .yoga-brand-text {
+    font-family: var(--yoga-font-head);
+    font-weight: 300;
+    font-size: 18px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.yoga-site-header .yoga-nav-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.yoga-site-header .yoga-nav-list a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(253, 251, 247, 0.85);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    font-family: var(--yoga-font-head);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.yoga-site-header .yoga-nav-list a:hover,
+.yoga-site-header .yoga-nav-list li.active a {
+    border-bottom-color: var(--yoga-gold);
+    color: var(--yoga-gold-light);
+}
+
+/* „Anfragen"-Button in der Navigation (Entwurf) */
+.yoga-site-header .yoga-nav-list a.yoga-nav-cta {
+    background: var(--yoga-gold);
+    color: var(--yoga-green-dark);
+    padding: 12px 24px;
+    border-radius: var(--yoga-radius-sm);
+    border-bottom: none;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+}
+
+.yoga-site-header .yoga-nav-list a.yoga-nav-cta:hover {
+    background: var(--yoga-gold-light);
+    color: var(--yoga-green-dark);
+    border-bottom-color: transparent;
+}
+
+.yoga-site-header .yoga-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--yoga-warm-white);
+    font-size: 26px;
+    cursor: pointer;
+    padding: 6px;
+}
+
+@media (max-width: 800px) {
+    .yoga-site-header .yoga-menu-btn {
+        display: block;
+    }
+
+    .yoga-site-header .yoga-nav-list {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: var(--yoga-green-dark);
+        flex-direction: column;
+        padding: 12px 24px 24px;
+        gap: 4px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .yoga-site-header .yoga-nav-list.open {
+        display: flex;
+    }
+
+    .yoga-site-header .yoga-nav-list a {
+        width: 100%;
+        padding: 12px 14px;
+    }
+
+    .yoga-site-header .yoga-nav-list a.yoga-nav-cta {
+        padding: 12px 24px;
+    }
+}
+
+/* ---- Hero (zweispaltig wie im Entwurf) ---- */
+.yoga-hero {
+    background: var(--yoga-green-dark);
+    color: var(--yoga-warm-white);
+    overflow: hidden;
+}
+
+.yoga-hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+}
+
+.yoga-hero-content {
+    padding: 96px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+
+.yoga-hero-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 15% 25%, rgba(201, 161, 91, 0.1), transparent 45%);
+    pointer-events: none;
+}
+
+.yoga-hero-label {
+    font-family: var(--yoga-font-head);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--yoga-gold);
+    margin: 0 0 22px;
+}
+
+.yoga-hero h1 {
+    font-weight: 300;
+    font-size: clamp(34px, 4.2vw, 52px);
+    line-height: 1.12;
+    letter-spacing: 0.06em;
+    color: var(--yoga-warm-white);
+    margin: 0 0 14px;
+    position: relative;
+}
+
+.yoga-hero-script {
+    font-family: var(--yoga-font-script);
+    font-size: clamp(26px, 3vw, 34px);
+    color: var(--yoga-gold-light);
+    margin: 0 0 26px;
+    position: relative;
+}
+
+.yoga-hero-divider {
+    width: 150px;
+    height: 26px;
+    margin: 0 0 26px;
+    color: var(--yoga-gold);
+}
+
+.yoga-hero-content > p:not(.yoga-hero-script) {
+    font-size: 17px;
+    line-height: 1.75;
+    color: rgba(253, 251, 247, 0.78);
+    max-width: 480px;
+    margin: 0 0 34px;
+    position: relative;
+}
+
+.yoga-hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+/* Rechte Hero-Fläche: Porträt-Bereich mit Bild-Caption */
+.yoga-hero-visual {
+    position: relative;
+    background: linear-gradient(200deg, var(--yoga-green), var(--yoga-green-dark));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 480px;
+}
+
+.yoga-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(201, 161, 91, 0.12), transparent 45%),
+                radial-gradient(circle at 80% 70%, rgba(227, 200, 138, 0.08), transparent 50%);
+}
+
+.yoga-hero-portrait {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: rgba(227, 200, 138, 0.55);
+    font-family: var(--yoga-font-head);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.yoga-hero-portrait svg {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 12px;
+    display: block;
+}
+
+.yoga-hero-caption {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    background: rgba(11, 43, 35, 0.92);
+    border-top: 1px solid rgba(201, 161, 91, 0.55);
+    padding: 22px 32px;
+    text-align: center;
+}
+
+.yoga-hero-caption .yoga-script {
+    font-size: 30px;
+    color: var(--yoga-gold-light);
+    margin: 0 0 6px;
+}
+
+.yoga-hero-caption-label {
+    font-family: var(--yoga-font-head);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--yoga-warm-white);
+    margin: 0;
+}
+
+/* ---- Buttons ---- */
+.yoga-btn,
+.yoga-btn-primary,
+button[type="submit"],
+.yoga-btn-secondary,
+.yoga-btn-ghost,
+.yoga-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--yoga-font-head);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--yoga-radius);
+    padding: 16px 34px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.yoga-btn-primary,
+button[type="submit"],
+.yoga-btn {
+    background: var(--yoga-gold);
+    color: var(--yoga-green-dark);
+}
+
+.yoga-btn-primary:hover,
+button[type="submit"]:hover,
+.yoga-btn:hover {
+    background: var(--yoga-gold-light);
+}
+
+.yoga-btn-secondary,
+.yoga-btn-outline {
+    background: transparent;
+    color: var(--yoga-gold-light);
+    border: 1px solid rgba(201, 161, 91, 0.5);
+    padding: 15px 33px;
+}
+
+.yoga-btn-secondary:hover,
+.yoga-btn-outline:hover {
+    border-color: var(--yoga-gold);
+    color: var(--yoga-gold);
+}
+
+.yoga-btn-ghost {
+    background: transparent;
+    color: var(--yoga-gold-dark);
+    border-bottom: 1px solid rgba(201, 161, 91, 0.5);
+    border-radius: 0;
+    padding: 6px 2px;
+}
+
+.yoga-btn-ghost:hover {
+    color: var(--yoga-gold);
+    border-bottom-color: var(--yoga-gold);
+}
+
+.yoga-btn:disabled,
+.yoga-btn-primary:disabled,
+button[type="submit"]:disabled {
+    background: rgba(18, 60, 49, 0.12);
+    color: rgba(18, 60, 49, 0.35);
+    cursor: not-allowed;
+}
+
+.yoga-btn-sm {
+    padding: 12px 24px;
+    font-size: 12px;
+}
+
+/* ---- Page Layout ---- */
+.yoga-page-layout,
+.yoga-activity-overview,
+.yoga-activity-detail,
+.yoga-static-page,
+.webseite-registration {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+}
+
+/* ---- Sektionen mit abwechselnden Hintergründen (Entwurf) ---- */
+.yoga-section {
+    padding: 80px 24px;
+}
+
+.yoga-section--creme {
+    background: var(--yoga-cream);
+}
+
+.yoga-section--warm {
+    background: var(--yoga-warm-white);
+}
+
+.yoga-section--green {
+    background: var(--yoga-green-dark);
+    color: var(--yoga-warm-white);
+}
+
+.yoga-section--green h2,
+.yoga-section--green h3 {
+    color: var(--yoga-warm-white);
+}
+
+.yoga-section--green p {
+    color: rgba(253, 251, 247, 0.78);
+}
+
+.yoga-section-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+/* Sektion nur als Hintergrundfläche (Inhalt bringt eigene Abstände mit) */
+.yoga-section--flush {
+    padding: 0;
+}
+
+/* Nummeriertes Label wie im Entwurf (01–05) */
+.yoga-num {
+    display: block;
+    font-family: var(--yoga-font-head);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--yoga-gold-dark);
+    margin: 0 0 8px;
+}
+
+.yoga-section--green .yoga-num {
+    color: var(--yoga-gold);
+}
+
+/* Grundstil für Script-Zeile */
+.yoga-script {
+    font-family: var(--yoga-font-script);
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--yoga-gold-dark);
+}
+
+.yoga-script-light {
+    color: var(--yoga-gold-light);
+}
+
+/* ---- Intro-Grid „Meine Idee" (Entwurf) ---- */
+.yoga-intro-grid {
+    display: grid;
+    grid-template-columns: 0.45fr 1fr;
+    gap: 64px;
+    align-items: start;
+}
+
+.yoga-intro-grid .yoga-lead {
+    font-size: 19px;
+    color: var(--yoga-text);
+    margin-bottom: 20px;
+}
+
+.yoga-intro-grid .yoga-divider {
+    width: 80px;
+    height: 18px;
+    margin: 24px 0;
+    color: var(--yoga-gold);
+}
+
+.yoga-intro-grid .yoga-key-phrase {
+    font-family: var(--yoga-font-head);
+    font-size: 13px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--yoga-text);
+    margin: 0 0 8px;
+}
+
+/* Highlight-Karte mit Icon-Kreisen (Entwurf) */
+.yoga-highlight-card {
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+    padding: 32px;
+    margin-top: 36px;
+}
+
+.yoga-highlight-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.yoga-highlight-row:last-child {
+    margin-bottom: 0;
+}
+
+.yoga-highlight-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--yoga-green-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    color: var(--yoga-gold);
+}
+
+.yoga-highlight-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.yoga-highlight-row h4 {
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    margin: 0 0 6px;
+    color: var(--yoga-text);
+}
+
+.yoga-highlight-row p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--yoga-text-muted);
+    line-height: 1.6;
+}
+
+/* ---- Kurs-Band „Regelmäßige Kurse" (Entwurf) ---- */
+.yoga-courses-band {
+    background: var(--yoga-green-dark);
+    border-radius: var(--yoga-radius);
+    padding: 48px 56px;
+    display: flex;
+    gap: 48px;
+    align-items: center;
+    color: var(--yoga-warm-white);
+}
+
+.yoga-courses-icon {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--yoga-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    color: var(--yoga-gold);
+}
+
+.yoga-courses-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.yoga-courses-content {
+    flex: 1;
+}
+
+.yoga-courses-band .yoga-card-label {
+    color: var(--yoga-gold-light);
+    margin: 0 0 12px;
+}
+
+.yoga-courses-band h3 {
+    color: var(--yoga-warm-white);
+    margin-bottom: 12px;
+}
+
+.yoga-courses-band p {
+    color: rgba(253, 251, 247, 0.78);
+    margin: 0;
+    max-width: 560px;
+}
+
+.yoga-courses-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    flex: none;
+}
+
+/* ---- Audience-Grid „Für wen" (Entwurf) ---- */
+.yoga-audience-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.yoga-audience-card {
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+    padding: 40px;
+}
+
+.yoga-audience-card h2,
+.yoga-audience-card h3 {
+    margin-bottom: 8px;
+}
+
+.yoga-audience-card .yoga-tags {
+    margin-top: 20px;
+}
+
+/* ---- Kontakt-Grid (Entwurf) ---- */
+.yoga-contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 56px;
+    align-items: start;
+}
+
+.yoga-contact-card {
+    background: var(--yoga-green-dark);
+    border: 1px solid rgba(201, 161, 91, 0.35);
+    border-radius: var(--yoga-radius);
+    padding: 40px;
+    color: var(--yoga-warm-white);
+}
+
+.yoga-contact-card h2,
+.yoga-contact-card h3 {
+    color: var(--yoga-warm-white);
+    margin-bottom: 10px;
+}
+
+.yoga-contact-card p {
+    color: rgba(253, 251, 247, 0.78);
+}
+
+.yoga-contact-card .yoga-script {
+    font-size: 28px;
+    color: var(--yoga-gold-light);
+    display: block;
+    margin-bottom: 32px;
+}
+
+.yoga-contact-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.yoga-contact-rows li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    color: rgba(253, 251, 247, 0.8);
+    font-size: 15px;
+}
+
+.yoga-contact-rows svg {
+    width: 20px;
+    height: 20px;
+    color: var(--yoga-gold-light);
+    flex: none;
+}
+
+.yoga-contact-rows a {
+    color: rgba(253, 251, 247, 0.85);
+    border-bottom: 1px solid rgba(201, 161, 91, 0.4);
+}
+
+.yoga-contact-rows a:hover {
+    color: var(--yoga-gold-light);
+}
+
+/* Weiße Form-/Anfrage-Karte (Entwurf) */
+.yoga-form-card {
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+    padding: 36px 40px;
+}
+
+.yoga-form-card h2,
+.yoga-form-card h3 {
+    margin-bottom: 18px;
+}
+
+.yoga-form-card p {
+    font-size: 15px;
+    color: var(--yoga-text-muted);
+}
+
+.yoga-section-header {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.yoga-section-header h1,
+.yoga-section-header h2 {
+    font-size: clamp(26px, 4vw, 32px);
+    margin: 0 0 8px;
+}
+
+.yoga-section-header .yoga-script {
+    font-family: var(--yoga-font-script);
+    font-size: clamp(24px, 3vw, 30px);
+    color: var(--yoga-gold-dark);
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+}
+
+.yoga-section-header .yoga-num {
+    margin-bottom: 8px;
+}
+
+/* Lotus-Trenner wie im Entwurf */
+.yoga-section-divider {
+    width: 120px;
+    height: 24px;
+    margin: 22px auto 0;
+    display: block;
+    color: var(--yoga-gold);
+}
+
+.yoga-section-header + .yoga-activity-grid {
+    margin-top: 12px;
+}
+
+.yoga-lead {
+    font-size: 17px;
+    color: var(--yoga-text-muted);
+    margin-bottom: 24px;
+    max-width: 680px;
+}
+
+/* ---- Cards ---- */
+.yoga-card-grid,
+.yoga-activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.yoga-card,
+.yoga-activity-card {
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px var(--yoga-shadow);
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+}
+
+.yoga-card:hover,
+.yoga-activity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--yoga-shadow);
+}
+
+.yoga-card-image,
+.yoga-activity-image {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    background: linear-gradient(160deg, var(--yoga-green), var(--yoga-green-deep));
+}
+
+.yoga-card-image-placeholder,
+.yoga-activity-image-placeholder {
+    width: 100%;
+    height: 170px;
+    background: linear-gradient(160deg, var(--yoga-green), var(--yoga-green-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--yoga-font-head);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(227, 200, 138, 0.7);
+}
+
+.yoga-card-image-placeholder svg,
+.yoga-activity-image-placeholder svg {
+    width: 48px;
+    height: 48px;
+    color: rgba(227, 200, 138, 0.55);
+}
+
+.yoga-card-body,
+.yoga-activity-card > h2,
+.yoga-activity-card > h3,
+.yoga-activity-card > p,
+.yoga-activity-card > .yoga-activity-type,
+.yoga-activity-card > .yoga-activity-next-session,
+.yoga-activity-card > .yoga-activity-price,
+.yoga-activity-card > .yoga-status-buchbar,
+.yoga-activity-card > .yoga-status-warteliste {
+    padding: 0 26px;
+}
+
+.yoga-card-body {
+    padding: 24px 26px 26px;
+}
+
+.yoga-card-body h3,
+.yoga-activity-card h2,
+.yoga-activity-card h3 {
+    font-size: 17px;
+    font-weight: 500;
+    margin: 0 0 10px;
+    padding-top: 24px;
+}
+
+.yoga-card-body h3 a,
+.yoga-activity-card h2 a,
+.yoga-activity-card h3 a {
+    color: var(--yoga-text);
+}
+
+.yoga-card-body h3 a:hover,
+.yoga-activity-card h2 a:hover,
+.yoga-activity-card h3 a:hover {
+    color: var(--yoga-gold-dark);
+}
+
+.yoga-card-label,
+.yoga-activity-type {
+    font-family: var(--yoga-font-head);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--yoga-gold-dark);
+    margin: 0 0 10px;
+}
+
+.yoga-card-body p,
+.yoga-activity-card > p:not(.yoga-activity-type):not(.yoga-activity-next-session):not(.yoga-activity-price):not(.yoga-status-buchbar):not(.yoga-status-warteliste) {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--yoga-text-muted);
+    margin: 0 0 16px;
+    flex: 1;
+}
+
+.yoga-activity-next-session {
+    font-size: 14px;
+    color: var(--yoga-text-muted);
+    margin: 0 0 12px;
+}
+
+.yoga-activity-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--yoga-text);
+    margin: 0 0 12px;
+}
+
+.yoga-status-buchbar {
+    color: var(--yoga-green);
+    font-weight: 600;
+    font-size: 13px;
+    margin: 0 0 20px;
+}
+
+.yoga-status-warteliste {
+    color: var(--yoga-terracotta);
+    font-weight: 600;
+    font-size: 13px;
+    margin: 0 0 20px;
+}
+
+.yoga-activity-card .yoga-card-actions,
+.yoga-card-actions {
+    padding: 0 26px 26px;
+    margin-top: auto;
+}
+
+/* ---- Filter ---- */
+.yoga-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding: 18px 22px;
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+}
+
+.yoga-filter label {
+    font-family: var(--yoga-font-head);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--yoga-text-muted);
+}
+
+.yoga-filter select,
+.yoga-form select,
+.yoga-form input,
+.yoga-form textarea {
+    font-family: var(--yoga-font-body);
+    font-size: 16px;
+    color: var(--yoga-text);
+    background: var(--yoga-warm-white);
+    border: 1px solid rgba(18, 60, 49, 0.18);
+    border-radius: var(--yoga-radius-sm);
+    padding: 14px 16px;
+    outline: none;
+    width: 100%;
+    max-width: 320px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.yoga-filter select:focus,
+.yoga-form select:focus,
+.yoga-form input:focus,
+.yoga-form textarea:focus {
+    border-color: var(--yoga-gold);
+    box-shadow: 0 0 0 3px rgba(201, 161, 91, 0.18);
+}
+
+.yoga-form textarea {
+    resize: vertical;
+}
+
+/* ---- Activity Detail ---- */
+.yoga-activity-detail-header {
+    margin-bottom: 28px;
+}
+
+.yoga-activity-detail h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    margin-bottom: 8px;
+}
+
+.yoga-activity-detail-image {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    border-radius: var(--yoga-radius);
+    margin-bottom: 28px;
+    background: linear-gradient(160deg, var(--yoga-green), var(--yoga-green-deep));
+}
+
+.yoga-activity-description {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--yoga-text-muted);
+    margin-bottom: 28px;
+}
+
+.yoga-activity-sessions {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+}
+
+.yoga-activity-sessions li {
+    padding: 14px 18px;
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius-sm);
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.yoga-activity-sessions small {
+    display: block;
+    color: var(--yoga-text-light);
+    margin-top: 4px;
+}
+
+/* ---- Forms ---- */
+.yoga-form,
+.webseite-registration form {
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+    padding: 34px 36px;
+    max-width: 720px;
+}
+
+.yoga-form-group,
+.webseite-registration form p {
+    margin-bottom: 22px;
+}
+
+.yoga-form label,
+.webseite-registration form label {
+    display: block;
+    font-family: var(--yoga-font-head);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--yoga-text-muted);
+    margin: 0 0 8px;
+}
+
+.yoga-form input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.yoga-form .yoga-checkbox-label {
+    display: inline;
+    font-family: var(--yoga-font-body);
+    font-size: 15px;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--yoga-text);
+}
+
+.yoga-form .error,
+.webseite-registration .error,
+.yoga-status-not-bookable {
+    padding: 14px 18px;
+    border-radius: var(--yoga-radius-sm);
+    background: rgba(140, 74, 63, 0.08);
+    border: 1px solid rgba(140, 74, 63, 0.35);
+    color: var(--yoga-terracotta);
+    font-size: 15px;
+    margin-bottom: 22px;
+}
+
+.yoga-status-not-bookable {
+    color: var(--yoga-text-muted);
+    border-color: var(--yoga-line);
+    background: var(--yoga-warm-white);
+}
+
+/* ---- Success ---- */
+.yoga-success-box {
+    background: var(--yoga-warm-white);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius);
+    padding: 34px 36px;
+    text-align: center;
+    max-width: 680px;
+}
+
+.yoga-success-box h1 {
+    font-size: 28px;
+}
+
+/* ---- Static Page (Inhaltsseite auf Creme, Komponenten wie im Entwurf) ---- */
+.yoga-static-page h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.yoga-static-page h2 {
+    font-size: 21px;
+    color: var(--yoga-gold-dark);
+    border-bottom: 2px solid rgba(201, 161, 91, 0.25);
+    padding-bottom: 8px;
+    margin-top: 28px;
+}
+
+.yoga-static-page h3 {
+    font-size: 17px;
+    margin-top: 22px;
+}
+
+.yoga-static-page p,
+.yoga-static-page li {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.yoga-static-page ul,
+.yoga-static-page ol {
+    padding-left: 22px;
+    margin: 12px 0;
+}
+
+.yoga-page-content blockquote {
+    margin: 16px 0;
+    padding: 12px 16px;
+    background: var(--yoga-cream);
+    border-left: 4px solid var(--yoga-gold);
+    border-radius: 0 var(--yoga-radius-sm) var(--yoga-radius-sm) 0;
+    color: var(--yoga-text-muted);
+}
+
+/* ---- Footer ---- */
+.yoga-site-footer {
+    background: var(--yoga-green-dark);
+    border-top: 1px solid rgba(201, 161, 91, 0.25);
+    padding: 44px 24px 52px;
+    color: rgba(253, 251, 247, 0.65);
+}
+
+.yoga-footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.yoga-footer-brand {
+    display: flex;
+    align-items: center;
+    color: var(--yoga-warm-white);
+}
+
+.yoga-footer-brand img {
+    height: 44px;
+    width: auto;
+}
+
+.yoga-footer-inner > p {
+    margin: 0;
+    color: rgba(253, 251, 247, 0.45);
+    font-size: 13px;
+}
+
+.yoga-footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.yoga-footer-links a {
+    color: var(--yoga-gold-light);
+    font-family: var(--yoga-font-head);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.yoga-footer-links a:hover {
+    color: var(--yoga-gold);
+}
+
+/* ---- Empty State ---- */
+.yoga-empty {
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--yoga-text-muted);
+    font-size: 17px;
+}
+
+/* ---- CMS-Inhaltsseiten: Komponenten ---- */
+blockquote.yoga-content-quote {
+    font-family: var(--yoga-font-script);
+    font-size: clamp(24px, 3vw, 30px);
+    line-height: 1.4;
+    color: var(--yoga-gold-dark);
+    text-align: center;
+    max-width: 620px;
+    margin: 32px auto;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+}
+
+.yoga-cta-panel {
+    background: var(--yoga-green-dark);
+    color: var(--yoga-warm-white);
+    border-radius: var(--yoga-radius);
+    padding: 44px 32px;
+    text-align: center;
+    margin: 36px 0;
+}
+
+.yoga-cta-panel .yoga-script {
+    font-family: var(--yoga-font-script);
+    font-size: clamp(26px, 3.5vw, 32px);
+    color: var(--yoga-gold-light);
+    margin: 0 0 14px;
+}
+
+.yoga-cta-panel p {
+    color: rgba(253, 251, 247, 0.78);
+    margin: 0 0 24px;
+}
+
+.yoga-page-content .yoga-card-label {
+    margin: 0 0 10px;
+}
+
+.yoga-page-content .yoga-card-body h3 {
+    padding-top: 0;
+    margin: 0 0 10px;
+}
+
+.yoga-page-content .yoga-card-body p:last-of-type {
+    margin-bottom: 0;
+}
+
+.yoga-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 24px;
+}
+
+.yoga-page-content .yoga-checklist li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 14px;
+    list-style: none;
+}
+
+.yoga-checklist li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--yoga-gold);
+}
+
+.yoga-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 24px 0 0;
+}
+
+.yoga-tag {
+    font-family: var(--yoga-font-head);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--yoga-text);
+    border: 1px solid var(--yoga-line-strong);
+    border-radius: var(--yoga-radius-full);
+    padding: 9px 18px;
+}
+
+.yoga-tag--gold {
+    color: var(--yoga-green-dark);
+    background: var(--yoga-gold);
+    border-color: transparent;
+}
+
+.yoga-page-content .yoga-contact-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    background: var(--yoga-cream);
+    border: 1px solid var(--yoga-line);
+    border-radius: var(--yoga-radius-sm);
+    list-style: none;
+}
+
+.yoga-contact-list strong {
+    font-family: var(--yoga-font-head);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yoga-gold-dark);
+    min-width: 96px;
+    flex: none;
+}
+
+/* ---- Startseite: Meine Idee ---- */
+.yoga-home .yoga-idee {
+    margin-bottom: 56px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--yoga-line);
+}
+
+.yoga-home .yoga-idee .yoga-lead {
+    margin-bottom: 16px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 980px) {
+    .yoga-hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .yoga-hero-content {
+        padding: 64px 24px;
+    }
+
+    .yoga-hero-visual {
+        min-height: 340px;
+    }
+
+    .yoga-intro-grid,
+    .yoga-audience-grid,
+    .yoga-contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .yoga-courses-band {
+        flex-direction: column;
+        text-align: center;
+        padding: 36px 24px;
+    }
+
+    .yoga-courses-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .yoga-courses-actions {
+        justify-content: center;
+    }
+
+    .yoga-section {
+        padding: 56px 16px;
+    }
+}
+
+@media (max-width: 700px) {
+    .yoga-hero-content {
+        padding: 56px 20px;
+    }
+
+    .yoga-hero-actions,
+    .yoga-courses-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .yoga-hero-actions .yoga-btn-primary,
+    .yoga-hero-actions .yoga-btn-secondary,
+    .yoga-courses-actions .yoga-btn-primary,
+    .yoga-courses-actions .yoga-btn-secondary {
+        width: 100%;
+    }
+
+    .yoga-footer-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .yoga-page-layout,
+    .yoga-activity-overview,
+    .yoga-activity-detail,
+    .yoga-static-page,
+    .webseite-registration {
+        padding: 32px 16px 56px;
+    }
+
+    .yoga-card-grid,
+    .yoga-activity-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .yoga-form,
+    .webseite-registration form {
+        padding: 24px;
+    }
+
+    .yoga-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .yoga-filter select {
+        max-width: none;
+    }
+}
+
+/* ---- Utility ---- */
+.yoga-text-center {
+    text-align: center;
+}
+
+.yoga-mt-1 { margin-top: 8px; }
+.yoga-mt-2 { margin-top: 16px; }
+.yoga-mt-3 { margin-top: 24px; }
+.yoga-mb-2 { margin-bottom: 16px; }
+.yoga-mb-3 { margin-bottom: 24px; }

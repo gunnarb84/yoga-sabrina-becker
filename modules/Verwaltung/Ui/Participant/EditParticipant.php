@@ -117,6 +117,6 @@ final class EditParticipant extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::participant.edit-participant');
+        return view('verwaltung::Participant.edit-participant');
     }
 }

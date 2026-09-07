@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\Registration;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -12,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Platform\Identity\UuidCast;
 
@@ -31,10 +30,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property RegistrationPaymentMethod $zahlungsart
  * @property RegistrationPaymentStatus $zahlungsstatus
  */
-class Registration extends Model
+class Registration extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_anmeldungen';
 
     protected $guarded = [];

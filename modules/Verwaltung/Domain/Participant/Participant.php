@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\Participant;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Platform\Identity\UuidCast;
 
 /**
@@ -30,10 +29,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property int $version
  * @property string $vorname
  */
-class Participant extends Model
+class Participant extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_teilnehmer';
 
     protected $guarded = [];

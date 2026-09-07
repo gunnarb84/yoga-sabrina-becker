@@ -92,6 +92,6 @@ final class ActivityRegistrations extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::registration.activity-registrations');
+        return view('verwaltung::Registration.activity-registrations');
     }
 }

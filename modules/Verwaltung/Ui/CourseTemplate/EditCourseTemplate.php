@@ -107,7 +107,7 @@ final class EditCourseTemplate extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::course-template.edit-course-template', [
+        return view('verwaltung::CourseTemplate.edit-course-template', [
             'weekdayOptions' => $this->weekdayOptions(),
         ]);
     }

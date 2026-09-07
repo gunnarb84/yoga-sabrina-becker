@@ -63,7 +63,7 @@ final class CreateActivity extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::activity.create-activity', [
+        return view('verwaltung::Activity.create-activity', [
             'types' => array_map(fn (ActivityType $t): array => ['value' => $t->value, 'label' => ucfirst($t->value)], ActivityType::cases()),
         ]);
     }

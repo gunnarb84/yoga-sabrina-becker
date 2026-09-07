@@ -41,7 +41,7 @@ test('bietet eine Filtermöglichkeit nach Typ', async ({ page }) => {
 });
 
 test('öffnet die Detailseite beim Klick auf eine Veranstaltung', async ({ page }) => {
-    await page.getByRole('article').filter({ hasText: titel }).getByRole('link').click();
+    await page.getByRole('article').filter({ hasText: titel }).getByRole('link', { name: titel }).click();
 
     await expect(page).toHaveURL(new RegExp(`/veranstaltung/${slug}`));
     await expect(page.getByRole('heading', { name: titel })).toBeVisible();

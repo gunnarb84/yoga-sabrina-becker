@@ -209,7 +209,7 @@ final class EditActivity extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('verwaltung::activity.edit-activity', [
+        return view('verwaltung::Activity.edit-activity', [
             'types' => array_map(fn (ActivityType $t): array => ['value' => $t->value, 'label' => ucfirst($t->value)], ActivityType::cases()),
             'statusLabel' => $this->status,
         ]);

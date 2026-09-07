@@ -36,6 +36,6 @@ final class OutboundMessageList extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return View::make('verwaltung::outbound-message.list');
+        return View::make('verwaltung::OutboundMessage.outbound-message-list');
     }
 }

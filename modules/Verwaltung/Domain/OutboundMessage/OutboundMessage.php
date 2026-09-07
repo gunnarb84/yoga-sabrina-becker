@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\OutboundMessage;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Platform\Identity\UuidCast;
 
 /**
@@ -26,10 +25,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property \Carbon\Carbon|null $versendet_am
  * @property int $version
  */
-class OutboundMessage extends Model
+class OutboundMessage extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_ausgehende_nachrichten';
 
     protected $guarded = [];

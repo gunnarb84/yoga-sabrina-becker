@@ -30,7 +30,7 @@ final class ActivityOverview extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        return view('webseite::activity.activity-overview', [
+        return view('webseite::Activity.activity-overview', [
             'typeOptions' => $this->typeOptions(),
         ]);
     }

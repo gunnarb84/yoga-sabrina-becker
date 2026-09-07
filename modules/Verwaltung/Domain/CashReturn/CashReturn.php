@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Domain\CashReturn;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Yoga\Modules\Verwaltung\Domain\CashReceipt\CashReceipt;
-use Yoga\Modules\Verwaltung\Domain\Support\EntityLifecycle;
+use Yoga\Modules\Verwaltung\Domain\Support\BaseModel;
 use Yoga\Platform\Identity\UuidCast;
 
 /**
@@ -24,10 +23,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property int $version
  * @property string $waehrung
  */
-class CashReturn extends Model
+class CashReturn extends BaseModel
 {
-    use EntityLifecycle;
-
     protected $table = 'verwaltung_rueckgabebestaetigungen';
 
     protected $guarded = [];

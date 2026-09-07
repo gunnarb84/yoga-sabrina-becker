@@ -1,49 +1,55 @@
-<div class="verwaltung-create-activity">
-    <h1>Neue Aktivitaet anlegen</h1>
+<div class="au-panel">
+    <div class="au-panel__header">
+        <h1 class="au-panel__title">Neue Aktivität anlegen</h1>
+    </div>
 
-    @if ($message)
-        <p class="message">{{ $message }}</p>
-    @endif
+    <div class="au-panel__body">
+        @if ($message)
+            <div class="au-status au-status--warn yoga-mb-2" role="alert">{{ $message }}</div>
+        @endif
 
-    @if ($created)
-        <p class="success">Die Aktivitaet wurde angelegt.</p>
-    @endif
+        @if ($created)
+            <div class="au-status au-status--ok yoga-mb-2">Die Aktivität wurde angelegt.</div>
+        @endif
 
-    <form wire:submit="save">
-        <label>
-            Typ
-            <select wire:model="type">
-                @foreach ($types as $option)
-                    <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
-                @endforeach
-            </select>
-        </label>
+        <form wire:submit="save" class="yoga-form">
+            <div class="yoga-form-group">
+                <label for="type">Typ</label>
+                <select id="type" wire:model="type" class="au-field__select">
+                    @foreach ($types as $option)
+                        <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-        <label>
-            Titel
-            <input type="text" wire:model="title" required>
-        </label>
+            <div class="yoga-form-group">
+                <label for="title">Titel</label>
+                <input type="text" id="title" wire:model="title" required class="au-field__input">
+            </div>
 
-        <label>
-            Kurzbeschreibung
-            <textarea wire:model="shortDescription"></textarea>
-        </label>
+            <div class="yoga-form-group">
+                <label for="shortDescription">Kurzbeschreibung</label>
+                <textarea id="shortDescription" wire:model="shortDescription" rows="2" class="au-field__textarea"></textarea>
+            </div>
 
-        <label>
-            Langbeschreibung
-            <textarea wire:model="longDescription"></textarea>
-        </label>
+            <div class="yoga-form-group">
+                <label for="longDescription">Langbeschreibung</label>
+                <textarea id="longDescription" wire:model="longDescription" rows="4" class="au-field__textarea"></textarea>
+            </div>
 
-        <label>
-            Preis (EUR)
-            <input type="number" step="0.01" wire:model="price" required>
-        </label>
+            <div class="yoga-form-group">
+                <label for="price">Preis (EUR)</label>
+                <input type="number" id="price" step="0.01" wire:model="price" required class="au-field__input">
+            </div>
 
-        <label>
-            Maximale Teilnehmerzahl
-            <input type="number" wire:model="maxParticipants" required>
-        </label>
+            <div class="yoga-form-group">
+                <label for="maxParticipants">Maximale Teilnehmerzahl</label>
+                <input type="number" id="maxParticipants" wire:model="maxParticipants" required class="au-field__input">
+            </div>
 
-        <button type="submit">Speichern</button>
-    </form>
+            <div class="yoga-form-group yoga-mt-2">
+                <button type="submit" class="yoga-btn-primary">Speichern</button>
+            </div>
+        </form>
+    </div>
 </div>
