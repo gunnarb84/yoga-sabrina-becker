@@ -13,23 +13,23 @@ deptrac:
         -   name: 'Verwaltung.Domain'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Domain\\\\~'
+                    value: '~^Yoga\\Modules\\Verwaltung\\Domain\\~'
         -   name: 'Verwaltung.Application'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Application\\\\~'
+                    value: '~^Yoga\\Modules\\Verwaltung\\Application\\~'
         -   name: 'Verwaltung.Persistence'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Persistence\\\\~'
+                    value: '~^Yoga\\Modules\\Verwaltung\\Persistence\\~'
         -   name: 'Verwaltung.Ui'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Ui\\\\~'
+                    value: '~^Yoga\\Modules\\Verwaltung\\Ui\\~'
         -   name: 'Verwaltung.Api'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Verwaltung\\\\Api\\\\~'
+                    value: '~^Yoga\\Modules\\Verwaltung\\Api\\~'
 
         # ------------------------------------------------------------------
         # Webseite
@@ -37,23 +37,23 @@ deptrac:
         -   name: 'Webseite.Domain'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Domain\\\\~'
+                    value: '~^Yoga\\Modules\\Webseite\\Domain\\~'
         -   name: 'Webseite.Application'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Application\\\\~'
+                    value: '~^Yoga\\Modules\\Webseite\\Application\\~'
         -   name: 'Webseite.Persistence'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Persistence\\\\~'
+                    value: '~^Yoga\\Modules\\Webseite\\Persistence\\~'
         -   name: 'Webseite.Ui'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Ui\\\\~'
+                    value: '~^Yoga\\Modules\\Webseite\\Ui\\~'
         -   name: 'Webseite.Api'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Modules\\\\Webseite\\\\Api\\\\~'
+                    value: '~^Yoga\\Modules\\Webseite\\Api\\~'
 
         # ------------------------------------------------------------------
         # Plattformbausteine
@@ -61,15 +61,15 @@ deptrac:
         -   name: 'Platform.Domain'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Platform\\\\[a-z0-9_]+\\\\Domain\\\\~'
+                    value: '~^Yoga\\Platform\\[a-z0-9_]+\\Domain\\~'
         -   name: 'Platform.Application'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Platform\\\\[a-z0-9_]+\\\\Application\\\\~'
+                    value: '~^Yoga\\Platform\\[a-z0-9_]+\\Application\\~'
         -   name: 'Platform.Persistence'
             collectors:
                 -   type: classNameRegex
-                    value: '~^Yoga\\\\Platform\\\\[a-z0-9_]+\\\\Persistence\\\\~'
+                    value: '~^Yoga\\Platform\\[a-z0-9_]+\\Persistence\\~'
 
     ruleset:
         # Domain kennt nichts außer sich — Fachregeln bleiben bestimmbar.

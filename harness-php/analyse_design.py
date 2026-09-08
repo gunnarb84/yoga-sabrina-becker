@@ -43,6 +43,13 @@ from _analyse_common import (  # noqa: E402
 # projektspezifisch ([projekt] kurzname) und bleibt deshalb unerwuenscht/unbeachtet.
 _MODULE = re.compile(r"(?:^|\\)Modules\\([A-Za-z0-9_]+)\\")
 
+# Befundtext (Deptrac >= 4.7): "A must not depend on B (SchichtA on SchichtB)".
+_VIOLATION = re.compile(r"^(.+?) must not depend on (.+?) \((.+?) on (.+?)\)$")
+
+# Hinweistext einer ungedeckten Abhaengigkeit (Deptrac >= 4.7, --report-uncovered):
+# "A has uncovered dependency on B (Schicht)" — Grundlage der Abdeckungsprobe.
+_UNCOVERED = re.compile(r"^(.+?) has uncovered dependency on (.+?)(?: \((.+?)\))?$")
+
 
 def require_binary(root: Path) -> Path:
     """Deptrac unter vendor/bin/ des Composer-Projekts pruefen, bevor gelaufen wird."""
@@ -63,7 +70,8 @@ def run_deptrac(root: Path, config: Path) -> dict:
         "--formatter=json",
         "--no-progress",
         "--no-interaction",
-        f"--config={config}",
+        "--report-uncovered",
+        f"--config-file={config}",
     ]
     proc = subprocess.run(cmd, cwd=str(root), capture_output=True, text=True)
     if proc.returncode not in (0, 1):
@@ -72,9 +80,14 @@ def run_deptrac(root: Path, config: Path) -> dict:
             f"{proc.stderr.strip() or proc.stdout.strip()}"
         )
     try:
-        return json.loads(proc.stdout or "{}")
+        # Leere Ausgabe ist kein gueltiges Ergebnis — ein gebrochener Lauf
+        # (z. B. falsche Option) wuerde sonst stillschweigend als gruen gelten.
+        return json.loads(proc.stdout)
     except json.JSONDecodeError:
-        sys.exit("Fehler: deptrac lieferte kein gueltiges JSON (Konfiguration pruefen).")
+        sys.exit(
+            "Fehler: deptrac lieferte kein gueltiges JSON (Konfiguration pruefen):\n"
+            f"{(proc.stderr.strip() or proc.stdout.strip())[:500]}"
+        )
 
 
 def _classes(node: object, seen: set[str]) -> None:
@@ -91,8 +104,50 @@ def _classes(node: object, seen: set[str]) -> None:
 
 
 def parse(data: dict) -> list[dict]:
-    """Alle Objekte mit "violations"-Liste finden (Schema von Deptrac-Version zu
-    Version unterschiedlich) und die Befunde in ein einheitliches Format bringen."""
+    """Befunde in ein einheitliches Format bringen.
+
+    Deptrac >= 4.7 liefert je Datei eine "messages"-Liste mit lesbarem Befundtext
+    (Fehler: "A must not depend on B (SchichtA on SchichtB)"). Aeltere Deptrac-
+    Versionen verschachteln "violations"-Objekte je Schicht — dieses Format wird
+    daneben weiter akzeptiert (siehe _parse_nested).
+    """
+    violations: list[dict] = []
+    files = data.get("files")
+    if isinstance(files, dict):
+        for file, info in files.items():
+            for message in info.get("messages") or []:
+                if message.get("type") != "error":
+                    continue
+                match = _VIOLATION.match(message.get("message") or "")
+                if match is None:
+                    continue
+                depender, dependent, depender_layer, dependent_layer = match.groups()
+                violations.append({
+                    "rule": "deptrac.violation",
+                    "depender": depender,
+                    "dependerLayer": depender_layer,
+                    "dependent": dependent,
+                    "dependentLayer": dependent_layer,
+                    "file": file,
+                    "line": message.get("line"),
+                })
+
+    seen = {
+        (v["depender"], v["dependent"], v["dependerLayer"], v["file"], v["line"])
+        for v in violations
+    }
+    for v in _parse_nested(data):
+        key = (v["depender"], v["dependent"], v["dependerLayer"], v["file"], v["line"])
+        if key not in seen:
+            seen.add(key)
+            violations.append(v)
+
+    violations.sort(key=lambda x: (x["file"] or "~", x["line"] or 0, x["depender"] or ""))
+    return violations
+
+
+def _parse_nested(data: dict) -> list[dict]:
+    """Alles mit "violations"-Liste finden (Schema aelterer Deptrac-Versionen)."""
     violations: list[dict] = []
 
     def visit(node: object, layer_name: str | None = None) -> None:
@@ -128,19 +183,37 @@ def parse(data: dict) -> list[dict]:
                 visit(value, layer_name)
 
     visit(data)
-    violations.sort(key=lambda x: (x["file"] or "~", x["line"] or 0, x["depender"] or ""))
     return violations
 
 
-def coverage(data: dict) -> dict:
+def found_classes(data: dict) -> set[str]:
+    """Alle im Ergebnis genannten Klassenbezeichner einsammeln — Grundlage der
+    Abdeckungsprobe. Alte Schemas nennen freie Klassenstrings; Deptrac >= 4.7
+    verbirgt sie im Befund- und Hinweistext der je-Datei-Meldungen."""
+    classes: set[str] = set()
+    _classes(data, classes)
+    files = data.get("files")
+    if isinstance(files, dict):
+        for info in files.values():
+            for message in info.get("messages") or []:
+                text = message.get("message") or ""
+                match = _VIOLATION.match(text)
+                if match is not None:
+                    classes.update((match.group(1), match.group(2)))
+                    continue
+                match = _UNCOVERED.match(text)
+                if match is not None:
+                    classes.update((match.group(1), match.group(2)))
+    return classes
+
+
+def coverage(classes: set[str]) -> dict:
     """Welche Module der Modulwurzel kamen im Ergebnis vor — und welche nicht.
 
     Der Pruefumfang ergibt sich aus der Regelvorlage; liegt ein Modul ausserhalb,
     faellt es lautlos heraus und der Lauf meldet trotzdem Erfolg. Diese Gegenprobe
     macht die Luecke sichtbar, statt sie als gruenes Ergebnis auszugeben.
     """
-    classes: set[str] = set()
-    _classes(data, classes)
     found = {m.lower() for name in classes for m in _MODULE.findall(name)}
     try:
         root = modul_root()
@@ -179,7 +252,7 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     data = run_deptrac(root, config)
-    abdeckung = coverage(data)
+    abdeckung = coverage(found_classes(data))
     violations = parse(data)
 
     payload = {

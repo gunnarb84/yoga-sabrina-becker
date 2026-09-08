@@ -112,15 +112,32 @@ def run_pint(root: Path, config: Path, paths: list[Path]) -> list[dict]:
         sys.exit("Fehler: Pint lieferte kein gueltiges JSON (Konfiguration pruefen).")
 
     violations: list[dict] = []
-    for file, info in data.get("files", {}).items():
-        for error in info.get("errors", []):
-            violations.append({
-                "tool": "pint",
-                "rule": error.get("source") or "pint",
-                "file": to_repo_path(Path(file)),
-                "line": error.get("line"),
-                "message": error.get("message"),
-            })
+    files = data.get("files")
+    # Aeltere Pint-Versionen liefern "files" als Objekt je Datei mit Fehlern je
+    # Regel (source, line, message). Neuere Pint-Versionen liefern eine Liste je
+    # Datei mit nur den betroffenen Fixern (keine Zeilen, keine Meldungen); bei
+    # Erfolg entfaellt "files" ganz. Beide Formate werden akzeptiert.
+    if isinstance(files, dict):
+        for file, info in files.items():
+            for error in info.get("errors", []):
+                violations.append({
+                    "tool": "pint",
+                    "rule": error.get("source") or "pint",
+                    "file": to_repo_path(Path(file)),
+                    "line": error.get("line"),
+                    "message": error.get("message"),
+                })
+    elif isinstance(files, list):
+        for info in files:
+            file = to_repo_path(Path(info.get("path", "")))
+            for fixer in info.get("fixers") or []:
+                violations.append({
+                    "tool": "pint",
+                    "rule": fixer or "pint",
+                    "file": file,
+                    "line": None,
+                    "message": f"Abweichung von der Pint-Regel '{fixer}'.",
+                })
     return violations
 
 
