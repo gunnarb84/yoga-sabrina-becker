@@ -17,7 +17,7 @@
                 <label for="type">Typ</label>
                 <select id="type" wire:model="type" class="au-field__select">
                     @foreach ($types as $option)
-                        <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                        <option value="{{ $option->value }}">{{ $option->label }}</option>
                     @endforeach
                 </select>
             </div>

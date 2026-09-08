@@ -20,7 +20,7 @@
                 <select id="filterStatus" wire:model="filterStatus" class="au-field__input">
                     <option value="">Alle</option>
                     @foreach ($statusOptions as $option)
-                        <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                        <option value="{{ $option->value }}">{{ $option->label }}</option>
                     @endforeach
                 </select>
             </div>
