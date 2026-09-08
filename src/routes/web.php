@@ -26,6 +26,9 @@ use Yoga\Modules\Verwaltung\Ui\Session\CreateSession;
 use Yoga\Modules\Webseite\Ui\Activity\ActivityDetail;
 use Yoga\Modules\Webseite\Ui\Activity\ActivityOverview;
 use Yoga\Modules\Webseite\Ui\Activity\PublishedActivities;
+use Yoga\Modules\Webseite\Ui\ContactInquiry\ContactInquiryDetail;
+use Yoga\Modules\Webseite\Ui\ContactInquiry\ContactInquiryForm;
+use Yoga\Modules\Webseite\Ui\ContactInquiry\ContactInquiryList;
 use Yoga\Modules\Webseite\Ui\Page\StaticPage;
 use Yoga\Modules\Webseite\Ui\Registration\RegisterForActivity;
 
@@ -33,6 +36,7 @@ Route::get('/', PublishedActivities::class)->name('home');
 Route::get('/kurse', ActivityOverview::class)->name('activities');
 Route::get('/veranstaltung/{slug}', ActivityDetail::class)->name('activity.detail');
 Route::get('/veranstaltung/{slug}/anmelden', RegisterForActivity::class)->name('activity.register');
+Route::get('/kontakt', ContactInquiryForm::class)->name('contact');
 
 Route::get('/verwaltung/login', [LoginController::class, 'showLoginForm'])->name('verwaltung.login');
 Route::post('/verwaltung/login', [LoginController::class, 'login'])->name('verwaltung.login.submit');
@@ -56,6 +60,8 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/verwaltung/rechnungen/{id}/email', [InvoiceController::class, 'sendEmail'])->name('verwaltung.rechnung.email');
     Route::get('/verwaltung/nachrichten', OutboundMessageList::class)->name('verwaltung.outbound-messages');
     Route::get('/verwaltung/nachrichten/{id}', OutboundMessageDetail::class)->name('verwaltung.outbound-message.detail');
+    Route::get('/verwaltung/kontaktanfragen', ContactInquiryList::class)->name('verwaltung.contact-inquiries');
+    Route::get('/verwaltung/kontaktanfragen/{id}', ContactInquiryDetail::class)->name('verwaltung.contact-inquiry.detail');
     Route::get('/verwaltung/teilnehmer', ParticipantList::class)->name('verwaltung.participants');
     Route::get('/verwaltung/teilnehmer/neu', CreateParticipant::class)->name('verwaltung.participant.create');
     Route::get('/verwaltung/teilnehmer/{id}/bearbeiten', EditParticipant::class)->name('verwaltung.participant.edit');

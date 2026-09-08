@@ -211,7 +211,7 @@ HTML,
             [
                 'titel' => 'Datenschutzerklärung',
                 'inhalt' => <<<'HTML'
-<p>Stand: 18.08.2026</p>
+<p>Stand: 08.09.2026</p>
 <h2>1. Verantwortliche</h2>
 <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
 <p>
@@ -237,8 +237,9 @@ HTML,
 </p>
 <p>Beim Aufrufen unserer Website werden aus technischer Notwendigkeit Verbindungsdaten (z. B. IP-Adresse, Datum, Uhrzeit, aufgerufene Seite, Browser- und Betriebssysteminformationen) an IONOS übertragen und in Server-Logfiles gespeichert. Diese Daten werden ausschließlich zur technischen Bereitstellung und Sicherstellung des Betriebs der Website verwendet.</p>
 <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an technisch fehlerfreier und sicherer Bereitstellung der Website).</p>
-<h2>4. Kontaktaufnahme per E-Mail oder Telefon</h2>
+<h2>4. Kontaktaufnahme per E-Mail, Telefon oder Kontaktformular</h2>
 <p>Wenn Sie uns per E-Mail oder Telefon kontaktieren, werden die von Ihnen übermittelten Daten (z. B. Name, E-Mail-Adresse, Telefonnummer, Anliegen) zum Zweck der Bearbeitung Ihrer Anfrage gespeichert.</p>
+<p>Über das Kontaktformular auf dieser Website werden die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, optional Telefonnummer, Anlass, Nachricht) zum Zweck der Bearbeitung Ihrer Anfrage gespeichert. Sie erhalten automatisch eine Eingangsbestätigung per E-Mail; die Anfrage wird zur Bearbeitung in der Verwaltung der Website gespeichert. Es werden keine Gesundheitsinformationen erhoben — bitte teilen Sie solche im Kontaktformular nicht mit.</p>
 <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen bzw. Vertragserfüllung) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Beantwortung der Anfrage).</p>
 <h2>5. Online-Buchungssystem</h2>
 <p>Auf unserer Website ist ein Online-Buchungssystem geplant, über das Kurse, Workshops und Einzelstunden gebucht werden können. Bei Nutzung dieses Buchungssystems werden personenbezogene Daten (z. B. Name, E-Mail-Adresse, Telefonnummer, Buchungsdaten) erfasst, verarbeitet und gespeichert.</p>

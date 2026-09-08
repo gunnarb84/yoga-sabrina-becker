@@ -117,4 +117,7 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    // Empfängerin der Benachrichtigung über neue Kontaktanfragen.
+    'contact_inquiry_recipient' => env('MAIL_CONTACT_INQUIRY_RECIPIENT', 'info@yoga-sabrinabecker.de'),
+
 ];

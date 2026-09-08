@@ -1,5 +1,5 @@
 > **Typ:** Index · **Für:** Anwender · **Bezug:** [PROJEKT.md](../../PROJEKT.md), [Specs](../../specs)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-08
 
 # Endkunden-Dokumentation — Yoga Sabrina Becker
 
@@ -13,6 +13,8 @@ Diese Dokumentation richtet sich an Besucher/innen und Teilnehmer/innen der Webs
 
 - [Veranstaltungen finden und filtern](anleitungen/veranstaltungen-finden-und-filtern.md)
 - [Zu einer Veranstaltung anmelden](anleitungen/zu-einer-veranstaltung-anmelden.md)
+- [Kontaktanfrage senden](anleitungen/kontaktanfrage-senden.md)
+- [Kontaktanfragen bearbeiten](anleitungen/kontaktanfragen-bearbeiten.md)
 
 ## Referenz
 

@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Entwickler · **Bezug:** [harness-php/_data.md](../../../harness-php/_data.md), [projekt/_domaene.md](../../../projekt/_domaene.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-08
 
 # Datenmodell
 
@@ -22,6 +22,7 @@ Die Datenbank ist eine MySQL/MariaDB-Datenbank pro Installation. Alle Primärsch
 | `credit_notes` | Gutschrift |
 | `cash_returns` | Rückgabebestätigung |
 | `outbound_messages` | Versandte E-Mail |
+| `webseite_kontaktanfragen` | Kontaktanfrage aus dem Webformular (Modul Webseite) |
 | `users` | Backend-Benutzer/in |
 
 ## Datentypen

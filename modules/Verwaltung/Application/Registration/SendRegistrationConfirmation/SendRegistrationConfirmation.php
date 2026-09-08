@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmation;
 
-use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
-use Throwable;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoicePdf;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Request as GeneratePdfRequest;
-use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\Request as SendOutboundMessageRequest;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
-use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessage;
-use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
 use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
 use Yoga\Modules\Verwaltung\Domain\Payment\PaymentMethod;
@@ -23,8 +20,10 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class SendRegistrationConfirmation
 {
-    public function __construct(private GenerateInvoicePdf $pdfGenerator)
-    {
+    public function __construct(
+        private GenerateInvoicePdf $pdfGenerator,
+        private SendOutboundMessage $sender,
+    ) {
     }
 
     /** @return Result<Response> */
@@ -87,26 +86,18 @@ final readonly class SendRegistrationConfirmation
 
         $subject = 'Anmeldebestätigung: '.$activity->titel;
 
-        $message = new OutboundMessage([
-            'anmeldung_id' => $registration->id,
-            'empfaenger' => $participant->email,
-            'betreff' => $subject,
-            'inhalt' => $html,
-            'status' => OutboundMessageStatus::Pending->value,
-        ]);
-        $message->save();
+        $sent = $this->sender->execute(new SendOutboundMessageRequest(
+            recipient: $participant->email,
+            subject: $subject,
+            html: $html,
+            anmeldungId: $registration->id,
+            attachment: $pdfAttachment,
+        ));
 
-        try {
-            $mail = new HtmlAttachmentMail($subject, $html, $pdfAttachment);
-
-            Mail::to($participant->email)->send($mail);
-            $message->markSent();
-            $message->save();
-        } catch (Throwable $e) {
-            $message->markFailed($e->getMessage());
-            $message->save();
+        if ($sent->isFailure()) {
+            return Result::failure('message.not_found');
         }
 
-        return Result::success(new Response($message->id));
+        return Result::success(new Response($sent->unwrap()->outboundMessageId));
     }
 }

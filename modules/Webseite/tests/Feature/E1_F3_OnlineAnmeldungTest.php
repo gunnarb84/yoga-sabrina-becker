@@ -19,6 +19,7 @@ use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoicePdf;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Request as GeneratePdfRequest;
 use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant\Request as UpsertRequest;
 use Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant\UpsertParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
@@ -207,7 +208,7 @@ it('sends a confirmation email and creates an outbound message for a transfer re
         paymentMethod: 'ueberweisung',
     ));
 
-    $confirmation = new SendRegistrationConfirmation(new GenerateInvoicePdf());
+    $confirmation = new SendRegistrationConfirmation(new GenerateInvoicePdf(), new SendOutboundMessage());
     $result = $confirmation->execute(new ConfirmationRequest(
         registrationId: $registration->unwrap()->registrationId,
     ));
@@ -244,7 +245,7 @@ it('sends a confirmation email without attachment for a free registration', func
         paymentMethod: 'kostenlos',
     ));
 
-    $confirmation = new SendRegistrationConfirmation(new GenerateInvoicePdf());
+    $confirmation = new SendRegistrationConfirmation(new GenerateInvoicePdf(), new SendOutboundMessage());
     $result = $confirmation->execute(new ConfirmationRequest(
         registrationId: $registration->unwrap()->registrationId,
     ));

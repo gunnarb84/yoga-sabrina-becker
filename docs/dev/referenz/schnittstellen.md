@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Entwickler · **Bezug:** [harness-php/_integration.md](../../../harness-php/_integration.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-08
 
 # Schnittstellen
 
@@ -9,8 +9,11 @@
 - `/veranstaltungen` – Veranstaltungsübersicht (`webseite.activities.index`)
 - `/veranstaltungen/{slug}` – Veranstaltungsdetail (`webseite.activities.show`)
 - `/veranstaltungen/{slug}/anmelden` – Anmeldeseite (`webseite.activities.register`)
+- `/kontakt` – Kontaktseite mit Anfrageformular (`contact`)
 - `/verwaltung/login` – Backend-Login (`verwaltung.login`)
-- `/verwaltung/...` – Verwaltungsbereich
+- `/verwaltung/...` – Verwaltungsbereich, darunter `/verwaltung/kontaktanfragen`
+  (`verwaltung.contact-inquiries`) und `/verwaltung/kontaktanfragen/{id}`
+  (`verwaltung.contact-inquiry.detail`)
 
 ## Integrations-API
 

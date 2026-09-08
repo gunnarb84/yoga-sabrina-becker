@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Anwender · **Bezug:** [specs/E1 Öffentliche Webseite](../../specs/E1%20Öffentliche%20Webseite)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-08
 
 # Meldungen der Anwendung
 
@@ -14,6 +14,11 @@ Diese Seite listet Hinweis- und Fehlermeldungen der öffentlichen Webseite. Die 
 | „Die Veranstaltung wurde nicht gefunden." | Der aufgerufene Link ist ungültig. | Zurück zur [Veranstaltungsübersicht](../anleitungen/veranstaltungen-finden-und-filtern.md). |
 | „Bitte bestätigen Sie die Speicherung der Gesundheitsinformationen." | Gesundheitsinformationen wurden eingegeben, aber die Checkbox nicht gesetzt. | Setzen Sie das Häkchen und senden Sie das Formular erneut. |
 | „Bitte eine gültige Zahlungsart wählen." | Die gewählte Zahlungsart ist ungültig. | Wählen Sie eine der angebotenen Zahlungsarten. |
+| „Bitte geben Sie eine gültige E-Mail-Adresse an." | Die E-Mail-Adresse im Kontaktformular entspricht nicht dem Format. | Prüfen Sie die Schreibweise Ihrer E-Mail-Adresse. |
+| „Es wurden zu viele Anfragen gesendet. Bitte versuchen Sie es später erneut." | Das Limit von fünf Anfragen innerhalb von zehn Minuten ist erreicht. | Versuchen Sie es später erneut. |
+| „Vielen Dank für Ihre Anfrage!" | Die Kontaktanfrage wurde aufgenommen. | Sie erhalten eine Eingangsbestätigung per E-Mail. |
+| „Die Änderungen wurden gespeichert." | Status und Notiz einer Kontaktanfrage wurden in der Verwaltung gespeichert. | Keine Aktion nötig. |
+| „Die Anfrage konnte nicht gespeichert werden." | Der Statuswechsel in der Verwaltung war ungültig oder die Anfrage fehlt. | Seite neu laden und erneut versuchen. |
 
 ## Siehe auch
 

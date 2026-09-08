@@ -38,12 +38,15 @@ innerhalb von 10 Minuten je IP-Adresse.
 
 Fehlercodes:
 - `contact_inquiry.invalid_email` — `email` entspricht nicht dem Format.
+- `contact_inquiry.invalid_input` — ein Pflichtfeld fehlt oder ein Feld überschreitet
+  seine Länge.
 - `contact_inquiry.rate_limited` — mehr als 5 Anfragen innerhalb von 10 Minuten je
   IP-Adresse.
 
 Ebenso in der Verwaltung (F4 S4):
 - `UpdateContactInquiry` — ändert `status` und `note` einer Anfrage.
 - `contact_inquiry.not_found` — Anfrage nicht gefunden.
+- `contact_inquiry.invalid_status` — `status` ist keiner der drei gültigen Werte.
 
 ## Ereignisse
 

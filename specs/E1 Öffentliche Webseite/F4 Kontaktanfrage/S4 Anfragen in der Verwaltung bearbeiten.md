@@ -1,7 +1,7 @@
 # Anfragen in der Verwaltung bearbeiten
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich alle Kontaktanfragen einsehen und bearbeiten können, damit

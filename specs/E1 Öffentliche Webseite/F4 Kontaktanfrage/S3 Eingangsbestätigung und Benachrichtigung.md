@@ -1,7 +1,7 @@
 # Eingangsbestätigung und Benachrichtigung
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Besucher möchte ich eine Bestätigung meiner Anfrage erhalten, damit ich weiß, dass sie

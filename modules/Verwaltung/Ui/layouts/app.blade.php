@@ -25,6 +25,7 @@
                 <a href="{{ route('verwaltung.course-templates') }}">Kursvorlagen</a>
                 <a href="{{ route('verwaltung.registrations') }}">Anmeldungen</a>
                 <a href="{{ route('verwaltung.participants') }}">Teilnehmer</a>
+                <a href="{{ route('verwaltung.contact-inquiries') }}">Kontaktanfragen</a>
                 <a href="{{ route('verwaltung.invoices') }}">Rechnungen</a>
                 <a href="{{ route('verwaltung.outbound-messages') }}">Nachrichten</a>
 

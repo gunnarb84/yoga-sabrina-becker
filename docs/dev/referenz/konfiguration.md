@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Entwickler · **Bezug:** [harness-php/_operations.md](../../../harness-php/_operations.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-08
 
 # Konfiguration und Umgebung
 
@@ -14,6 +14,7 @@ Die Anwendung wird über `src/.env` konfiguriert. Mindestens erforderlich sind:
 | `DB_HOST`, `DB_PORT` | Datenbank-Host |
 | `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` | Datenbankzugang |
 | `MAIL_MAILER` | `log` für lokale Tests, sonst SMTP |
+| `MAIL_CONTACT_INQUIRY_RECIPIENT` | Empfängerin der Benachrichtigung über neue Kontaktanfragen (Voreinstellung `info@yoga-sabrinabecker.de`) |
 | `QUEUE_CONNECTION` | `database` |
 | `CACHE_STORE` | `database` |
 | `SESSION_DRIVER` | `database` |
