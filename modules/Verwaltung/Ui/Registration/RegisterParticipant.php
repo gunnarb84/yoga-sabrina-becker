@@ -9,7 +9,7 @@ use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\Participant\Participants\ParticipantsQuery;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant as RegisterParticipantOperation;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterParticipantRequest;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
+use Yoga\Modules\Verwaltung\Application\Registration\RegistrationPaymentMethodOptions;
 
 #[Layout('verwaltung::layouts.app')]
 final class RegisterParticipant extends Component
@@ -39,18 +39,10 @@ final class RegisterParticipant extends Component
     {
         $this->message = '';
 
-        $method = RegistrationPaymentMethod::tryFrom($this->paymentMethod);
-
-        if ($method === null) {
-            $this->message = 'Bitte eine gueltige Zahlungsart waehlen.';
-
-            return;
-        }
-
         $result = $operation->execute(new RegisterParticipantRequest(
             activityId: $this->activityId,
             participantId: $this->participantId,
-            paymentMethod: $method->value,
+            paymentMethod: $this->paymentMethod,
         ));
 
         if ($result->isFailure()) {
@@ -66,7 +58,7 @@ final class RegisterParticipant extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::Registration.register-participant', [
-            'methods' => array_map(fn (RegistrationPaymentMethod $m): array => ['value' => $m->value, 'label' => ucfirst($m->value)], RegistrationPaymentMethod::cases()),
+            'methods' => app(RegistrationPaymentMethodOptions::class)->execute(),
         ]);
     }
 }

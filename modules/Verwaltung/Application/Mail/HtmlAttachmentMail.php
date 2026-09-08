@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yoga\Modules\Verwaltung\Ui\Mail;
+namespace Yoga\Modules\Verwaltung\Application\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

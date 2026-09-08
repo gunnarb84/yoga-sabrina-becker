@@ -6,9 +6,9 @@ namespace Yoga\Modules\Verwaltung\Ui\Participant;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Yoga\Modules\Verwaltung\Application\Participant\ParticipantEdit\ParticipantEditQuery;
 use Yoga\Modules\Verwaltung\Application\Participant\UpdateParticipant\Request as UpdateParticipantRequest;
 use Yoga\Modules\Verwaltung\Application\Participant\UpdateParticipant\UpdateParticipant as UpdateParticipantOperation;
-use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 
 #[Layout('verwaltung::layouts.app')]
 final class EditParticipant extends Component
@@ -48,9 +48,9 @@ final class EditParticipant extends Component
      */
     public array $registrations = [];
 
-    public function mount(string $id): void
+    public function mount(string $id, ParticipantEditQuery $query): void
     {
-        $participant = Participant::findById($id);
+        $participant = $query->execute($id);
 
         if ($participant === null) {
             abort(404);
@@ -60,30 +60,15 @@ final class EditParticipant extends Component
         $this->email = $participant->email;
         $this->firstName = $participant->vorname;
         $this->lastName = $participant->nachname;
-        $this->addressLine1 = $participant->adresszeile_1 ?? '';
-        $this->addressLine2 = $participant->adresszeile_2 ?? '';
-        $this->postalCode = $participant->postleitzahl ?? '';
-        $this->city = $participant->stadt ?? '';
-        $this->phone = $participant->telefon ?? '';
-        $this->dateOfBirth = $participant->geburtsdatum !== null ? $participant->geburtsdatum->format('Y-m-d') : '';
-        $this->healthNotes = $participant->gesundheitsinformationen ?? '';
+        $this->addressLine1 = $participant->adresszeile_1;
+        $this->addressLine2 = $participant->adresszeile_2;
+        $this->postalCode = $participant->postleitzahl;
+        $this->city = $participant->stadt;
+        $this->phone = $participant->telefon;
+        $this->dateOfBirth = $participant->geburtsdatum;
+        $this->healthNotes = $participant->gesundheitsinformationen;
         $this->healthNotesConsent = $participant->gesundheitsinformationen_einwilligung;
-
-        /** @var list<object{id: string, aktivitaet_titel: string, status: string, anmeldedatum: string}> $registrations */
-        $registrations = [];
-        foreach ($participant->anmeldungen()->with('aktivitaet')->orderBy('angelegt_am', 'desc')->get() as $registration) {
-            $activity = $registration->aktivitaet;
-            assert($activity !== null);
-
-            $registrations[] = (object) [
-                'id' => $registration->id,
-                'aktivitaet_titel' => $activity->titel,
-                'status' => $registration->status->value,
-                'anmeldedatum' => $registration->angelegt_am->format('d.m.Y H:i'),
-            ];
-        }
-
-        $this->registrations = $registrations;
+        $this->registrations = $participant->anmeldungen;
     }
 
     public function save(UpdateParticipantOperation $operation): void

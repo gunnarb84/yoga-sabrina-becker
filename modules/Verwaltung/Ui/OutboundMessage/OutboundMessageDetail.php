@@ -10,13 +10,15 @@ use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\OutboundMessageDetail\OutboundMessageDetailQuery;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\ResendOutboundMessage\Request as ResendOutboundMessageRequest;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\ResendOutboundMessage\ResendOutboundMessage as ResendOutboundMessageOperation;
-use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
 
 #[Layout('verwaltung::layouts.app')]
 final class OutboundMessageDetail extends Component
 {
     public string $messageId = '';
 
+    /**
+     * @var object{id: string, anmeldung_id: string|null, aktivitaet_id: string|null, empfaenger: string, betreff: string, inhalt: string, status: string, versendet_am: string|null, fehlermeldung: string|null, erneut_senden_moeglich: bool}|null
+     */
     public ?object $message = null;
 
     public string $status = '';
@@ -43,7 +45,7 @@ final class OutboundMessageDetail extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return View::make('verwaltung::OutboundMessage.outbound-message-detail', [
-            'canResend' => in_array($this->status, [OutboundMessageStatus::Pending->value, OutboundMessageStatus::Failed->value], true),
+            'canResend' => $this->message !== null && $this->message->erneut_senden_moeglich,
         ]);
     }
 }

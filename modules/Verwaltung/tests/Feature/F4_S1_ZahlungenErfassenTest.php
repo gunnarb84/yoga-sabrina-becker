@@ -51,7 +51,7 @@ it('records a cash payment and issues a receipt with the next number', function 
     $record = new RecordPayment(app(NextNumber::class));
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
@@ -121,14 +121,14 @@ it('increments document numbers for consecutive payments', function (): void {
 
     $first = $record->execute(new RecordPaymentRequest(
         registrationId: $firstRegistration->unwrap()->registrationId,
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
     ));
     $second = $record->execute(new RecordPaymentRequest(
         registrationId: $secondRegistration->unwrap()->registrationId,
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
@@ -142,7 +142,7 @@ it('fails with not_found for a non-existing registration', function (): void {
     $record = new RecordPayment(app(NextNumber::class));
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: '018e1234-5678-7abc-8def-0123456789ab',
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
@@ -164,7 +164,7 @@ it('fails with already_paid when a payment was already recorded', function (): v
     $record = new RecordPayment(app(NextNumber::class));
     $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
@@ -172,7 +172,7 @@ it('fails with already_paid when a payment was already recorded', function (): v
 
     $second = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',
@@ -194,7 +194,7 @@ it('fails when trying to record a transfer payment directly', function (): void 
     $record = new RecordPayment(app(NextNumber::class));
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
-        method: PaymentMethod::Transfer,
+        method: PaymentMethod::Transfer->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',

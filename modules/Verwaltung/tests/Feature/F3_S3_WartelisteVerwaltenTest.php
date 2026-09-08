@@ -17,13 +17,13 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Mail;
 use Livewire\Livewire;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
-use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Ui\Registration\ActivityRegistrations;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 

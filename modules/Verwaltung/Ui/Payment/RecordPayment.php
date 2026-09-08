@@ -9,13 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\RecordPayment as RecordPaymentOperation;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\Request as RecordPaymentRequest;
-use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
-use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
-use Yoga\Modules\Verwaltung\Domain\Payment\PaymentMethod;
-use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentStatus;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
+use Yoga\Modules\Verwaltung\Application\Payment\RecordPaymentPrefill\RecordPaymentPrefillQuery;
 
 #[Layout('verwaltung::layouts.app')]
 final class RecordPayment extends Component
@@ -30,43 +24,34 @@ final class RecordPayment extends Component
 
     public string $recipient = '';
 
-    public function mount(string $id): void
+    public function mount(string $id, RecordPaymentPrefillQuery $prefillQuery): void
     {
         $this->registrationId = $id;
-        $registration = Registration::findById($id);
+        $prefill = $prefillQuery->execute($id);
 
-        if ($registration === null || $registration->status === RegistrationStatus::Cancelled) {
+        if ($prefill === null || $prefill->fall === 'cancelled') {
             $this->redirect(route('verwaltung.activities'), navigate: true);
 
             return;
         }
 
-        if ($registration->zahlungsstatus === RegistrationPaymentStatus::Paid) {
-            $this->redirect(route('verwaltung.activity.registrations', ['id' => $registration->aktivitaet_id]), navigate: true);
+        if ($prefill->fall !== 'editable') {
+            $this->redirect(route('verwaltung.activity.registrations', ['id' => $prefill->aktivitaet_id]), navigate: true);
 
             return;
         }
 
-        if ($registration->zahlungsart === RegistrationPaymentMethod::Transfer) {
-            $this->redirect(route('verwaltung.activity.registrations', ['id' => $registration->aktivitaet_id]), navigate: true);
-
-            return;
-        }
-
-        $this->activityId = $registration->aktivitaet_id;
-        $activity = Activity::findById($this->activityId);
-        $participant = Participant::findById($registration->teilnehmer_id);
-
-        $this->amount = $activity !== null ? (string) $activity->preis : '';
+        $this->activityId = $prefill->aktivitaet_id;
+        $this->amount = $prefill->betrag;
         $this->paidAt = now()->format('Y-m-d\TH:i');
-        $this->recipient = $participant === null ? '' : trim($participant->vorname.' '.$participant->nachname);
+        $this->recipient = $prefill->empfaenger;
     }
 
     public function save(RecordPaymentOperation $operation): void
     {
         $result = $operation->execute(new RecordPaymentRequest(
             registrationId: $this->registrationId,
-            method: PaymentMethod::Cash,
+            method: 'bar',
             amount: $this->amount,
             paidAt: $this->paidAt,
             recipient: $this->recipient,

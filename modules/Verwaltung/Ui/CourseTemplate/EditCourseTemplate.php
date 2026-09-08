@@ -6,11 +6,11 @@ namespace Yoga\Modules\Verwaltung\Ui\CourseTemplate;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Yoga\Modules\Verwaltung\Application\CourseTemplate\CourseTemplateEdit\CourseTemplateEditQuery;
 use Yoga\Modules\Verwaltung\Application\CourseTemplate\DeleteCourseTemplate\DeleteCourseTemplate as DeleteCourseTemplateOperation;
 use Yoga\Modules\Verwaltung\Application\CourseTemplate\DeleteCourseTemplate\Request as DeleteCourseTemplateRequest;
 use Yoga\Modules\Verwaltung\Application\CourseTemplate\UpdateCourseTemplate\Request as UpdateCourseTemplateRequest;
 use Yoga\Modules\Verwaltung\Application\CourseTemplate\UpdateCourseTemplate\UpdateCourseTemplate as UpdateCourseTemplateOperation;
-use Yoga\Modules\Verwaltung\Domain\CourseTemplate\CourseTemplate;
 
 #[Layout('verwaltung::layouts.app')]
 final class EditCourseTemplate extends Component
@@ -41,9 +41,9 @@ final class EditCourseTemplate extends Component
 
     public bool $saved = false;
 
-    public function mount(string $id): void
+    public function mount(string $id, CourseTemplateEditQuery $query): void
     {
-        $template = CourseTemplate::findById($id);
+        $template = $query->execute($id);
 
         if ($template === null) {
             abort(404);
@@ -52,14 +52,14 @@ final class EditCourseTemplate extends Component
         $this->templateId = $template->id;
         $this->title = $template->titel;
         $this->weekday = $template->wochentag;
-        $this->startTime = substr($template->startzeit, 0, 5);
+        $this->startTime = $template->startzeit;
         $this->durationMinutes = $template->dauer_minuten;
         $this->sessionCount = $template->anzahl_termine;
         $this->price = $template->preis;
         $this->maxParticipants = $template->maximale_teilnehmerzahl;
-        $this->shortDescription = $template->kurzbeschreibung ?? '';
-        $this->longDescription = $template->langbeschreibung ?? '';
-        $this->location = $template->ort ?? '';
+        $this->shortDescription = $template->kurzbeschreibung;
+        $this->longDescription = $template->langbeschreibung;
+        $this->location = $template->ort;
     }
 
     public function save(UpdateCourseTemplateOperation $operation): void

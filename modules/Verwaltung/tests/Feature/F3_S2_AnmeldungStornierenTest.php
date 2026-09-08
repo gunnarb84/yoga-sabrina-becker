@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\CancelRegistration;
 use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\Request as CancelRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
@@ -23,7 +24,6 @@ use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
-use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 
 beforeEach(function (): void {

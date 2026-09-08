@@ -88,7 +88,7 @@ it('creates a cash return when cancelling a paid cash registration', function ()
     $record = new RecordPayment(app(NextNumber::class));
     $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
-        method: PaymentMethod::Cash,
+        method: PaymentMethod::Cash->value,
         amount: '45.00',
         paidAt: '2026-09-02 12:00:00',
         recipient: 'Max Mustermann',

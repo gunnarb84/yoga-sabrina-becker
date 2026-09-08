@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yoga\Modules\Verwaltung\Persistence\Seeders;
+namespace Yoga\Modules\Verwaltung\Application\Seeders;
 
 use Illuminate\Database\Seeder;
 use Yoga\Modules\Verwaltung\Application\Activity\CreateActivity\CreateActivity as CreateActivityOperation;
@@ -27,7 +27,7 @@ final class DemoSeeder extends Seeder
         RegisterParticipantOperation $registerParticipant,
     ): void {
         $createResult = $createActivity->execute(new CreateActivityRequest(
-            type: ActivityType::Workshop,
+            type: ActivityType::Workshop->value,
             title: 'Yoga-Workshop: Rücken fit im Alltag',
             shortDescription: 'Ein praxisnaher Workshop mit Fokus auf Rückenmobilisation und Entspannung.',
             longDescription: 'In diesem vierstündigen Workshop erlernen Sie gezielte Übungen zur Stärkung der Rückenmuskulatur und zur Verbesserung der Körperhaltung im Alltag. Zwischen den Einheiten gibt es Pausen mit Tee und Snacks.',

@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Yoga\Modules\Verwaltung\Application\Activity\Activities\ActivitiesQuery;
 use Yoga\Modules\Verwaltung\Application\Registration\AllRegistrations\AllRegistrationsQuery;
-use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
+use Yoga\Modules\Verwaltung\Application\Registration\RegistrationStatusOptions;
 
 #[Layout('verwaltung::layouts.app')]
 final class AllRegistrations extends Component
@@ -55,7 +55,7 @@ final class AllRegistrations extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::Registration.all-registrations', [
-            'statusOptions' => array_map(fn (RegistrationStatus $s): array => ['value' => $s->value, 'label' => ucfirst($s->value)], RegistrationStatus::cases()),
+            'statusOptions' => app(RegistrationStatusOptions::class)->execute(),
             'typeLabel' => fn (string $payment): string => match ($payment) {
                 'bar' => 'Bar',
                 'ueberweisung' => 'Überweisung',

@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 use Illuminate\Support\Facades\Mail;
+use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\Participant\Participants\ParticipantsQuery;
 use Yoga\Modules\Verwaltung\Application\Participant\UpdateParticipant\Request as UpdateParticipantRequest;
 use Yoga\Modules\Verwaltung\Application\Participant\UpdateParticipant\UpdateParticipant;
@@ -22,7 +23,6 @@ use Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmatio
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessage;
 use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
-use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 
 it('does not expose health notes in the participant list query', function (): void {

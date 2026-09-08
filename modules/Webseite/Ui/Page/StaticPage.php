@@ -6,18 +6,16 @@ namespace Yoga\Modules\Webseite\Ui\Page;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Yoga\Modules\Webseite\Domain\Page\Page;
+use Yoga\Modules\Webseite\Application\Page\GetPageContent;
 
 #[Layout('webseite::layouts.app')]
 final class StaticPage extends Component
 {
-    public ?Page $page = null;
+    public ?object $page = null;
 
-    public function mount(string $slug): void
+    public function mount(string $slug, GetPageContent $query): void
     {
-        $this->page = Page::where('slug', $slug)
-            ->where('veroeffentlicht', true)
-            ->first();
+        $this->page = $query->execute($slug);
     }
 
     public function render(): \Illuminate\Contracts\View\View

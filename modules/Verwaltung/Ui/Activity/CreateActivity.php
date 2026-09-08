@@ -6,9 +6,9 @@ namespace Yoga\Modules\Verwaltung\Ui\Activity;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Yoga\Modules\Verwaltung\Application\Activity\ActivityTypeOptions;
 use Yoga\Modules\Verwaltung\Application\Activity\CreateActivity\CreateActivity as CreateActivityOperation;
 use Yoga\Modules\Verwaltung\Application\Activity\CreateActivity\Request as CreateActivityRequest;
-use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
 
 #[Layout('verwaltung::layouts.app')]
 final class CreateActivity extends Component
@@ -33,16 +33,8 @@ final class CreateActivity extends Component
     {
         $this->message = '';
 
-        $type = ActivityType::tryFrom($this->type);
-
-        if ($type === null) {
-            $this->message = 'Bitte einen gueltigen Typ waehlen.';
-
-            return;
-        }
-
         $result = $operation->execute(new CreateActivityRequest(
-            type: $type,
+            type: $this->type,
             title: $this->title,
             shortDescription: $this->shortDescription === '' ? null : $this->shortDescription,
             longDescription: $this->longDescription === '' ? null : $this->longDescription,
@@ -64,7 +56,7 @@ final class CreateActivity extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::Activity.create-activity', [
-            'types' => array_map(fn (ActivityType $t): array => ['value' => $t->value, 'label' => ucfirst($t->value)], ActivityType::cases()),
+            'types' => app(ActivityTypeOptions::class)->execute(),
         ]);
     }
 }

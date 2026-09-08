@@ -9,15 +9,16 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoicePdf;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Request as GeneratePdfRequest;
+use Yoga\Modules\Verwaltung\Application\Invoice\InvoiceDetails\InvoiceDetailsQuery;
 use Yoga\Modules\Verwaltung\Application\Invoice\SendInvoice\Request as SendInvoiceRequest;
 use Yoga\Modules\Verwaltung\Application\Invoice\SendInvoice\SendInvoice;
-use Yoga\Modules\Verwaltung\Domain\Invoice\Invoice;
 
 final readonly class InvoiceController
 {
     public function __construct(
         private GenerateInvoicePdf $pdfGenerator,
         private SendInvoice $sendInvoice,
+        private InvoiceDetailsQuery $invoiceDetails,
     ) {
     }
 
@@ -39,7 +40,7 @@ final readonly class InvoiceController
 
     public function sendEmail(string $id): RedirectResponse
     {
-        $invoice = Invoice::findById($id);
+        $invoice = $this->invoiceDetails->execute($id);
 
         if ($invoice === null) {
             abort(404);

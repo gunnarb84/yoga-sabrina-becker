@@ -21,7 +21,7 @@ use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
 it('creates an activity with draft status', function (): void {
     $operation = new CreateActivity();
     $result = $operation->execute(new CreateActivityRequest(
-        type: ActivityType::Course,
+        type: ActivityType::Course->value,
         title: 'Yoga-Kurs',
         shortDescription: 'Kurzbeschreibung',
         longDescription: null,
@@ -41,7 +41,7 @@ it('creates an activity with draft status', function (): void {
 it('fails with title_empty when the title is empty', function (): void {
     $operation = new CreateActivity();
     $result = $operation->execute(new CreateActivityRequest(
-        type: ActivityType::Course,
+        type: ActivityType::Course->value,
         title: '',
         shortDescription: null,
         longDescription: null,
@@ -57,7 +57,7 @@ it('fails with title_empty when the title is empty', function (): void {
 it('fails with price_negative when the price is negative', function (): void {
     $operation = new CreateActivity();
     $result = $operation->execute(new CreateActivityRequest(
-        type: ActivityType::Course,
+        type: ActivityType::Course->value,
         title: 'Yoga-Kurs',
         shortDescription: null,
         longDescription: null,
@@ -73,7 +73,7 @@ it('fails with price_negative when the price is negative', function (): void {
 it('fails with max_participants_too_low when max participants is below one', function (): void {
     $operation = new CreateActivity();
     $result = $operation->execute(new CreateActivityRequest(
-        type: ActivityType::Course,
+        type: ActivityType::Course->value,
         title: 'Yoga-Kurs',
         shortDescription: null,
         longDescription: null,

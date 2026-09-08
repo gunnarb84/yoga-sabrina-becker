@@ -27,7 +27,7 @@ it('updates the activity fields', function (): void {
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: $this->activity->id,
-        type: ActivityType::Event,
+        type: ActivityType::Event->value,
         title: 'Bearbeiteter Titel',
         shortDescription: 'Neue Kurzbeschreibung',
         longDescription: 'Neue Langbeschreibung',
@@ -52,7 +52,7 @@ it('fails with not_found for a non-existing activity', function (): void {
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: '018e1234-5678-7abc-8def-0123456789ab',
-        type: ActivityType::Workshop,
+        type: ActivityType::Workshop->value,
         title: 'Titel',
         shortDescription: null,
         longDescription: null,
@@ -72,7 +72,7 @@ it('fails with already_completed for a completed activity', function (): void {
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: $this->activity->id,
-        type: ActivityType::Workshop,
+        type: ActivityType::Workshop->value,
         title: 'Titel',
         shortDescription: null,
         longDescription: null,
@@ -92,7 +92,7 @@ it('fails with already_cancelled for a cancelled activity', function (): void {
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: $this->activity->id,
-        type: ActivityType::Workshop,
+        type: ActivityType::Workshop->value,
         title: 'Titel',
         shortDescription: null,
         longDescription: null,
@@ -109,7 +109,7 @@ it('fails with title_empty when the title is empty', function (): void {
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: $this->activity->id,
-        type: ActivityType::Workshop,
+        type: ActivityType::Workshop->value,
         title: '',
         shortDescription: null,
         longDescription: null,
@@ -126,7 +126,7 @@ it('fails with price_negative when the price is negative', function (): void {
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: $this->activity->id,
-        type: ActivityType::Workshop,
+        type: ActivityType::Workshop->value,
         title: 'Titel',
         shortDescription: null,
         longDescription: null,
@@ -143,7 +143,7 @@ it('fails with max_participants_too_low when max participants is below one', fun
     $operation = new UpdateActivity();
     $result = $operation->execute(new UpdateActivityRequest(
         activityId: $this->activity->id,
-        type: ActivityType::Workshop,
+        type: ActivityType::Workshop->value,
         title: 'Titel',
         shortDescription: null,
         longDescription: null,

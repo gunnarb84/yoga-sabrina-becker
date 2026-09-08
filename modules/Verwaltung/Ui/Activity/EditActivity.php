@@ -6,6 +6,8 @@ namespace Yoga\Modules\Verwaltung\Ui\Activity;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Yoga\Modules\Verwaltung\Application\Activity\ActivityEdit\ActivityEditQuery;
+use Yoga\Modules\Verwaltung\Application\Activity\ActivityTypeOptions;
 use Yoga\Modules\Verwaltung\Application\Activity\UpdateActivity\Request as UpdateActivityRequest;
 use Yoga\Modules\Verwaltung\Application\Activity\UpdateActivity\UpdateActivity as UpdateActivityOperation;
 use Yoga\Modules\Verwaltung\Application\Session\CreateSession\CreateSession as CreateSessionOperation;
@@ -15,8 +17,6 @@ use Yoga\Modules\Verwaltung\Application\Session\DeleteSession\Request as DeleteS
 use Yoga\Modules\Verwaltung\Application\Session\SessionsByActivity\SessionsByActivityQuery;
 use Yoga\Modules\Verwaltung\Application\Session\UpdateSession\Request as UpdateSessionRequest;
 use Yoga\Modules\Verwaltung\Application\Session\UpdateSession\UpdateSession as UpdateSessionOperation;
-use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
-use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
 
 #[Layout('verwaltung::layouts.app')]
 final class EditActivity extends Component
@@ -58,22 +58,22 @@ final class EditActivity extends Component
 
     public string $sessionMessage = '';
 
-    public function mount(string $id, SessionsByActivityQuery $query): void
+    public function mount(string $id, SessionsByActivityQuery $query, ActivityEditQuery $activityQuery): void
     {
-        $activity = Activity::findById($id);
+        $activity = $activityQuery->execute($id);
 
         if ($activity === null) {
             abort(404);
         }
 
         $this->activityId = $activity->id;
-        $this->type = $activity->typ->value;
+        $this->type = $activity->typ;
         $this->title = $activity->titel;
-        $this->shortDescription = $activity->kurzbeschreibung ?? '';
-        $this->longDescription = $activity->langbeschreibung ?? '';
+        $this->shortDescription = $activity->kurzbeschreibung;
+        $this->longDescription = $activity->langbeschreibung;
         $this->price = $activity->preis;
         $this->maxParticipants = $activity->maximale_teilnehmerzahl;
-        $this->status = $activity->status->value;
+        $this->status = $activity->status;
         $this->sessions = $query->execute($this->activityId);
     }
 
@@ -82,17 +82,9 @@ final class EditActivity extends Component
         $this->message = '';
         $this->saved = false;
 
-        $type = ActivityType::tryFrom($this->type);
-
-        if ($type === null) {
-            $this->message = 'Bitte einen gueltigen Typ waehlen.';
-
-            return;
-        }
-
         $result = $operation->execute(new UpdateActivityRequest(
             activityId: $this->activityId,
-            type: $type,
+            type: $this->type,
             title: $this->title,
             shortDescription: $this->shortDescription === '' ? null : $this->shortDescription,
             longDescription: $this->longDescription === '' ? null : $this->longDescription,
@@ -210,7 +202,7 @@ final class EditActivity extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('verwaltung::Activity.edit-activity', [
-            'types' => array_map(fn (ActivityType $t): array => ['value' => $t->value, 'label' => ucfirst($t->value)], ActivityType::cases()),
+            'types' => app(ActivityTypeOptions::class)->execute(),
             'statusLabel' => $this->status,
         ]);
     }

@@ -7,6 +7,7 @@ namespace Yoga\Modules\Verwaltung\Application\Activity\CreateActivity;
 use Illuminate\Support\Str;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\Activity\ActivityStatus;
+use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
 use Yoga\Platform\Shared\Application\Result;
 
 final readonly class CreateActivity
@@ -14,6 +15,12 @@ final readonly class CreateActivity
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
+        $type = ActivityType::tryFrom($request->type);
+
+        if ($type === null) {
+            return Result::failure('activity.type_invalid');
+        }
+
         if ($request->title === '') {
             return Result::failure('activity.title_empty');
         }
@@ -27,7 +34,7 @@ final readonly class CreateActivity
         }
 
         $activity = new Activity([
-            'typ' => $request->type->value,
+            'typ' => $type->value,
             'titel' => $request->title,
             'kurzbeschreibung' => $request->shortDescription,
             'langbeschreibung' => $request->longDescription,

@@ -15,12 +15,12 @@ use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoi
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Request as GeneratePdfRequest;
 use Yoga\Modules\Verwaltung\Application\Invoice\SendInvoice\Request as SendInvoiceRequest;
 use Yoga\Modules\Verwaltung\Application\Invoice\SendInvoice\SendInvoice;
+use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessage;
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
 use Yoga\Modules\Verwaltung\Tests\TestFactory;
-use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 
 beforeEach(function (): void {

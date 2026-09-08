@@ -6,6 +6,7 @@ namespace Yoga\Modules\Verwaltung\Application\Activity\UpdateActivity;
 
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\Activity\ActivityStatus;
+use Yoga\Modules\Verwaltung\Domain\Activity\ActivityType;
 use Yoga\Platform\Shared\Application\Result;
 
 final readonly class UpdateActivity
@@ -13,6 +14,12 @@ final readonly class UpdateActivity
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
+        $type = ActivityType::tryFrom($request->type);
+
+        if ($type === null) {
+            return Result::failure('activity.type_invalid');
+        }
+
         $activity = Activity::findById($request->activityId);
 
         if ($activity === null) {
@@ -39,7 +46,7 @@ final readonly class UpdateActivity
             return Result::failure('activity.max_participants_too_low');
         }
 
-        $activity->typ = $request->type;
+        $activity->typ = $type;
         $activity->titel = $request->title;
         $activity->kurzbeschreibung = $request->shortDescription;
         $activity->langbeschreibung = $request->longDescription;

@@ -22,7 +22,7 @@ final readonly class RecordPayment
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
-        if ($request->method !== PaymentMethod::Cash) {
+        if ($request->method !== PaymentMethod::Cash->value) {
             return Result::failure('payment.method_not_supported');
         }
 
@@ -41,7 +41,7 @@ final readonly class RecordPayment
         return DB::transaction(function () use ($registration, $request): Result {
             $payment = new Payment([
                 'anmeldung_id' => $registration->id,
-                'methode' => $request->method->value,
+                'methode' => $request->method,
                 'betrag' => $request->amount,
                 'bezahlt_am' => $request->paidAt ?? now(),
             ]);

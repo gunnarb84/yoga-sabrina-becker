@@ -9,6 +9,7 @@ use Ramsey\Uuid\Uuid;
 use Throwable;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoicePdf;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Request as GeneratePdfRequest;
+use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessage;
 use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
@@ -18,7 +19,6 @@ use Yoga\Modules\Verwaltung\Domain\Payment\PaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
-use Yoga\Modules\Verwaltung\Ui\Mail\HtmlAttachmentMail;
 use Yoga\Platform\Shared\Application\Result;
 
 final readonly class SendRegistrationConfirmation

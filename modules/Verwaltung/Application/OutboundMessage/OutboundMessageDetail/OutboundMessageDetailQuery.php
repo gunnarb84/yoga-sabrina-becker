@@ -6,12 +6,13 @@ namespace Yoga\Modules\Verwaltung\Application\OutboundMessage\OutboundMessageDet
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Domain\OutboundMessage\OutboundMessageStatus;
 use Yoga\Platform\Shared\Application\DbValue;
 
 final readonly class OutboundMessageDetailQuery
 {
     /**
-     * @return object{id: string, anmeldung_id: string|null, aktivitaet_id: string|null, empfaenger: string, betreff: string, inhalt: string, status: string, versendet_am: string|null, fehlermeldung: string|null}|null
+     * @return object{id: string, anmeldung_id: string|null, aktivitaet_id: string|null, empfaenger: string, betreff: string, inhalt: string, status: string, versendet_am: string|null, fehlermeldung: string|null, erneut_senden_moeglich: bool}|null
      */
     public function execute(string $messageId): ?object
     {
@@ -41,6 +42,8 @@ final readonly class OutboundMessageDetailQuery
             return null;
         }
 
+        $status = DbValue::string($row->status);
+
         return (object) [
             'id' => Uuid::fromBytes($row->id)->toString(),
             'anmeldung_id' => is_string($row->anmeldung_id) ? Uuid::fromBytes($row->anmeldung_id)->toString() : null,
@@ -48,9 +51,15 @@ final readonly class OutboundMessageDetailQuery
             'empfaenger' => DbValue::string($row->empfaenger),
             'betreff' => DbValue::string($row->betreff),
             'inhalt' => DbValue::string($row->inhalt),
-            'status' => DbValue::string($row->status),
+            'status' => $status,
             'versendet_am' => DbValue::nullableString($row->versendet_am),
             'fehlermeldung' => DbValue::nullableString($row->fehlermeldung),
+            'erneut_senden_moeglich' => $this->erneutSendenMoeglich($status),
         ];
+    }
+
+    private function erneutSendenMoeglich(string $status): bool
+    {
+        return in_array($status, [OutboundMessageStatus::Pending->value, OutboundMessageStatus::Failed->value], true);
     }
 }
