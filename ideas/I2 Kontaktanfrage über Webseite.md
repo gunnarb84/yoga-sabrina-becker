@@ -1,7 +1,7 @@
 # Kontaktanfrage über Webseite
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
 
 ## Problem
 Die Kontaktseite (/kontakt) bietet derzeit keinen schriftlichen Anfrageweg auf der
@@ -63,4 +63,8 @@ Status.
   GitHub-Repository wird weitergenutzt.
 
 ## Offene Punkte
-- Keine — die Idee ist abgestimmt und bereit für die Spezifizierung.
+- Keine — die Idee ist als Spec umgesetzt:
+  - `specs/E1 Öffentliche Webseite/F4 Kontaktanfrage/S1 Anfrageformular anzeigen.md`
+  - `specs/E1 Öffentliche Webseite/F4 Kontaktanfrage/S2 Anfrage absenden.md`
+  - `specs/E1 Öffentliche Webseite/F4 Kontaktanfrage/S3 Eingangsbestätigung und Benachrichtigung.md`
+  - `specs/E1 Öffentliche Webseite/F4 Kontaktanfrage/S4 Anfragen in der Verwaltung bearbeiten.md`

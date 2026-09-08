@@ -52,6 +52,8 @@ Zahlungseingang. Der Zahlungseingang wird separat als `Payment` erfasst.
 - Veranstaltungsdetail anzeigen.
 - Anmeldeformular für Teilnehmer/in ohne Anmeldung im System.
 - Zahlungsinformationen für Überweisung anzeigen.
+- Kontaktanfrage über das Kontaktformular aufnehmen (speichern, Eingangsbestätigung an die
+  anfragende Person, Benachrichtigung an die Inhaberin).
 
 ## Externe Systeme
 

@@ -38,3 +38,16 @@ Nur lesende Sicht; fachliche Felder siehe E2 `_Datenstruktur.md`.
 | `waitingListCount` | Anzahl Wartelisten-Einträge | Ganzzahl | ja |
 | `isBookable` | Buchbar | Ja/Nein | ja |
 | `image` | Bild | Medienreferenz | nein |
+
+## Kontaktanfrage (`ContactInquiry`)
+
+| Bezeichner | Oberfläche | Datentyp | Pflicht |
+|---|---|---|---|
+| `name` | Name | Text | ja |
+| `email` | E-Mail | E-Mail | ja |
+| `phone` | Telefon | Text | nein |
+| `topic` | Anlass/Gruppe | Text | nein |
+| `message` | Nachricht | Text | ja |
+| `status` | Status (Neu/In Bearbeitung/Erledigt) | Aufzählung | ja |
+| `note` | Notiz | Text | nein |
+| `receivedAt` | Eingegangen am | Zeitpunkt | ja |

@@ -17,6 +17,7 @@ Backend-Menü in der Verwaltung, sondern werden über die CMS-Funktion in E2 gep
 | 2.3 | Termine | Kalenderansicht der Veranstaltungstermine | E2 F1 |
 | 2.4 | Teilnehmer | Liste und Maske der Teilnehmer/innen | E2 F2 |
 | 2.5 | Anmeldungen | Liste und Maske der Anmeldungen inkl. Warteliste | E2 F3 |
-| 2.6 | Zahlungen | Liste und Maske der Zahlungen, Belege und Gutschriften | E2 F4 |
-| 2.7 | Ausgehende Nachrichten | Protokoll versendeter E-Mails | E2 F5 |
-| 2.8 | Einstellungen | System- und Zahlungseinstellungen | E2 F4 |
+| 2.6 | Kontaktanfragen | Liste und Detailansicht der Kontaktanfragen | E1 F4 |
+| 2.7 | Zahlungen | Liste und Maske der Zahlungen, Belege und Gutschriften | E2 F4 |
+| 2.8 | Ausgehende Nachrichten | Protokoll versendeter E-Mails | E2 F5 |
+| 2.9 | Einstellungen | System- und Zahlungseinstellungen | E2 F4 |

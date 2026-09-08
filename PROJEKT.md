@@ -95,6 +95,7 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 | Rückgabebestätigung | CashReturn | Forlaufend nummerierter Beleg für Rückzahlung in bar |
 | Vorlage | CourseTemplate | Wiederverwendbare Vorlage für wiederkehrende Kurse |
 | Ausgehende Nachricht | OutboundMessage | Im System protokolliert versandte E-Mail |
+| Kontaktanfrage | ContactInquiry | Schriftliche Anfrage über das Kontaktformular der Webseite |
 
 ## Stakeholder und Rollen
 

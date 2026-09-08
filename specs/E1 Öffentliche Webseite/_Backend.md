@@ -21,10 +21,31 @@ Liefert Inhalt und Meta-Daten einer Seite anhand von `slug`.
 ### `ListNavigationItems`
 Liefert die öffentliche Navigation sortiert nach `sortOrder`.
 
+### `ListContactInquiries`
+Liefert Kontaktanfragen mit `receivedAt`, `name`, `email`, `topic`, `status`; Filter nach
+`status` (Verwaltung, siehe F4 S4).
+
+### `GetContactInquiry`
+Liefert eine einzelne Kontaktanfrage inklusive `message` und `note`.
+
 ## Vorgänge
 
-E1 enthält keine schreibenden Vorgänge; diese liegen in E2.
+### `RecordContactInquiry`
+Nimmt eine Kontaktanfrage vom Anfrageformular entgegen und speichert sie mit dem Status
+`Neu`. Prüft Pflichtfelder und das Format von `email`. Verwirft Anfragen mit ausgefülltem
+verstecktem Spamschutz-Feld stillschweigend (Erfolgsmeldung). Erlaubt höchstens 5 Anfragen
+innerhalb von 10 Minuten je IP-Adresse.
+
+Fehlercodes:
+- `contact_inquiry.invalid_email` — `email` entspricht nicht dem Format.
+- `contact_inquiry.rate_limited` — mehr als 5 Anfragen innerhalb von 10 Minuten je
+  IP-Adresse.
+
+Ebenso in der Verwaltung (F4 S4):
+- `UpdateContactInquiry` — ändert `status` und `note` einer Anfrage.
+- `contact_inquiry.not_found` — Anfrage nicht gefunden.
 
 ## Ereignisse
 
-E1 veröffentlicht keine Domain Events.
+E1 veröffentlicht keine Domain Events. Die E-Mails nach `RecordContactInquiry` werden als
+`OutboundMessage` protokolliert und sind in der Verwaltung über E2 F5 einsehbar.
