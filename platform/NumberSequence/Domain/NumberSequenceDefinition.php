@@ -46,7 +46,10 @@ class NumberSequenceDefinition extends Model
 
     public function fullPrefix(): string
     {
-        return $this->prefix . '-' . $this->currentYearFormatted();
+        // Leerer Präfix: die Jahreszahl allein bildet den Präfix (z. B. „2026-00012").
+        return $this->prefix === ''
+            ? $this->currentYearFormatted()
+            : $this->prefix.'-'.$this->currentYearFormatted();
     }
 
     public function formatNumber(int $number): string

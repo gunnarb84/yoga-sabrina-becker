@@ -86,6 +86,11 @@ final readonly class SendRegistrationConfirmation
 
         $subject = 'Anmeldebestätigung: '.$activity->titel;
 
+        if ($participant->email === null || $participant->email === '') {
+            // Teilnehmer/innen ohne E-Mail-Adresse erhalten keine Bestätigung.
+            return Result::success(new Response(null));
+        }
+
         $sent = $this->sender->execute(new SendOutboundMessageRequest(
             recipient: $participant->email,
             subject: $subject,

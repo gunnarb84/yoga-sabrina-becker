@@ -57,7 +57,7 @@ final class EditParticipant extends Component
         }
 
         $this->participantId = $participant->id;
-        $this->email = $participant->email;
+        $this->email = $participant->email ?? '';
         $this->firstName = $participant->vorname;
         $this->lastName = $participant->nachname;
         $this->addressLine1 = $participant->adresszeile_1;

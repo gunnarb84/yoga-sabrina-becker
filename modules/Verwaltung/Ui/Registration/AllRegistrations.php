@@ -14,7 +14,7 @@ use Yoga\Modules\Verwaltung\Application\Registration\RegistrationStatusOptions;
 final class AllRegistrations extends Component
 {
     /**
-     * @var list<object{id: string, aktivitaet_id: string, aktivitaet_titel: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, zahlungsart: string, angemeldet_am: string, freie_plaetze: int, warteliste_anzahl: int}>
+     * @var list<object{id: string, aktivitaet_id: string, aktivitaet_titel: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, zahlungsart: string, herkunft: string, angemeldet_am: string, freie_plaetze: int, warteliste_anzahl: int}>
      */
     public array $registrations = [];
 

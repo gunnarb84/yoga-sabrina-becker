@@ -13,7 +13,7 @@ use Yoga\Platform\Shared\Application\DbValue;
 final readonly class AllRegistrationsQuery
 {
     /**
-     * @return list<object{id: string, aktivitaet_id: string, aktivitaet_titel: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, zahlungsart: string, angemeldet_am: string, freie_plaetze: int, warteliste_anzahl: int}>
+     * @return list<object{id: string, aktivitaet_id: string, aktivitaet_titel: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, zahlungsart: string, herkunft: string, angemeldet_am: string, freie_plaetze: int, warteliste_anzahl: int}>
      */
     public function execute(?string $activityId = null, ?string $status = null, ?string $search = null, int $limit = 500): array
     {
@@ -25,6 +25,7 @@ final readonly class AllRegistrationsQuery
                 'verwaltung_anmeldungen.status',
                 'verwaltung_anmeldungen.angemeldet_am',
                 'verwaltung_anmeldungen.zahlungsart',
+                'verwaltung_anmeldungen.herkunft',
                 'verwaltung_aktivitaeten.titel as aktivitaet_titel',
                 'verwaltung_aktivitaeten.maximale_teilnehmerzahl',
                 'verwaltung_teilnehmer.vorname',
@@ -81,9 +82,10 @@ final readonly class AllRegistrationsQuery
                 'aktivitaet_titel' => DbValue::string($row->aktivitaet_titel),
                 'teilnehmer_id' => Uuid::fromBytes($row->teilnehmer_id)->toString(),
                 'teilnehmer_name' => trim($firstName.' '.$lastName),
-                'email' => DbValue::string($row->email),
+                'email' => DbValue::nullableString($row->email) ?? '',
                 'status' => DbValue::string($row->status),
                 'zahlungsart' => DbValue::string($row->zahlungsart),
+                'herkunft' => DbValue::string($row->herkunft),
                 'angemeldet_am' => DbValue::string($row->angemeldet_am),
                 'freie_plaetze' => max(0, $count['max'] - $count['confirmed']),
                 'warteliste_anzahl' => $count['waiting'],

@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
 use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\ResendOutboundMessage\Request as ResendRequest;
@@ -51,7 +52,7 @@ afterEach(function (): void {
 
 function barzahlungVorgang(): RecordPayment
 {
-    return new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    return new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
 }
 
 function legeBarAnmeldungAn(object $activity, string $email): string
@@ -91,7 +92,7 @@ it('sends the receipt as PDF by email to the participant when a cash payment is 
         return $mail->hasTo($participant->email)
             && str_contains($mail->subjectText, 'Barquittung')
             && $mail->attachment !== null
-            && str_starts_with($mail->attachment['filename'], 'Barquittung-B-2026-');
+            && str_starts_with($mail->attachment['filename'], 'Barquittung-2026-');
     });
 });
 
@@ -110,7 +111,7 @@ it('logs the receipt email as an outbound message with status sent', function ()
     $message = OutboundMessage::query()->orderByDesc('angelegt_am')->first();
 
     expect($message)->not->toBeNull();
-    expect($message->betreff)->toContain('Barquittung B-2026-00001');
+    expect($message->betreff)->toContain('Barquittung 2026-00001');
     expect($message->status)->toBe(OutboundMessageStatus::Sent);
     expect($message->empfaenger)->toBe('protokoll@example.com');
 });

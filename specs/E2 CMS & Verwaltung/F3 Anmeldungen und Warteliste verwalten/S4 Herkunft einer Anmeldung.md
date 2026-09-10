@@ -1,7 +1,7 @@
 # Herkunft einer Anmeldung
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich in den Anmeldungen sehen, ob sie über die Webseite oder in

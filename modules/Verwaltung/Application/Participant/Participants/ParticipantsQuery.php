@@ -48,7 +48,7 @@ final readonly class ParticipantsQuery
 
             $result[] = (object) [
                 'id' => Uuid::fromBytes($row->id)->toString(),
-                'email' => DbValue::string($row->email),
+                'email' => DbValue::nullableString($row->email) ?? '',
                 'vorname' => DbValue::string($row->vorname),
                 'nachname' => DbValue::string($row->nachname),
                 'telefon' => DbValue::nullableString($row->telefon),

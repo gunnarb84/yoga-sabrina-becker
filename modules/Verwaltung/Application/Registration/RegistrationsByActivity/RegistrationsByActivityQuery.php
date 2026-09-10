@@ -11,7 +11,7 @@ use Yoga\Platform\Shared\Application\DbValue;
 final readonly class RegistrationsByActivityQuery
 {
     /**
-     * @return list<object{id: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, angemeldet_am: string, zahlungsart: string, zahlungsstatus: string, rang: int|null}>
+     * @return list<object{id: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, angemeldet_am: string, zahlungsart: string, herkunft: string, zahlungsstatus: string, rang: int|null}>
      */
     public function execute(string $activityId): array
     {
@@ -24,6 +24,7 @@ final readonly class RegistrationsByActivityQuery
                 'verwaltung_anmeldungen.status',
                 'verwaltung_anmeldungen.angemeldet_am',
                 'verwaltung_anmeldungen.zahlungsart',
+                'verwaltung_anmeldungen.herkunft',
                 'verwaltung_anmeldungen.zahlungsstatus',
                 'verwaltung_teilnehmer.vorname',
                 'verwaltung_teilnehmer.nachname',
@@ -50,10 +51,11 @@ final readonly class RegistrationsByActivityQuery
                 'id' => Uuid::fromBytes($row->id)->toString(),
                 'teilnehmer_id' => Uuid::fromBytes($row->teilnehmer_id)->toString(),
                 'teilnehmer_name' => trim($firstName . ' ' . $lastName),
-                'email' => DbValue::string($row->email),
+                'email' => DbValue::nullableString($row->email) ?? '',
                 'status' => DbValue::string($row->status),
                 'angemeldet_am' => DbValue::string($row->angemeldet_am),
                 'zahlungsart' => DbValue::string($row->zahlungsart),
+                'herkunft' => DbValue::string($row->herkunft),
                 'zahlungsstatus' => DbValue::string($row->zahlungsstatus),
                 'rang' => DbValue::nullableInt($row->rang),
             ];

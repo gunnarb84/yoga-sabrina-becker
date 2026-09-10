@@ -15,7 +15,7 @@ use Yoga\Platform\Identity\UuidCast;
  * @property string|null $adresszeile_2
  * @property \Carbon\Carbon $angelegt_am
  * @property string|null $angelegt_von
- * @property string $email
+ * @property string|null $email
  * @property \Carbon\Carbon|null $geaendert_am
  * @property string|null $geaendert_von
  * @property \Carbon\Carbon|null $geburtsdatum

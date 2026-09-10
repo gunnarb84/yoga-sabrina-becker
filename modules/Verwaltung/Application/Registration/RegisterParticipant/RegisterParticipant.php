@@ -14,6 +14,7 @@ use Yoga\Modules\Verwaltung\Domain\Payment\PaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationPaymentStatus;
+use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationSource;
 use Yoga\Modules\Verwaltung\Domain\Registration\RegistrationStatus;
 use Yoga\Modules\Verwaltung\Domain\WaitingList\WaitingList;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
@@ -59,7 +60,7 @@ final readonly class RegisterParticipant
             return Result::failure('registration.already_registered');
         }
 
-        return DB::transaction(function () use ($activity, $participant, $method, $activityIdBytes): Result {
+        return DB::transaction(function () use ($activity, $participant, $method, $activityIdBytes, $request): Result {
             $confirmedCount = Registration::whereRaw('aktivitaet_id = ?', [$activityIdBytes])
                 ->where('status', RegistrationStatus::Confirmed->value)
                 ->count();
@@ -74,6 +75,7 @@ final readonly class RegisterParticipant
                 'status' => $status->value,
                 'zahlungsart' => $method->value,
                 'zahlungsstatus' => $this->initialPaymentStatus($method)->value,
+                'herkunft' => (RegistrationSource::tryFrom($request->source) ?? RegistrationSource::Website)->value,
             ]);
 
             $registration->save();

@@ -7,6 +7,7 @@ namespace Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Throwable;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
 use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\CashReceipt\CashReceipt;
 use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
@@ -16,6 +17,11 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class GenerateCashReceiptPdf
 {
+    public function __construct(
+        private AmountInWords $amountInWords,
+    ) {
+    }
+
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
@@ -46,18 +52,22 @@ final readonly class GenerateCashReceiptPdf
 
         try {
             $html = view('bareinnahmenbelege.pdf', [
-                'receipt' => $receipt,
-                'activity' => $activity,
-                'participant' => $participant,
+                'nummer' => $receipt->nummer,
+                'datum' => $receipt->ausgestellt_am->format('d.m.Y'),
+                'empfaenger' => $receipt->empfaenger,
+                'betrag' => number_format((float) $receipt->betrag, 2, ',', '.'),
+                'inWorten' => $this->amountInWords->execute((float) $receipt->betrag),
+                'leistung' => $activity->titel,
             ])->render();
 
             $options = new Options([
                 'isRemoteEnabled' => false,
                 'isPhpEnabled' => false,
-                'defaultFont' => 'Helvetica',
+                'defaultFont' => 'Lato',
             ]);
 
             $dompdf = new Dompdf($options);
+            $this->registerLato($dompdf);
             $dompdf->loadHtml($html, 'UTF-8');
             $dompdf->setPaper('A4');
             $dompdf->render();
@@ -68,6 +78,23 @@ final readonly class GenerateCashReceiptPdf
             ));
         } catch (Throwable $e) {
             return Result::failure('receipt.pdf_generation_failed', [$e->getMessage()]);
+        }
+    }
+
+    private function registerLato(Dompdf $dompdf): void
+    {
+        $fontDirectory = resource_path('fonts');
+        $fontMetrics = $dompdf->getFontMetrics();
+
+        foreach (['Lato-Regular.ttf' => ['normal', 'normal'], 'Lato-Bold.ttf' => ['normal', 'bold']] as $file => [$style, $weight]) {
+            $path = $fontDirectory.'/'.$file;
+
+            if (is_file($path)) {
+                $fontMetrics->registerFont(
+                    ['family' => 'Lato', 'style' => $style, 'weight' => $weight],
+                    $path,
+                );
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ declare(strict_types=1);
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\RecordPayment;
@@ -52,7 +53,7 @@ it('records a cash payment and issues a receipt with the next number', function 
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash->value,
@@ -62,14 +63,14 @@ it('records a cash payment and issues a receipt with the next number', function 
     ));
 
     expect($result->isSuccess())->toBeTrue();
-    expect($result->unwrap()->documentNumber)->toBe('B-2026-00001');
+    expect($result->unwrap()->documentNumber)->toBe('2026-00001');
 
     $payment = Payment::findById($result->unwrap()->paymentId);
     expect($payment)->not->toBeNull();
     expect($payment->methode)->toBe(PaymentMethod::Cash);
     expect($payment->betrag)->toBe('45.0000');
 
-    $receipt = CashReceipt::where('nummer', 'B-2026-00001')->first();
+    $receipt = CashReceipt::where('nummer', '2026-00001')->first();
     expect($receipt)->not->toBeNull();
     expect($receipt->empfaenger)->toBe('Max Mustermann');
 
@@ -121,7 +122,7 @@ it('increments document numbers for consecutive payments', function (): void {
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
 
     $first = $record->execute(new RecordPaymentRequest(
         registrationId: $firstRegistration->unwrap()->registrationId,
@@ -138,12 +139,12 @@ it('increments document numbers for consecutive payments', function (): void {
         recipient: 'Max Mustermann',
     ));
 
-    expect($first->unwrap()->documentNumber)->toBe('B-2026-00001');
-    expect($second->unwrap()->documentNumber)->toBe('B-2026-00002');
+    expect($first->unwrap()->documentNumber)->toBe('2026-00001');
+    expect($second->unwrap()->documentNumber)->toBe('2026-00002');
 });
 
 it('fails with not_found for a non-existing registration', function (): void {
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: '018e1234-5678-7abc-8def-0123456789ab',
         method: PaymentMethod::Cash->value,
@@ -165,7 +166,7 @@ it('fails with already_paid when a payment was already recorded', function (): v
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash->value,
@@ -195,7 +196,7 @@ it('fails when trying to record a transfer payment directly', function (): void 
         paymentMethod: 'ueberweisung',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Transfer->value,

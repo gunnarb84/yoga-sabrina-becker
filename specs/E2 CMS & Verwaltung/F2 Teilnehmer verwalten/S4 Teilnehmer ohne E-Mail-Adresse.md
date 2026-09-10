@@ -1,7 +1,7 @@
 # Teilnehmer ohne E-Mail-Adresse
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich Teilnehmer/innen ohne E-Mail-Adresse führen, damit ich auch

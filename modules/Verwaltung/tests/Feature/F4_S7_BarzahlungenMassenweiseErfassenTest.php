@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
 use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
@@ -57,7 +58,7 @@ function massenVorgang(): RecordCashPaymentBatch
 {
     return new RecordCashPaymentBatch(new RecordPayment(
         app(NextNumber::class),
-        new GenerateCashReceiptPdf(),
+        new GenerateCashReceiptPdf(new AmountInWords()),
         new SendOutboundMessage(),
     ));
 }
@@ -104,7 +105,7 @@ it('excludes transfer, free and paid registrations from the batch list', functio
     legeAnmeldungAn($activity, 'ueberweisung@example.com', 'ueberweisung');
     legeAnmeldungAn($activity, 'kostenlos@example.com', 'kostenlos');
 
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $record->execute(new RecordPaymentRequest(
         registrationId: $bezahlt->id,
         method: 'bar',
@@ -138,8 +139,8 @@ it('records payments and gapless receipts for every selected registration', func
     $response = $result->unwrap();
     expect($response->recordedCount)->toBe(2);
     expect($response->skippedCount)->toBe(0);
-    expect($response->outcomes[0]->receiptNumber)->toBe('B-2026-00001');
-    expect($response->outcomes[1]->receiptNumber)->toBe('B-2026-00002');
+    expect($response->outcomes[0]->receiptNumber)->toBe('2026-00001');
+    expect($response->outcomes[1]->receiptNumber)->toBe('2026-00002');
     expect(CashReceipt::count())->toBe(2);
 
     $ersteNeu = Registration::findById($erste->id);
@@ -165,7 +166,7 @@ it('skips a registration that was paid between load and save and records the res
     $zweite = legeAnmeldungAn($activity, 'zweite@example.com', 'bar');
 
     // Zwischen Laden und Speichern wurde die erste Anmeldung bereits erfasst.
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $record->execute(new RecordPaymentRequest(
         registrationId: $erste->id,
         method: 'bar',

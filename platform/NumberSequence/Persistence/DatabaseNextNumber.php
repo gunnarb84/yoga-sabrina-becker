@@ -60,6 +60,45 @@ final readonly class DatabaseNextNumber implements NextNumber
         return $definition->formatNumber($next);
     }
 
+    public function advance(string $code, int $letzteNummer, ?int $jahr = null): void
+    {
+        $definition = NumberSequenceDefinition::where('code', $code)->firstOrFail();
+        $tableName = $this->resolver->resolve($code);
+        $jahr = $jahr ?? $definition->currentYear();
+
+        $this->transaction(function () use ($tableName, $code, $letzteNummer, $jahr): void {
+            $query = $this->table($tableName)
+                ->lockForUpdate()
+                ->where('jahr', $jahr)
+                ->where('code', $code);
+
+            $row = $query->first();
+
+            if ($row === null) {
+                $this->table($tableName)->insert([
+                    'code' => $code,
+                    'jahr' => $jahr,
+                    'letzte_nummer' => $letzteNummer,
+                    'angelegt_am' => now(),
+                    'geaendert_am' => now(),
+                ]);
+
+                return;
+            }
+
+            $current = is_int($row->letzte_nummer) ? $row->letzte_nummer : 0;
+
+            if ($letzteNummer <= $current) {
+                return;
+            }
+
+            $query->update([
+                'letzte_nummer' => $letzteNummer,
+                'geaendert_am' => now(),
+            ]);
+        });
+    }
+
     private function table(string $name): Builder
     {
         return $this->db->connection()->table($name);

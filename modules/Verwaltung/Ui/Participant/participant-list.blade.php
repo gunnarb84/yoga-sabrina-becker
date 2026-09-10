@@ -31,7 +31,7 @@
                                         {{ $participant->vorname }} {{ $participant->nachname }}
                                     </a>
                                 </td>
-                                <td>{{ $participant->email }}</td>
+                                <td>{{ $participant->email !== '' ? $participant->email : '—' }}</td>
                                 <td>{{ $participant->telefon }}</td>
                                 <td>{{ $participant->stadt }}</td>
                             </tr>

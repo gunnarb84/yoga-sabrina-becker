@@ -1,7 +1,7 @@
 # Bareinnahme ohne Anmeldung erfassen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich eine Bareinnahme für jemanden erfassen, der nicht über die

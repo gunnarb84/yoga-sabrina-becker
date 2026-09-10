@@ -17,6 +17,7 @@ declare(strict_types=1);
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Payment\MarkTransferPaid\MarkTransferPaid;
@@ -89,7 +90,7 @@ it('creates a cash return when cancelling a paid cash registration', function ()
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(new AmountInWords()), new SendOutboundMessage());
     $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash->value,

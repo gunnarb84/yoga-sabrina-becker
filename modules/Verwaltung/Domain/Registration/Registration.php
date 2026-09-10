@@ -23,6 +23,7 @@ use Yoga\Platform\Identity\UuidCast;
  * @property \Carbon\Carbon|null $geaendert_am
  * @property string|null $geaendert_von
  * @property string $id
+ * @property RegistrationSource $herkunft
  * @property RegistrationStatus $status
  * @property string $teilnehmer_id
  * @property int $version
@@ -49,6 +50,7 @@ class Registration extends BaseModel
         'angelegt_von' => UuidCast::class,
         'geaendert_von' => UuidCast::class,
         'angemeldet_am' => 'datetime',
+        'herkunft' => RegistrationSource::class,
         'status' => RegistrationStatus::class,
         'zahlungsart' => RegistrationPaymentMethod::class,
         'zahlungsstatus' => RegistrationPaymentStatus::class,

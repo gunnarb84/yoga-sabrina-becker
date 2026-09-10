@@ -43,6 +43,7 @@ final class RegisterParticipant extends Component
             activityId: $this->activityId,
             participantId: $this->participantId,
             paymentMethod: $this->paymentMethod,
+            source: RegisterParticipantRequest::SOURCE_ADMINISTRATION,
         ));
 
         if ($result->isFailure()) {

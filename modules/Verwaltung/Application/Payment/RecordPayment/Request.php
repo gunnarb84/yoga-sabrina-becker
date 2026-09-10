@@ -12,6 +12,8 @@ final readonly class Request
         public string $amount,
         public ?string $paidAt,
         public string $recipient,
+        public ?string $receiptNumber = null,
+        public ?string $issuedAt = null,
     ) {
     }
 }

@@ -12,7 +12,7 @@ final readonly class CreateParticipant
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
-        if (Participant::where('email', $request->email)->exists()) {
+        if ($request->email !== null && Participant::where('email', $request->email)->exists()) {
             return Result::failure('participant.email_already_exists');
         }
 

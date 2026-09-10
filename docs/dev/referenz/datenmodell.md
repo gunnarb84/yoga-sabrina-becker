@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Entwickler · **Bezug:** [harness-php/_data.md](../../../harness-php/_data.md), [projekt/_domaene.md](../../../projekt/_domaene.md)
-> **Stand:** 2026-09-08
+> **Stand:** 2026-09-10
 
 # Datenmodell
 
@@ -13,8 +13,8 @@ Die Datenbank ist eine MySQL/MariaDB-Datenbank pro Installation. Alle Primärsch
 |---|---|
 | `activities` | Veranstaltung (Kurs, Event, Workshop) |
 | `sessions` | Einzelner Termin einer Veranstaltung |
-| `participants` | Teilnehmer/in |
-| `registrations` | Anmeldung einer/m Teilnehmer/in zu einer Veranstaltung |
+| `participants` | Teilnehmer/in (`email` optional, Pflicht nur im Online-Anmeldeprozess) |
+| `registrations` | Anmeldung einer/m Teilnehmer/in zu einer Veranstaltung (mit `herkunft` = `webseite`/`verwaltung`) |
 | `waiting_lists` | Wartelistenplätze über der Kapazität |
 | `payments` | Zahlung (Bar oder Überweisung) zu einer Anmeldung |
 | `cash_receipts` | Bareinnahmenbeleg |
@@ -30,7 +30,11 @@ Die Datenbank ist eine MySQL/MariaDB-Datenbank pro Installation. Alle Primärsch
 - **Preis:** Ganzzahl in der kleinsten Währungseinheit (Cent), gespeichert als `int`, Währung in einer separaten Spalte (Hauswährung `EUR`).
 - **Dauer:** Minuten als Ganzzahl, Anzeige als Stunden/Minuten.
 - **Maximale Teilnehmerzahl:** Positive Ganzzahl.
-- **Belegnummern:** Lückenlos fortlaufend pro Belegrolle.
+- **Belegnummern:** Lückenlos fortlaufend pro Belegrolle. Der Nummernkreis der
+  Bareinnahmenbelege trägt kein Präfix und formatiert als `YYYY-NNNNN`
+  (z. B. `2026-00012`); über den Vorgang `RecordWalkInCashPayment` lässt sich eine
+  Belegnummer für die Nachpflege handschriftlicher Belege vorgeben, wobei der
+  Nummernkreis hinter der übernommenen Nummer weiterschaltet.
 
 ## Siehe auch
 

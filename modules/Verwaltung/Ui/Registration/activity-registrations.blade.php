@@ -36,6 +36,7 @@
                             <th>E-Mail</th>
                             <th>Zahlungsart</th>
                             <th>Zahlungsstatus</th>
+                            <th>Herkunft</th>
                             <th>Angemeldet am</th>
                             <th>Aktion</th>
                         </tr>
@@ -46,6 +47,8 @@
                                 <td>{{ $registration->teilnehmer_name }}</td>
                                 <td>{{ $registration->email }}</td>
                                 <td>{{ $registration->zahlungsart }}</td>
+                                <td>{{ $registration->zahlungsstatus }}</td>
+                                <td>{{ $registration->herkunft === 'verwaltung' ? 'Verwaltung' : 'Webseite' }}</td>
                                 <td>{{ $registration->zahlungsstatus }}</td>
                                 <td>{{ \Carbon\Carbon::parse($registration->angemeldet_am)->format('d.m.Y H:i') }}</td>
                                 <td>

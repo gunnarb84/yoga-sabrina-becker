@@ -9,7 +9,7 @@ use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 final readonly class ParticipantEditQuery
 {
     /**
-     * @return object{id: string, email: string, vorname: string, nachname: string, adresszeile_1: string, adresszeile_2: string, postleitzahl: string, stadt: string, telefon: string, geburtsdatum: string, gesundheitsinformationen: string, gesundheitsinformationen_einwilligung: bool, anmeldungen: list<object{id: string, aktivitaet_titel: string, status: string, anmeldedatum: string}>}|null
+     * @return object{id: string, email: string|null, vorname: string, nachname: string, adresszeile_1: string, adresszeile_2: string, postleitzahl: string, stadt: string, telefon: string, geburtsdatum: string, gesundheitsinformationen: string, gesundheitsinformationen_einwilligung: bool, anmeldungen: list<object{id: string, aktivitaet_titel: string, status: string, anmeldedatum: string}>}|null
      */
     public function execute(string $participantId): ?object
     {

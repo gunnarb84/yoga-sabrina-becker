@@ -1,7 +1,7 @@
 # Zahlungen erfassen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich Zahlungen zu Anmeldungen erfassen können, damit ich den

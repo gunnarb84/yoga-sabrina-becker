@@ -7,7 +7,7 @@ namespace Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfi
 final readonly class Response
 {
     public function __construct(
-        public string $outboundMessageId,
+        public ?string $outboundMessageId,
     ) {
     }
 }

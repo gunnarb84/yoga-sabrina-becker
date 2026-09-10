@@ -20,7 +20,7 @@ final class ActivityRegistrations extends Component
     public string $activityId = '';
 
     /**
-     * @var list<object{id: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, angemeldet_am: string, zahlungsart: string, rang: int|null}>
+     * @var list<object{id: string, teilnehmer_id: string, teilnehmer_name: string, email: string, status: string, angemeldet_am: string, zahlungsart: string, herkunft: string, zahlungsstatus: string, rang: int|null}>
      */
     public array $registrations = [];
 

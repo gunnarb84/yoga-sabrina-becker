@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Verwaltung\Application\Payment\RecordPayment;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
@@ -35,6 +36,23 @@ final readonly class RecordPayment
             return Result::failure('payment.method_not_supported');
         }
 
+        $explicitNumber = null;
+
+        if ($request->receiptNumber !== null) {
+            $parsed = $this->parseReceiptNumber($request->receiptNumber);
+            $explicitNumber = $parsed !== null
+                ? ['text' => $request->receiptNumber, 'jahr' => $parsed['jahr'], 'nummer' => $parsed['nummer']]
+                : null;
+
+            if ($explicitNumber === null) {
+                return Result::failure('receipt.number_invalid');
+            }
+
+            if (CashReceipt::where('nummer', $request->receiptNumber)->exists()) {
+                return Result::failure('receipt.number_taken');
+            }
+        }
+
         $registration = Registration::findById($request->registrationId);
 
         if ($registration === null) {
@@ -54,7 +72,7 @@ final readonly class RecordPayment
             return Result::failure('registration.incomplete_data');
         }
 
-        $result = DB::transaction(function () use ($registration, $request): Result {
+        $result = DB::transaction(function () use ($registration, $request, $explicitNumber): Result {
             $payment = new Payment([
                 'anmeldung_id' => $registration->id,
                 'methode' => $request->method,
@@ -64,7 +82,7 @@ final readonly class RecordPayment
 
             $payment->save();
 
-            [$documentId, $documentNumber, $documentType] = $this->issueCashReceipt($payment, $request->recipient);
+            [$documentId, $documentNumber, $documentType] = $this->issueCashReceipt($payment, $request, $explicitNumber);
 
             $payment->beleg_id = $documentId;
             $payment->beleg_art = $documentType;
@@ -76,14 +94,14 @@ final readonly class RecordPayment
             return Result::success(new Response($payment->id, $documentNumber, $documentId));
         });
 
-        if ($result->isSuccess() && $participant->email !== '') {
-            $this->sendReceiptEmail($result->unwrap(), $activity, $registration, $participant);
+        if ($result->isSuccess() && $participant->email !== null && $participant->email !== '') {
+            $this->sendReceiptEmail($result->unwrap(), $activity, $registration, $participant, $participant->email);
         }
 
         return $result;
     }
 
-    private function sendReceiptEmail(Response $response, Activity $activity, Registration $registration, Participant $participant): void
+    private function sendReceiptEmail(Response $response, Activity $activity, Registration $registration, Participant $participant, string $email): void
     {
         $receipt = CashReceipt::findById($response->documentId);
 
@@ -111,7 +129,7 @@ final readonly class RecordPayment
         ])->render();
 
         $this->sender->execute(new SendOutboundMessageRequest(
-            recipient: $participant->email,
+            recipient: $email,
             subject: 'Barquittung '.$receipt->nummer,
             html: $html,
             anmeldungId: $registration->id,
@@ -120,22 +138,47 @@ final readonly class RecordPayment
     }
 
     /**
+     * @param  array{text: string, jahr: int, nummer: int}|null  $explicitNumber
      * @return array{0: string, 1: string, 2: string}
      */
-    private function issueCashReceipt(Payment $payment, string $recipient): array
+    private function issueCashReceipt(Payment $payment, Request $request, ?array $explicitNumber): array
     {
-        $number = $this->numbers->next('B');
+        if ($explicitNumber !== null) {
+            $number = $explicitNumber['text'];
+
+            // Nachpflege: der Nummernkreis zählt hinter der übernommenen
+            // Nummer weiter, damit künftige Belege kollisionsfrei anschließen.
+            $this->numbers->advance('B', $explicitNumber['nummer'], $explicitNumber['jahr']);
+        } else {
+            $number = $this->numbers->next('B');
+        }
 
         $receipt = new CashReceipt([
             'nummer' => $number,
             'zahlung_id' => $payment->id,
-            'ausgestellt_am' => now(),
-            'empfaenger' => $recipient,
+            'ausgestellt_am' => $request->issuedAt !== null
+                ? Carbon::parse($request->issuedAt)
+                : now(),
+            'empfaenger' => $request->recipient,
             'betrag' => $payment->betrag,
         ]);
 
         $receipt->save();
 
         return [$receipt->id, $number, 'bareinnahmenbeleg'];
+    }
+
+    /**
+     * Prüft das Format `YYYY-NNNNN` und liefert Jahr und Nummer.
+     *
+     * @return array{jahr: int, nummer: int}|null
+     */
+    private function parseReceiptNumber(string $number): ?array
+    {
+        if (preg_match('/^(\d{4})-(\d{5})$/', $number, $matches) !== 1) {
+            return null;
+        }
+
+        return ['jahr' => (int) $matches[1], 'nummer' => (int) $matches[2]];
     }
 }

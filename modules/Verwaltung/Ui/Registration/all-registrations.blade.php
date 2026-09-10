@@ -48,6 +48,7 @@
                             <th>E-Mail</th>
                             <th>Status</th>
                             <th>Zahlungsart</th>
+                            <th>Herkunft</th>
                             <th>Angemeldet am</th>
                             <th>Freie Plätze</th>
                             <th>Warteliste</th>
@@ -65,6 +66,7 @@
                                 <td>{{ $registration->email }}</td>
                                 <td>{{ ucfirst($registration->status) }}</td>
                                 <td>{{ $typeLabel($registration->zahlungsart) }}</td>
+                                <td>{{ $registration->herkunft === 'verwaltung' ? 'Verwaltung' : 'Webseite' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($registration->angemeldet_am)->format('d.m.Y H:i') }}</td>
                                 <td>{{ $registration->freie_plaetze }}</td>
                                 <td>{{ $registration->warteliste_anzahl }}</td>

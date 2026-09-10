@@ -7,7 +7,7 @@ namespace Yoga\Modules\Verwaltung\Application\Participant\CreateParticipant;
 final readonly class Request
 {
     public function __construct(
-        public string $email,
+        public ?string $email,
         public string $firstName,
         public string $lastName,
         public ?string $addressLine1,

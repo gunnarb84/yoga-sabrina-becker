@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Anwender · **Bezug:** [PROJEKT.md](../../PROJEKT.md)
-> **Stand:** 2026-09-08
+> **Stand:** 2026-09-10
 
 # Glossar
 
@@ -14,6 +14,7 @@ Begriffe, die in der Anwendung und in dieser Dokumentation verwendet werden.
 | **Termin** | Einzelner Zeitpunkt einer Veranstaltung. |
 | **Teilnehmer/in** | Person, die an einer Veranstaltung teilnimmt. |
 | **Anmeldung** | Verknüpfung zwischen einer/m Teilnehmer/in und einer Veranstaltung. |
+| **Herkunft** | Kennzeichnet, ob eine Anmeldung über die Webseite oder in der Verwaltung entstanden ist. |
 | **Warteliste** | Rangfolge von Anmeldungen, die über der maximalen Teilnehmerzahl liegen. |
 | **Bestätigt** | Status einer Anmeldung mit festem Platz. |
 | **Überweisung** | Zahlungsart, bei der eine Rechnung erzeugt wird. |
@@ -21,6 +22,8 @@ Begriffe, die in der Anwendung und in dieser Dokumentation verwendet werden.
 | **Barquittung** | Als PDF ausgegebene und per E-Mail versandte Quittung über eine Barzahlung. |
 | **Bareinnahmenliste** | Liste aller Barquittungen in der Verwaltung, mit Filter und PDF-Download. |
 | **Massenerfassung** | Erfassung mehrer Barzahlungen einer Veranstaltung mit einer Aktion. |
+| **Bareinnahme erfassen** | Maske zur Erfassung von Bareinnahmen ohne vorherige Anmeldung über die Webseite (Laufkundschaft). |
+| **Nachpflege** | Übernahme bereits handschriftlich vergebener Belegnummern in das System. |
 | **Kontaktanfrage** | Schriftliche Anfrage über das Kontaktformular der Webseite; sie erscheint in der Verwaltung und wird über den Status bearbeitet. |
 
 ## Siehe auch

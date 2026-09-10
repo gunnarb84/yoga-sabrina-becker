@@ -1,5 +1,5 @@
 > **Typ:** Referenz · **Für:** Entwickler · **Bezug:** [harness-php/_design.md](../../../harness-php/_design.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-10
 
 # Module und Schichten
 
@@ -17,9 +17,9 @@
 | Schicht | Inhalt |
 |---|---|
 | `Domain` | Benutzer, Rollen, Rechte, Verwaltungsmodelle |
-| `Application` | Vorgänge: Anmeldung bearbeiten, Zahlung erfassen, Beleg erzeugen |
+| `Application` | Vorgänge: Anmeldung bearbeiten, Zahlung erfassen, Bareinnahme ohne Anmeldung erfassen (`RecordWalkInCashPayment`), Beleg erzeugen (PDF nach der Papiervorlage mit `AmountInWords`) |
 | `Persistence` | Verwaltungsmigrationen, Eloquent-Modelle, Query-Objekte |
-| `Ui` | Livewire-basiertes Admin-UI, Login, Listen und Masken |
+| `Ui` | Livewire-basiertes Admin-UI, Login, Listen und Masken (u. a. „Bareinnahme erfassen“ für Laufkundschaft und Nachpflege) |
 
 ## Platform
 

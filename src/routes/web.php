@@ -9,6 +9,7 @@ use Yoga\Modules\Verwaltung\Ui\Activity\EditActivity;
 use Yoga\Modules\Verwaltung\Ui\Auth\LoginController;
 use Yoga\Modules\Verwaltung\Ui\CashReceipt\CashReceiptController;
 use Yoga\Modules\Verwaltung\Ui\CashReceipt\CashReceipts;
+use Yoga\Modules\Verwaltung\Ui\CashReceipt\RecordWalkInCashPayment;
 use Yoga\Modules\Verwaltung\Ui\CourseTemplate\CourseTemplateList;
 use Yoga\Modules\Verwaltung\Ui\CourseTemplate\CreateCourseTemplate;
 use Yoga\Modules\Verwaltung\Ui\CourseTemplate\EditCourseTemplate;
@@ -62,6 +63,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/verwaltung/rechnungen/{id}/pdf', [InvoiceController::class, 'download'])->name('verwaltung.rechnung.pdf');
     Route::post('/verwaltung/rechnungen/{id}/email', [InvoiceController::class, 'sendEmail'])->name('verwaltung.rechnung.email');
     Route::get('/verwaltung/bareinnahmen', CashReceipts::class)->name('verwaltung.cash-receipts');
+    Route::get('/verwaltung/bareinnahmen/erfassen', RecordWalkInCashPayment::class)->name('verwaltung.cash-receipt.record');
     Route::get('/verwaltung/bareinnahmen/{id}/pdf', [CashReceiptController::class, 'download'])->name('verwaltung.bareinnahme.pdf');
     Route::get('/verwaltung/aktivitaeten/{id}/barzahlungen/masse', BulkCashPayments::class)->name('verwaltung.payment.bulk');
     Route::get('/verwaltung/nachrichten', OutboundMessageList::class)->name('verwaltung.outbound-messages');
