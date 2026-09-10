@@ -25,6 +25,17 @@ Liefert die aktuelle Warteliste einer Veranstaltung sortiert nach `rank`.
 ### `ListPayments`
 Liefert alle Zahlungen mit Filter nach Veranstaltung, Teilnehmer/in, Zahlungsart und Belegnummer.
 
+### `ListCashReceipts`
+Liefert alle Bareinnahmenbelege mit Filter nach Belegnummer und Empfänger, absteigend
+sortiert nach Ausstellungsdatum und Belegnummer.
+
+### `ListOpenCashRegistrations`
+Liefert alle Anmeldungen einer Veranstaltung mit Zahlungsart `Bar`, Status `Bestätigt`
+und ohne erfasste Zahlung.
+
+### `GenerateCashReceiptPdf`
+Erzeugt das PDF eines Bareinnahmenbelegs. Fehlercode: `RECEIPT_NOT_FOUND`.
+
 ### `ListOutboundMessages`
 Liefert alle ausgehenden Nachrichten mit Filter nach Empfänger, Status und Anmeldung.
 
@@ -66,8 +77,16 @@ Rückt den ersten Eintrag der Warteliste nach und benachrichtigt die Teilnehmeri
 Teilnehmer per `OutboundMessage`. Fehlercode: `WAITING_LIST_EMPTY`.
 
 ### `RecordCashPayment`
-Erfasst eine Barzahlung zu einer bestehenden Anmeldung und erzeugt `CashReceipt`. Fehlercode:
+Erfasst eine Barzahlung zu einer bestehenden Anmeldung, erzeugt `CashReceipt` samt PDF und
+versendet die Barquittung per E-Mail an die Teilnehmerin/den Teilnehmer. Fehlercode:
 `REGISTRATION_NOT_FOUND`, `ALREADY_PAID`.
+
+### `RecordCashPaymentBatch`
+Erfasst die angehakten Barzahlungen einer Veranstaltung en bloc: je Anmeldung `Payment`
+und `CashReceipt` mit lückenloser Nummer, Zahlungsstatus „bezahlt" und Barquittung per
+E-Mail. Scheitert eine einzelne Anmeldung (z. B. `ALREADY_PAID`), werden die übrigen
+trotzdem erfasst. Fehlercodes: `ACTIVITY_NOT_FOUND`, `REGISTRATION_NOT_FOUND`,
+`ALREADY_PAID`, `PAYMENT_METHOD_NOT_SUPPORTED`.
 
 ### `CreateCreditNote`
 Erzeugt eine Gutschrift zu einer Rechnung. Fehlercode: `INVOICE_NOT_FOUND`.

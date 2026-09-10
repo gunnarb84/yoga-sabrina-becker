@@ -1,7 +1,7 @@
 # Zahlungen erfassen
 
 ## Meta
-- **State:** Implemented
+- **State:** Modified
 
 ## User Story
 Als Administratorin möchte ich Zahlungen zu Anmeldungen erfassen können, damit ich den
@@ -22,4 +22,5 @@ Anmeldung erstellt.
   existiert.
 - `RecordCashPayment` scheitert mit `ALREADY_PAID`, wenn bereits eine Zahlung erfasst wurde.
 - Der Zahlungsstatus der Anmeldung wird auf „bezahlt" gesetzt.
-- Die Bareinnahmenliste zeigt alle `CashReceipt` mit Datum, Nummer, Empfänger und Betrag.
+- Die Bareinnahmenliste zeigt alle `CashReceipt` mit Datum, Nummer, Empfänger und Betrag
+  (siehe S5).

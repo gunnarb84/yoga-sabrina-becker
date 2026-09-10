@@ -1,7 +1,7 @@
 # Barquittung und Bareinnahmenliste automatisieren
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
 
 ## Problem
 Sabrina Becker schreibt für jede Barzahlung von Hand eine Quittung (bisher
@@ -101,4 +101,13 @@ Zahlung, kein Beleg, die Anmeldung gilt direkt als bezahlt.
   verifiziert).
 
 ## Offene Punkte
-- (keine — Stakeholder hat die finale Fassung am 10.09.2026 bestätigt; Idee ist Ready)
+- (keine — Idee ist in Specs überführt)
+
+## Überführung in Specs
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S5 Bareinnahmenliste und Beleg-PDF.md`
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S6 Barquittung per E-Mail versenden.md`
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S7 Barzahlungen massenweise erfassen.md`
+- Ergänzungen: `specs/E2 CMS & Verwaltung/_Backend.md` (Abfragen `ListCashReceipts`,
+  `ListOpenCashRegistrations`, `GenerateCashReceiptPdf`; Vorgänge `RecordCashPayment`
+  erweitert, `RecordCashPaymentBatch` neu), `specs/guidelines/_Menüstruktur.md`
+  (Menüpunkt „Bareinnahmen"), S1 (Kriterium Bareinnahmenliste nach S5 verschoben).
