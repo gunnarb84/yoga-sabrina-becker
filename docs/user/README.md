@@ -15,6 +15,7 @@ Diese Dokumentation richtet sich an Besucher/innen und Teilnehmer/innen der Webs
 - [Zu einer Veranstaltung anmelden](anleitungen/zu-einer-veranstaltung-anmelden.md)
 - [Kontaktanfrage senden](anleitungen/kontaktanfrage-senden.md)
 - [Kontaktanfragen bearbeiten](anleitungen/kontaktanfragen-bearbeiten.md)
+- [Barzahlungen erfassen und Quittungen ausstellen](anleitungen/barzahlungen-erfassen.md)
 
 ## Referenz
 

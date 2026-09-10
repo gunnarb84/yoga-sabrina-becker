@@ -1,7 +1,10 @@
 <div class="au-panel">
     <div class="au-panel__header">
         <h1 class="au-panel__title">Anmeldungen</h1>
-        <a href="{{ route('verwaltung.registration.create', ['id' => $activityId]) }}" class="au-btn au-btn--primary">Teilnehmer anmelden</a>
+        <div style="display:flex;gap:8px">
+            <a href="{{ route('verwaltung.payment.bulk', ['id' => $activityId]) }}" class="au-btn">Barzahlungen massenweise erfassen</a>
+            <a href="{{ route('verwaltung.registration.create', ['id' => $activityId]) }}" class="au-btn au-btn--primary">Teilnehmer anmelden</a>
+        </div>
     </div>
 
     <div class="au-panel__body">

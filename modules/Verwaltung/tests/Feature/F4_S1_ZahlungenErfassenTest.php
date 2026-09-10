@@ -16,7 +16,10 @@ declare(strict_types=1);
  */
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\RecordPayment;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\Request as RecordPaymentRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
@@ -31,6 +34,7 @@ use Yoga\Modules\Verwaltung\Tests\TestFactory;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 
 beforeEach(function (): void {
+    Mail::fake();
     Carbon::setTestNow('2026-09-02 12:00:00');
     $this->activity = TestFactory::createActivity(maxParticipants: 2);
 });
@@ -48,7 +52,7 @@ it('records a cash payment and issues a receipt with the next number', function 
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class));
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash->value,
@@ -117,7 +121,7 @@ it('increments document numbers for consecutive payments', function (): void {
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class));
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
 
     $first = $record->execute(new RecordPaymentRequest(
         registrationId: $firstRegistration->unwrap()->registrationId,
@@ -139,7 +143,7 @@ it('increments document numbers for consecutive payments', function (): void {
 });
 
 it('fails with not_found for a non-existing registration', function (): void {
-    $record = new RecordPayment(app(NextNumber::class));
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: '018e1234-5678-7abc-8def-0123456789ab',
         method: PaymentMethod::Cash->value,
@@ -161,7 +165,7 @@ it('fails with already_paid when a payment was already recorded', function (): v
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class));
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
     $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash->value,
@@ -191,7 +195,7 @@ it('fails when trying to record a transfer payment directly', function (): void 
         paymentMethod: 'ueberweisung',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class));
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
     $result = $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Transfer->value,

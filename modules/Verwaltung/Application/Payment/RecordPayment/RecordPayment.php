@@ -6,7 +6,13 @@ namespace Yoga\Modules\Verwaltung\Application\Payment\RecordPayment;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\Request as GeneratePdfRequest;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\Request as SendOutboundMessageRequest;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage as MailSender;
+use Yoga\Modules\Verwaltung\Domain\Activity\Activity;
 use Yoga\Modules\Verwaltung\Domain\CashReceipt\CashReceipt;
+use Yoga\Modules\Verwaltung\Domain\Participant\Participant;
 use Yoga\Modules\Verwaltung\Domain\Payment\Payment;
 use Yoga\Modules\Verwaltung\Domain\Payment\PaymentMethod;
 use Yoga\Modules\Verwaltung\Domain\Registration\Registration;
@@ -15,8 +21,11 @@ use Yoga\Platform\Shared\Application\Result;
 
 final readonly class RecordPayment
 {
-    public function __construct(private NextNumber $numbers)
-    {
+    public function __construct(
+        private NextNumber $numbers,
+        private GenerateCashReceiptPdf $pdfGenerator,
+        private MailSender $sender,
+    ) {
     }
 
     /** @return Result<Response> */
@@ -38,7 +47,14 @@ final readonly class RecordPayment
             return Result::failure('registration.already_paid');
         }
 
-        return DB::transaction(function () use ($registration, $request): Result {
+        $participant = Participant::findById($registration->teilnehmer_id);
+        $activity = Activity::findById($registration->aktivitaet_id);
+
+        if ($participant === null || $activity === null) {
+            return Result::failure('registration.incomplete_data');
+        }
+
+        $result = DB::transaction(function () use ($registration, $request): Result {
             $payment = new Payment([
                 'anmeldung_id' => $registration->id,
                 'methode' => $request->method,
@@ -57,8 +73,50 @@ final readonly class RecordPayment
             $registration->markAsPaid();
             $registration->save();
 
-            return Result::success(new Response($payment->id, $documentNumber));
+            return Result::success(new Response($payment->id, $documentNumber, $documentId));
         });
+
+        if ($result->isSuccess() && $participant->email !== '') {
+            $this->sendReceiptEmail($result->unwrap(), $activity, $registration, $participant);
+        }
+
+        return $result;
+    }
+
+    private function sendReceiptEmail(Response $response, Activity $activity, Registration $registration, Participant $participant): void
+    {
+        $receipt = CashReceipt::findById($response->documentId);
+
+        if ($receipt === null) {
+            return;
+        }
+
+        $pdfResult = $this->pdfGenerator->execute(new GeneratePdfRequest($response->documentId));
+        $attachment = null;
+
+        if ($pdfResult->isSuccess()) {
+            $pdf = $pdfResult->unwrap();
+
+            $attachment = [
+                'filename' => $pdf->filename,
+                'content' => (string) $pdf->content,
+                'mime' => 'application/pdf',
+            ];
+        }
+
+        $html = view('emails.cash-receipt', [
+            'receipt' => $receipt,
+            'activity' => $activity,
+            'participant' => $participant,
+        ])->render();
+
+        $this->sender->execute(new SendOutboundMessageRequest(
+            recipient: $participant->email,
+            subject: 'Barquittung '.$receipt->nummer,
+            html: $html,
+            anmeldungId: $registration->id,
+            attachment: $attachment,
+        ));
     }
 
     /**

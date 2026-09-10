@@ -13,7 +13,11 @@
 - `/verwaltung/login` – Backend-Login (`verwaltung.login`)
 - `/verwaltung/...` – Verwaltungsbereich, darunter `/verwaltung/kontaktanfragen`
   (`verwaltung.contact-inquiries`) und `/verwaltung/kontaktanfragen/{id}`
-  (`verwaltung.contact-inquiry.detail`)
+  (`verwaltung.contact-inquiry.detail`), `/verwaltung/bareinnahmen`
+  (`verwaltung.cash-receipts`) mit dem Beleg-PDF-Download
+  `/verwaltung/bareinnahmen/{id}/pdf` (`verwaltung.bareinnahme.pdf`) sowie die
+  Massenerfassung `/verwaltung/aktivitaeten/{id}/barzahlungen/masse`
+  (`verwaltung.payment.bulk`)
 
 ## Integrations-API
 

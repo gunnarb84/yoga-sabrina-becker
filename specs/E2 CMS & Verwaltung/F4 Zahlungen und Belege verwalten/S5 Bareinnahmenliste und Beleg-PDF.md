@@ -1,7 +1,7 @@
 # Bareinnahmenliste und Beleg-PDF
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich alle Bareinnahmenbelege in einer Liste einsehen und als PDF

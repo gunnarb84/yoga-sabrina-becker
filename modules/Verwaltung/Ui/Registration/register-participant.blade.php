@@ -31,7 +31,7 @@
                     <span class="au-field__label">Zahlungsart</span>
                     <select wire:model="paymentMethod" class="au-field__input" required>
                         @foreach ($methods as $method)
-                            <option value="{{ $method['value'] }}">{{ $method['label'] }}</option>
+                            <option value="{{ $method->value }}">{{ $method->label }}</option>
                         @endforeach
                     </select>
                 </label>

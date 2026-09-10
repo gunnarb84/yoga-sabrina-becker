@@ -15,7 +15,10 @@ declare(strict_types=1);
  */
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Ramsey\Uuid\Uuid;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
+use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Payment\MarkTransferPaid\MarkTransferPaid;
 use Yoga\Modules\Verwaltung\Application\Payment\MarkTransferPaid\Request as MarkTransferPaidRequest;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\RecordPayment;
@@ -36,6 +39,7 @@ use Yoga\Modules\Verwaltung\Tests\TestFactory;
 use Yoga\Platform\NumberSequence\Application\NextNumber;
 
 beforeEach(function (): void {
+    Mail::fake();
     Carbon::setTestNow('2026-09-02 12:00:00');
     $this->activity = TestFactory::createActivity(maxParticipants: 2);
 });
@@ -85,7 +89,7 @@ it('creates a cash return when cancelling a paid cash registration', function ()
         paymentMethod: 'bar',
     ));
 
-    $record = new RecordPayment(app(NextNumber::class));
+    $record = new RecordPayment(app(NextNumber::class), new GenerateCashReceiptPdf(), new SendOutboundMessage());
     $record->execute(new RecordPaymentRequest(
         registrationId: $registration->unwrap()->registrationId,
         method: PaymentMethod::Cash->value,

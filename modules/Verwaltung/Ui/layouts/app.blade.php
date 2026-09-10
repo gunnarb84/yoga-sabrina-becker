@@ -27,6 +27,7 @@
                 <a href="{{ route('verwaltung.participants') }}">Teilnehmer</a>
                 <a href="{{ route('verwaltung.contact-inquiries') }}">Kontaktanfragen</a>
                 <a href="{{ route('verwaltung.invoices') }}">Rechnungen</a>
+                <a href="{{ route('verwaltung.cash-receipts') }}">Bareinnahmen</a>
                 <a href="{{ route('verwaltung.outbound-messages') }}">Nachrichten</a>
 
                 @auth

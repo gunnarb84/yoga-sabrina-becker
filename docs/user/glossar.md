@@ -18,10 +18,14 @@ Begriffe, die in der Anwendung und in dieser Dokumentation verwendet werden.
 | **Bestätigt** | Status einer Anmeldung mit festem Platz. |
 | **Überweisung** | Zahlungsart, bei der eine Rechnung erzeugt wird. |
 | **Barzahlung vor Ort** | Zahlung beim ersten Termin in bar. |
+| **Barquittung** | Als PDF ausgegebene und per E-Mail versandte Quittung über eine Barzahlung. |
+| **Bareinnahmenliste** | Liste aller Barquittungen in der Verwaltung, mit Filter und PDF-Download. |
+| **Massenerfassung** | Erfassung mehrer Barzahlungen einer Veranstaltung mit einer Aktion. |
 | **Kontaktanfrage** | Schriftliche Anfrage über das Kontaktformular der Webseite; sie erscheint in der Verwaltung und wird über den Status bearbeitet. |
 
 ## Siehe auch
 
+- [Barzahlungen erfassen und Quittungen ausstellen](anleitungen/barzahlungen-erfassen.md)
 - [Zu einer Veranstaltung anmelden](anleitungen/zu-einer-veranstaltung-anmelden.md)
 - [Veranstaltungen finden und filtern](anleitungen/veranstaltungen-finden-und-filtern.md)
 - [Kontaktanfrage senden](anleitungen/kontaktanfrage-senden.md)

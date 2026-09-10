@@ -1,7 +1,7 @@
 # Barzahlungen massenweise erfassen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich die Barzahlungen einer Veranstaltung in einem Durchgang

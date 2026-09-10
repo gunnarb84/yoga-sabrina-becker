@@ -20,6 +20,17 @@ Diese Seite listet Hinweis- und Fehlermeldungen der öffentlichen Webseite. Die 
 | „Die Änderungen wurden gespeichert." | Status und Notiz einer Kontaktanfrage wurden in der Verwaltung gespeichert. | Keine Aktion nötig. |
 | „Die Anfrage konnte nicht gespeichert werden." | Der Statuswechsel in der Verwaltung war ungültig oder die Anfrage fehlt. | Seite neu laden und erneut versuchen. |
 
+## Verwaltung — Zahlungen und Belege
+
+| Meldung | Situation | Was Sie tun können |
+|---|---|---|
+| „Bitte wählen Sie mindestens eine Anmeldung aus." | In der Massenerfassung wurde keine Anmeldung markiert. | Setzen Sie bei den gewünschten Anmeldungen das Häkchen und speichern Sie erneut. |
+| „… Zahlung(en) wurden erfasst." | Die Massenerfassung hat die ausgewählten Barzahlungen gespeichert. | Keine Aktion nötig. |
+| „Die Massenerfassung konnte nicht gestartet werden." | Die Veranstaltung fehlt oder die Erfassung ist nicht möglich. | Seite neu laden und erneut versuchen. |
+| „Alle Bar-Anmeldungen dieser Veranstaltung sind erfasst." | Es gibt keine offenen Bar-Anmeldungen mehr. | Keine Aktion nötig. |
+| „Noch keine Bareinnahmen vorhanden." | Die Bareinnahmenliste ist leer. | Keine Aktion nötig. |
+| „Der Beleg wurde nicht gefunden." | Der aufgerufene Beleg-PDF-Link ist ungültig. | Über die [Bareinnahmenliste](../anleitungen/barzahlungen-erfassen.md) erneut öffnen. |
+
 ## Siehe auch
 
 - [Zu einer Veranstaltung anmelden](../anleitungen/zu-einer-veranstaltung-anmelden.md)

@@ -90,6 +90,9 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 | Warteliste | WaitingList | Rangfolge von Anmeldungen über der maximalen Teilnehmerzahl |
 | Zahlung | Payment | Barzahlung oder Überweisung für eine Anmeldung |
 | Bareinnahmenbeleg | CashReceipt | Forlaufend nummerierter Beleg für eine Barzahlung |
+| Barquittung | CashReceipt | Als PDF ausgegebene und per E-Mail versandte Quittung über eine Barzahlung (derselbe Beleg wie Bareinnahmenbeleg) |
+| Bareinnahmenliste | CashReceiptList | Liste aller Bareinnahmenbelege in der Verwaltung |
+| Massenerfassung | CashPaymentBatch | Gemeinsame Erfassung mehrerer Barzahlungen einer Veranstaltung |
 | Rechnung | Invoice | Forlaufend nummerierte Rechnung für eine Überweisung |
 | Gutschrift | CreditNote | Forlaufend nummerierte Gutschrift zu einer Rechnung |
 | Rückgabebestätigung | CashReturn | Forlaufend nummerierter Beleg für Rückzahlung in bar |

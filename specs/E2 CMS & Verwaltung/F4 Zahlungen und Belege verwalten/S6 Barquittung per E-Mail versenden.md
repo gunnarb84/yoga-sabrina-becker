@@ -1,7 +1,7 @@
 # Barquittung per E-Mail versenden
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich, dass Teilnehmende ihre Barquittung per E-Mail erhalten,
