@@ -87,6 +87,7 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 | Termin | Session | Einzelner Termin einer Veranstaltung |
 | Teilnehmer/in | Participant | Person, die an Kursen/Events/Workshops teilnimmt |
 | Anmeldung | Registration | Verknüpfung zwischen Teilnehmer/in und einer Veranstaltung |
+| Herkunft | Source | Kennzeichnet, ob eine Anmeldung über die Webseite oder in der Verwaltung entstanden ist (Werte: Webseite/Verwaltung) |
 | Warteliste | WaitingList | Rangfolge von Anmeldungen über der maximalen Teilnehmerzahl |
 | Zahlung | Payment | Barzahlung oder Überweisung für eine Anmeldung |
 | Bareinnahmenbeleg | CashReceipt | Forlaufend nummerierter Beleg für eine Barzahlung |

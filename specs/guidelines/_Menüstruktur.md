@@ -20,5 +20,6 @@ Backend-Menü in der Verwaltung, sondern werden über die CMS-Funktion in E2 gep
 | 2.6 | Kontaktanfragen | Liste und Detailansicht der Kontaktanfragen | E1 F4 |
 | 2.7 | Zahlungen | Liste und Maske der Zahlungen, Belege und Gutschriften | E2 F4 |
 | 2.8 | Bareinnahmen | Bareinnahmenliste mit Beleg-PDF-Download | E2 F4 |
-| 2.9 | Ausgehende Nachrichten | Protokoll versendeter E-Mails | E2 F5 |
-| 2.10 | Einstellungen | System- und Zahlungseinstellungen | E2 F4 |
+| 2.9 | Bareinnahme erfassen | Erfassung einer Bareinnahme ohne Anmeldung (inkl. Nachpflege) | E2 F4 |
+| 2.10 | Ausgehende Nachrichten | Protokoll versendeter E-Mails | E2 F5 |
+| 2.11 | Einstellungen | System- und Zahlungseinstellungen | E2 F4 |

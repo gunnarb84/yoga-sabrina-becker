@@ -1,7 +1,7 @@
 # Barquittung nach Papiervorlage
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
 
 ## Problem
 Das automatisch erzeugte Beleg-PDF (`bareinnahmenbelege/pdf.blade.php`) ist eine schlichte
@@ -59,3 +59,6 @@ dunkle Farbfläche, Schrift Lato) wird nachgebildet.
 
 ## Offene Punkte
 - (leer)
+
+## Spec-Pfade
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S5 Bareinnahmenliste und Beleg-PDF.md` (geändert)

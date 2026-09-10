@@ -78,8 +78,22 @@ Teilnehmer per `OutboundMessage`. Fehlercode: `WAITING_LIST_EMPTY`.
 
 ### `RecordCashPayment`
 Erfasst eine Barzahlung zu einer bestehenden Anmeldung, erzeugt `CashReceipt` samt PDF und
-versendet die Barquittung per E-Mail an die Teilnehmerin/den Teilnehmer. Fehlercode:
+versendet die Barquittung per E-Mail an die Teilnehmerin/den Teilnehmer (sofern eine
+E-Mail-Adresse vorhanden ist). Unterstützt die Nachpflege mit vorgegebener Belegnummer und
+Ausstellungsdatum (siehe `RecordWalkInCashPayment`). Fehlercode:
 `REGISTRATION_NOT_FOUND`, `ALREADY_PAID`.
+
+### `RecordWalkInCashPayment`
+Erfasst eine Bareinnahme ohne vorherige Anmeldung (Laufkundschaft) und legt in einem
+Vorgang Teilnehmer/in (Wiederverwendung bei exakt übereinstimmendem Vor- und Nachnamen),
+Anmeldung (Status `Bestätigt`, Zahlungsart `Bar`, Herkunft `Verwaltung`, ohne
+Kapazitäts- und Wartelistenprüfung), `Payment` und `CashReceipt` an. Die Barquittung wird
+bei vorhandener E-Mail-Adresse per E-Mail versandt. Mit eingeschalteter Nachpflege erhält
+der Beleg die vorgegebene Belegnummer (Format `YYYY-NNNNN`, eindeutig) und das
+vorgegebene Ausstellungsdatum; der Stand des Nummernkreises wird mindestens auf die
+vorgegebene Nummer gesetzt. Fehlercodes: `ACTIVITY_NOT_FOUND`,
+`PARTICIPANT_NAME_REQUIRED`, `PARTICIPANT_EMAIL_INVALID`, `AMOUNT_INVALID`,
+`REGISTRATION_ALREADY_EXISTS`, `RECEIPT_NUMBER_INVALID`, `RECEIPT_NUMBER_TAKEN`.
 
 ### `RecordCashPaymentBatch`
 Erfasst die angehakten Barzahlungen einer Veranstaltung en bloc: je Anmeldung `Payment`

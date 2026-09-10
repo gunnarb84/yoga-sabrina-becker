@@ -1,7 +1,7 @@
 # Bareinnahmen ohne vorherige Anmeldung
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
 
 ## Problem
 Barzahlungen sind im System bisher fest an eine Anmeldung gekettet, die über die Webseite
@@ -88,3 +88,10 @@ Original-Belegnummer und Original-Datum vorgegeben, statt eine neue Nummer zu zi
 
 ## Offene Punkte
 - (leer)
+
+## Spec-Pfade
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S8 Bareinnahme ohne Anmeldung erfassen.md`
+- `specs/E2 CMS & Verwaltung/F2 Teilnehmer verwalten/S4 Teilnehmer ohne E-Mail-Adresse.md`
+- `specs/E2 CMS & Verwaltung/F3 Anmeldungen und Warteliste verwalten/S4 Herkunft einer Anmeldung.md`
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S1 Zahlungen erfassen.md` (geändert)
+- `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/S7 Barzahlungen massenweise erfassen.md` (geändert)

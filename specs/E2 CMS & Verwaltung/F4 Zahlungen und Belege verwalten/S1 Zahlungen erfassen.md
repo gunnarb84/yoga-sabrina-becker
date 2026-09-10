@@ -1,7 +1,7 @@
 # Zahlungen erfassen
 
 ## Meta
-- **State:** Implemented
+- **State:** Modified
 
 ## User Story
 Als Administratorin möchte ich Zahlungen zu Anmeldungen erfassen können, damit ich den
@@ -17,7 +17,7 @@ Anmeldung erstellt.
 - In der Anmeldungsmaske kann eine Barzahlung erfasst werden.
 - Der Vorgang `RecordCashPayment` legt eine `Payment` mit der Methode `CASH` an.
 - `RecordCashPayment` erzeugt automatisch einen `CashReceipt` mit der nächsten freien
-  lückenlosen Nummer im Format `B-YYYY-NNNNN`.
+  lückenlosen Nummer im Format `YYYY-NNNNN`.
 - `RecordCashPayment` scheitert mit `REGISTRATION_NOT_FOUND`, wenn die Anmeldung nicht
   existiert.
 - `RecordCashPayment` scheitert mit `ALREADY_PAID`, wenn bereits eine Zahlung erfasst wurde.

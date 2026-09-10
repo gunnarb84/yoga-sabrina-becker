@@ -1,7 +1,7 @@
 # Barzahlungen massenweise erfassen
 
 ## Meta
-- **State:** Implemented
+- **State:** Modified
 
 ## User Story
 Als Administratorin möchte ich die Barzahlungen einer Veranstaltung in einem Durchgang
@@ -22,7 +22,7 @@ bestehen; Anmeldungen, die inzwischen bereits bezahlt sind, werden übersprungen
   mit Zahlungsart `Bar`, Status `Bestätigt` und ohne erfasste Zahlung.
 - Für jede angehakte Anmeldung erzeugt `RecordCashPaymentBatch` eine `Payment` mit der
   Methode `CASH` und einen `CashReceipt` mit der nächsten freien lückenlosen Nummer im
-  Format `B-YYYY-NNNNN`.
+  Format `YYYY-NNNNN`.
 - Der Zahlungsstatus jeder erfassten Anmeldung wird auf „bezahlt" gesetzt.
 - Anmeldungen mit Zahlungsart `Überweisung` oder `Kostenlos` erscheinen nicht in der
   Massenerfassung.

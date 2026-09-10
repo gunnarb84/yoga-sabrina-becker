@@ -45,7 +45,7 @@ Migrationen regelt `_data.md` und gehören nicht hierher.
 
 | Bezeichner | Oberfläche | Datentyp | Pflicht |
 |---|---|---|---|
-| `email` | E-Mail-Adresse | E-Mail | ja |
+| `email` | E-Mail-Adresse | E-Mail | nein (Pflicht im Online-Anmeldeprozess) |
 | `firstName` | Vorname | Text | ja |
 | `lastName` | Nachname | Text | ja |
 | `addressLine1` | Adresszeile 1 | Text | nein |
@@ -64,6 +64,7 @@ Migrationen regelt `_data.md` und gehören nicht hierher.
 | `activity` | Veranstaltung | Referenz | ja |
 | `participant` | Teilnehmer/in | Referenz | ja |
 | `registeredAt` | Anmeldezeitpunkt | Zeitpunkt | ja |
+| `source` | Herkunft (Webseite/Verwaltung) | Aufzählung | ja |
 | `status` | Status (Bestätigt/Warteliste/Storniert) | Aufzählung | ja |
 | `paymentMethod` | Zahlungsart (Bar/Überweisung/Kostenlos) | Aufzählung | ja |
 | `payment` | Zahlung | Referenz | nein |
