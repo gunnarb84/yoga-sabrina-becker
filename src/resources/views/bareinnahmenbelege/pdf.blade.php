@@ -98,6 +98,8 @@
         .felder--abschluss .linie {
             border-bottom: 0.7pt solid #b9ad8f;
             height: 6mm;
+            font-size: 9pt;
+            padding-top: 0.5mm;
         }
         .felder--abschluss .label { margin-top: 1.5mm; }
 

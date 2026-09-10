@@ -54,7 +54,7 @@
     <table class="felder felder--abschluss">
         <tr>
             <td class="feld feld--erste">
-                <div class="linie"></div>
+                <div class="linie">Bergen, {{ $datum }}</div>
                 <div class="label">Ort, Datum</div>
             </td>
             <td class="feld">
