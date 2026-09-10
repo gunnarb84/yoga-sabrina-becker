@@ -1,7 +1,7 @@
 # Barquittung und Bareinnahmenliste automatisieren
 
 ## Meta
-- **State:** Draft
+- **State:** Ready
 
 ## Problem
 Sabrina Becker schreibt für jede Barzahlung von Hand eine Quittung (bisher
@@ -101,4 +101,4 @@ Zahlung, kein Beleg, die Anmeldung gilt direkt als bezahlt.
   verifiziert).
 
 ## Offene Punkte
-- (keine — Stakeholder-Fassung zur Bestätigung vorgelegt)
+- (keine — Stakeholder hat die finale Fassung am 10.09.2026 bestätigt; Idee ist Ready)
