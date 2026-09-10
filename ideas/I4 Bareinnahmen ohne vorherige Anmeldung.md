@@ -1,0 +1,26 @@
+# Bareinnahmen ohne vorherige Anmeldung
+
+## Meta
+- **State:** Draft
+
+## Problem
+…
+
+## Lösungsidee
+…
+
+## Scope
+- **In Scope:** …
+- **Out of Scope:** …
+
+## Auswirkungen auf den Bestand
+- **Specs:** …
+- **Datenstruktur:** …
+- **Backend:** …
+- **Quellcode:** …
+
+## Entscheidungen
+- 10.09.2026: Idee angelegt, Nummer I4 reserviert.
+
+## Offene Punkte
+- Dialog noch nicht begonnen.
