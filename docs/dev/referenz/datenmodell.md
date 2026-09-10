@@ -18,6 +18,7 @@ Die Datenbank ist eine MySQL/MariaDB-Datenbank pro Installation. Alle Primärsch
 | `waiting_lists` | Wartelistenplätze über der Kapazität |
 | `payments` | Zahlung (Bar oder Überweisung) zu einer Anmeldung |
 | `cash_receipts` | Bareinnahmenbeleg |
+| `verwaltung_barentnahmen` | Barentnahme aus der Barkasse (Datum, Betrag, Zweck, optionale Fremdbelegnummer; ohne Belegnummer und PDF) |
 | `invoices` | Rechnung |
 | `credit_notes` | Gutschrift |
 | `cash_returns` | Rückgabebestätigung |

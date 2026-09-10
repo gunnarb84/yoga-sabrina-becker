@@ -90,11 +90,33 @@ dann nichts erfasst.
 
 ## Die Bareinnahmenliste verwenden
 
-1. Wählen Sie im oberen Menü **Bareinnahmen**. Die Liste zeigt alle Barquittungen mit
-   Belegnummer, Datum, Empfänger/in und Betrag — die neueste zuerst.
+1. Wählen Sie im oberen Menü **Bareinnahmen**. Die Liste zeigt alle Kassenbewegungen
+   gemischt-chronologisch — Barquittungen, Bar-Rückzahlungen und Barentnahmen — mit
+   Beleg- bzw. Fremdbelegnummer, Datum, Empfänger/in bzw. Zweck, Betrag und dem laufenden
+   **Bestand** je Zeile; die neueste Bewegung steht oben.
 2. Um die Liste einzugrenzen, geben Sie unter **Belegnummer** einen Teil der Nummer oder
-   unter **Empfänger/in** einen Namen ein. Die Liste aktualisiert sich automatisch.
-3. Wählen Sie **PDF**, um die Barquittung herunterzuladen und auszudrucken.
+   unter **Empfänger/in bzw. Zweck** einen Begriff ein. Die Liste aktualisiert sich
+   automatisch.
+3. Wählen Sie bei einer Barquittung **PDF**, um sie herunterzuladen und auszudrucken.
+   Bar-Rückzahlungen und Barentnahmen erhalten keinen PDF-Download.
+
+Der **Bestand** ergibt sich aus allen Bareinnahmen abzüglich der Bar-Rückzahlungen und
+Barentnahmen. Er darf auch negativ sein, wenn Bareinnahmen aus der Zeit vor dem System
+nicht nachgepflegt sind.
+
+## Eine Barentnahme erfassen
+
+Wenn Geld die Barkasse verlässt, ohne dass eine Kundin oder ein Kunde bezahlt hat
+(z. B. private Entnahme oder ein Barkauf):
+
+1. Wählen Sie im oberen Menü **Bareinnahmen** und dort **Barentnahme erfassen**.
+2. **Datum** ist mit dem heutigen Datum vorbelegt; tragen Sie den **Betrag** und den
+   **Zweck** ein. Bei einem Barkauf können Sie zusätzlich die **Fremdbelegnummer**
+   eintragen (z. B. die Nummer der Kassenquittung des Händlers).
+3. Wählen Sie **Barentnahme speichern**. Die Entnahme erscheint als Abgang in der
+   Bareinnahmenliste und mindert den Bestand.
+
+Eine Barentnahme ist kein Beleg: Sie erhält keine Belegnummer und kein PDF.
 
 ## Eine nicht versendete Barquittung erneut senden
 
@@ -107,7 +129,8 @@ erstellt; die Nachricht erhält den Status **fehlgeschlagen**. Öffnen Sie unter
 
 Jede Bareinnahme — auch von Laufkundschaft — hat eine fortlaufende Barquittung als PDF
 im Aufbau der Papiervorlage, Teilnehmer/innen mit E-Mail-Adresse erhalten die Quittung
-automatisch per E-Mail, und die manuelle Bareinnahmenliste entfällt.
+automatisch per E-Mail, und die manuelle Bareinnahmenliste entfällt. Die Bareinnahmenliste
+weist mit Bareinnahmen, Bar-Rückzahlungen und Barentnahmen den korrekten Kassenbestand aus.
 
 ## Siehe auch
 

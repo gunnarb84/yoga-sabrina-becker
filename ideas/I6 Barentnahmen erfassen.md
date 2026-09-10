@@ -1,7 +1,7 @@
 # Barentnahmen erfassen
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
 
 ## Problem
 Sabrina Becker entnimmt der Barkasse gelegentlich Geld (z. B. private Entnahme,
@@ -24,7 +24,8 @@ Felder der Erfassung: Datum, Betrag, Zweck (Pflicht), Fremdbelegnummer (optional
 ## Auswirkungen auf den Bestand
 - **Specs:** Neue Story in `specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten/`
   (Barentnahme erfassen); Story der Bareinnahmenliste (F4-S5) wird geändert (gemischte
-  Liste mit Bestandsspalte).
+  Liste mit Bestandsspalte). — Umgesetzt:
+  `S9 Barentnahmen erfassen.md` (neu), `S5 Bareinnahmenliste und Beleg-PDF.md` (geändert).
 - **Datenstruktur:** Neue Tabelle `verwaltung_barentnahmen` (UUID v7 binary(16)) mit
   `datum` (date), `betrag` (decimal 10,2), `zweck` (string), `fremdbelegnummer`
   (string, nullable).

@@ -7,9 +7,12 @@ declare(strict_types=1);
  *        S5 Bareinnahmenliste und Beleg-PDF
  *
  * Geprüfte Kriterien:
- * - Die Abfrage ListCashReceipts liefert die Belege, absteigend sortiert nach
- *   issuedAt und number.
- * - Die Bareinnahmenliste kann nach Belegnummer und Empfänger gefiltert werden.
+ * - Die Abfrage ListCashMovements liefert alle Kassenbewegungen gemischt-
+ *   chronologisch, neueste zuerst.
+ * - Die Bareinnahmenliste zeigt je Zeile den laufenden Bestand: Bareinnahmen als
+ *   Zugang, Bar-Rückzahlungen und Barentnahmen als Abgang.
+ * - Die Bareinnahmenliste kann nach Beleg- bzw. Fremdbelegnummer und nach
+ *   Empfänger/in bzw. Zweck gefiltert werden.
  * - Die Abfrage GenerateCashReceiptPdf erzeugt das PDF eines CashReceipt; sie
  *   scheitert mit dem Fehlercode RECEIPT_NOT_FOUND, wenn der Beleg nicht existiert.
  * - Ein Bareinnahmenbeleg kann als PDF heruntergeladen werden (Dateiname).
@@ -19,10 +22,10 @@ declare(strict_types=1);
  *   Teilnehmer:in“ oben, „Durchschrift – für Unterlagen“ unten), getrennt durch
  *   eine Trennlinie mit Scherensymbol, jeweils im Aufbau der Papiervorlage.
  * - Jede Quittungshälfte trägt die Felder Beleg-Nr., Datum, Erhalten von, Betrag,
- *   „In Worten“, „Für folgende Leistung / Kurs“, den Kleinunternehmer-Hinweis,
- *   „Betrag dankend bar erhalten.“ sowie leere Linien für „Ort, Datum“ und
- *   „Unterschrift (Kursleitung)“.
+ *   „In Worten“, „Für folgende Leistung / Kurs“, den Kleinunternehmer-Hinweis und
+ *   „Betrag dankend bar erhalten.“.
  * - Der Betrag wird „in Worten“ automatisch ausgeschrieben.
+ * - Die Zeile „Ort, Datum“ ist mit Bergen und dem Ausstellungsdatum vorausgefüllt.
  */
 
 use Carbon\Carbon;
@@ -30,10 +33,14 @@ use Illuminate\Support\Facades\Mail;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\Request as GeneratePdfRequest;
-use Yoga\Modules\Verwaltung\Application\CashReceipt\ListCashReceipts\ListCashReceiptsQuery;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\ListCashMovements\ListCashMovementsQuery;
+use Yoga\Modules\Verwaltung\Application\CashWithdrawal\RecordCashWithdrawal\RecordCashWithdrawal;
+use Yoga\Modules\Verwaltung\Application\CashWithdrawal\RecordCashWithdrawal\Request as RecordWithdrawalRequest;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\RecordPayment;
 use Yoga\Modules\Verwaltung\Application\Payment\RecordPayment\Request as RecordPaymentRequest;
+use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\CancelRegistration;
+use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\Request as CancelRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Domain\CashReceipt\CashReceipt;
@@ -51,9 +58,9 @@ afterEach(function (): void {
 });
 
 /**
- * Legt eine Anmeldung mit Barzahlung an und liefert die Belegnummer.
+ * Legt eine Anmeldung mit Barzahlung an und liefert Belegnummer und Anmelde-Id.
  */
-function erfasseBarzahlung(object $activity, string $email, string $empfaenger, string $datum): string
+function erfasseBarzahlung(object $activity, string $email, string $empfaenger, string $datum): object
 {
     $participant = TestFactory::createParticipant(email: $email);
     $register = new RegisterParticipant(app(NextNumber::class));
@@ -76,57 +83,130 @@ function erfasseBarzahlung(object $activity, string $email, string $empfaenger, 
 
     expect($result->isSuccess())->toBeTrue();
 
-    return (string) $result->unwrap()->documentNumber;
+    return (object) [
+        'nummer' => (string) $result->unwrap()->documentNumber,
+        'registrationId' => (string) $registration->unwrap()->registrationId,
+    ];
 }
 
-it('lists receipts ordered by issued date and number descending', function (): void {
+/**
+ * Erfasst eine Barentnahme und liefert ihre Id.
+ */
+function erfasseBarentnahme(string $datum, string $betrag, string $zweck): string
+{
+    $operation = new RecordCashWithdrawal();
+    $result = $operation->execute(new RecordWithdrawalRequest(
+        date: $datum,
+        amount: $betrag,
+        purpose: $zweck,
+        externalReference: null,
+    ));
+
+    expect($result->isSuccess())->toBeTrue();
+
+    return $result->unwrap()->withdrawalId;
+}
+
+it('lists cash movements newest first with a running balance', function (): void {
     erfasseBarzahlung($this->activity, 'fruh@example.com', 'Anna Fruh', '2026-09-01 10:00:00');
     erfasseBarzahlung($this->activity, 'spaet@example.com', 'Berta Spat', '2026-09-02 10:00:00');
+    erfasseBarentnahme('2026-09-03', '30.00', 'Private Entnahme');
 
-    $query = new ListCashReceiptsQuery();
-    $receipts = $query->execute();
+    $query = new ListCashMovementsQuery();
+    $movements = $query->execute();
 
-    expect($receipts)->toHaveCount(2);
-    expect($receipts[0]->nummer)->toBe('2026-00002');
-    expect($receipts[1]->nummer)->toBe('2026-00001');
+    expect($movements)->toHaveCount(3);
+
+    // Neueste zuerst: Barentnahme, dann Beleg 2, dann Beleg 1.
+    expect($movements[0]->typ)->toBe('barentnahme');
+    expect($movements[0]->bestand)->toBe('60');
+    expect($movements[1]->typ)->toBe('bareinnahme');
+    expect($movements[1]->kennung)->toBe('2026-00002');
+    expect($movements[1]->bestand)->toBe('90');
+    expect($movements[2]->kennung)->toBe('2026-00001');
+    expect($movements[2]->bestand)->toBe('45');
 });
 
-it('filters receipts by receipt number', function (): void {
-    erfasseBarzahlung($this->activity, 'eins@example.com', 'Max Eins', '2026-09-01 10:00:00');
-    erfasseBarzahlung($this->activity, 'zwei@example.com', 'Berta Zwei', '2026-09-02 10:00:00');
+it('treats cash returns as outgoing movements in the balance', function (): void {
+    $zahlung = erfasseBarzahlung($this->activity, 'rueck@example.com', 'Anna Rueck', '2026-09-01 10:00:00');
 
-    $query = new ListCashReceiptsQuery();
-    $receipts = $query->execute('00002');
+    $cancel = app(CancelRegistration::class);
+    $cancel->execute(new CancelRequest(registrationId: $zahlung->registrationId));
 
-    expect($receipts)->toHaveCount(1);
-    expect($receipts[0]->nummer)->toBe('2026-00002');
+    $query = new ListCashMovementsQuery();
+    $movements = $query->execute();
+
+    expect($movements)->toHaveCount(2);
+
+    expect($movements[0]->typ)->toBe('rueckgabe');
+    expect($movements[0]->richtung)->toBe('ausgabe');
+    expect($movements[0]->bestand)->toBe('0');
+    expect($movements[1]->typ)->toBe('bareinnahme');
+    expect($movements[1]->richtung)->toBe('einnahme');
+    expect($movements[1]->bestand)->toBe('45');
 });
 
-it('filters receipts by recipient', function (): void {
-    erfasseBarzahlung($this->activity, 'anna@example.com', 'Anna Beispiel', '2026-09-01 10:00:00');
-    erfasseBarzahlung($this->activity, 'berta@example.com', 'Berta Beispiel', '2026-09-02 10:00:00');
-
-    $query = new ListCashReceiptsQuery();
-    $receipts = $query->execute(null, 'Anna Beispiel');
-
-    expect($receipts)->toHaveCount(1);
-    expect($receipts[0]->empfaenger)->toBe('Anna Beispiel');
-});
-
-it('exposes the required fields for each receipt', function (): void {
+it('exposes the required fields for each movement', function (): void {
     erfasseBarzahlung($this->activity, 'felder@example.com', 'Max Feld', '2026-09-02 10:00:00');
+    erfasseBarentnahme('2026-09-03', '10.00', 'Wechselgeld');
 
-    $query = new ListCashReceiptsQuery();
-    $receipts = $query->execute();
+    $query = new ListCashMovementsQuery();
+    $movements = $query->execute();
 
-    expect($receipts)->toHaveCount(1);
+    expect($movements)->toHaveCount(2);
 
-    $receipt = $receipts[0];
-    expect($receipt->nummer)->toBe('2026-00001');
-    expect($receipt->ausgestellt_am)->toContain('2026-09-02');
-    expect($receipt->empfaenger)->toBe('Max Feld');
+    $withdrawal = $movements[0];
+    expect($withdrawal->typ)->toBe('barentnahme');
+    expect($withdrawal->richtung)->toBe('ausgabe');
+    expect($withdrawal->datum)->toContain('2026-09-03');
+    expect($withdrawal->beschreibung)->toBe('Wechselgeld');
+    expect($withdrawal->betrag)->toBe('10.0000');
+    expect($withdrawal->waehrung)->toBe('EUR');
+
+    $receipt = $movements[1];
+    expect($receipt->typ)->toBe('bareinnahme');
+    expect($receipt->richtung)->toBe('einnahme');
+    expect($receipt->kennung)->toBe('2026-00001');
+    expect($receipt->beschreibung)->toBe('Max Feld');
     expect($receipt->betrag)->toBe('45.0000');
-    expect($receipt->waehrung)->toBe('EUR');
+});
+
+it('filters movements by receipt number and external reference', function (): void {
+    erfasseBarzahlung($this->activity, 'eins@example.com', 'Max Eins', '2026-09-01 10:00:00');
+
+    $operation = new RecordCashWithdrawal();
+    $operation->execute(new RecordWithdrawalRequest(
+        date: '2026-09-03',
+        amount: '5.00',
+        purpose: 'Barkauf Teelichter',
+        externalReference: 'KB-9911',
+    ));
+
+    $query = new ListCashMovementsQuery();
+
+    $byNumber = $query->execute('00001');
+    expect($byNumber)->toHaveCount(1);
+    expect($byNumber[0]->typ)->toBe('bareinnahme');
+
+    $byExternalReference = $query->execute('KB-9911');
+    expect($byExternalReference)->toHaveCount(1);
+    expect($byExternalReference[0]->typ)->toBe('barentnahme');
+    expect($byExternalReference[0]->beschreibung)->toBe('Barkauf Teelichter');
+});
+
+it('filters movements by recipient and purpose', function (): void {
+    erfasseBarzahlung($this->activity, 'anna@example.com', 'Anna Beispiel', '2026-09-01 10:00:00');
+    erfasseBarentnahme('2026-09-02', '10.00', 'Wechselgeld ausgezahlt');
+
+    $query = new ListCashMovementsQuery();
+
+    $byRecipient = $query->execute(null, 'Anna Beispiel');
+    expect($byRecipient)->toHaveCount(1);
+    expect($byRecipient[0]->typ)->toBe('bareinnahme');
+
+    $byPurpose = $query->execute(null, 'Wechselgeld');
+    expect($byPurpose)->toHaveCount(1);
+    expect($byPurpose[0]->typ)->toBe('barentnahme');
 });
 
 it('fails PDF generation with RECEIPT_NOT_FOUND for an unknown receipt', function (): void {
@@ -138,7 +218,8 @@ it('fails PDF generation with RECEIPT_NOT_FOUND for an unknown receipt', functio
 });
 
 it('generates a receipt PDF with the receipt number as filename', function (): void {
-    $nummer = erfasseBarzahlung($this->activity, 'pdf@example.com', 'Max Pdf', '2026-09-02 10:00:00');
+    $zahlung = erfasseBarzahlung($this->activity, 'pdf@example.com', 'Max Pdf', '2026-09-02 10:00:00');
+    $nummer = $zahlung->nummer;
     $receiptId = CashReceipt::query()->where('nummer', $nummer)->first()->id;
 
     $generator = new GenerateCashReceiptPdf(new AmountInWords());
@@ -150,7 +231,7 @@ it('generates a receipt PDF with the receipt number as filename', function (): v
 });
 
 it('renders the receipt number, recipient and amount in the receipt document', function (): void {
-    $nummer = erfasseBarzahlung($this->activity, 'inhalt@example.com', 'Anna Inhalt', '2026-09-02 10:00:00');
+    $nummer = erfasseBarzahlung($this->activity, 'inhalt@example.com', 'Anna Inhalt', '2026-09-02 10:00:00')->nummer;
 
     $html = view('bareinnahmenbelege.pdf', [
         'nummer' => $nummer,
@@ -169,5 +250,6 @@ it('renders the receipt number, recipient and amount in the receipt document', f
     expect($html)->toContain('45,00 €');
     expect($html)->toContain('fünfundvierzig Euro und null Cent');
     expect($html)->toContain('02.09.2026');
+    expect($html)->toContain('Bergen, 02.09.2026');
     expect($html)->toContain('Kleinunternehmer gemäß § 19 UStG');
 });

@@ -25,9 +25,11 @@ Liefert die aktuelle Warteliste einer Veranstaltung sortiert nach `rank`.
 ### `ListPayments`
 Liefert alle Zahlungen mit Filter nach Veranstaltung, Teilnehmer/in, Zahlungsart und Belegnummer.
 
-### `ListCashReceipts`
-Liefert alle Bareinnahmenbelege mit Filter nach Belegnummer und Empfänger, absteigend
-sortiert nach Ausstellungsdatum und Belegnummer.
+### `ListCashMovements`
+Liefert alle Kassenbewegungen — Bareinnahmenbelege, Bar-Rückzahlungen und Barentnahmen —
+gemischt-chronologisch (neueste zuerst) mit dem laufenden `Bestand` je Zeile. Der Bestand
+wird aufsteigend kumuliert: Bareinnahmen als Zugang, Bar-Rückzahlungen und Barentnahmen
+als Abgang. Filter nach Beleg- bzw. Fremdbelegnummer und nach Empfänger/in bzw. Zweck.
 
 ### `ListOpenCashRegistrations`
 Liefert alle Anmeldungen einer Veranstaltung mit Zahlungsart `Bar`, Status `Bestätigt`
@@ -108,6 +110,10 @@ Erzeugt eine Gutschrift zu einer Rechnung. Fehlercode: `INVOICE_NOT_FOUND`.
 ### `CreateCashReturn`
 Erzeugt eine Rückgabebestätigung zu einem Bareinnahmenbeleg. Fehlercode:
 `CASH_RECEIPT_NOT_FOUND`.
+
+### `RecordCashWithdrawal`
+Erfasst eine Barentnahme aus der Barkasse (`CashWithdrawal`) ohne Belegnummer und ohne
+PDF. Fehlercodes: `AMOUNT_INVALID`, `PURPOSE_REQUIRED`, `DATE_INVALID`.
 
 ### `ResendOutboundMessage`
 Versucht eine fehlgeschlagene oder ausstehende Nachricht erneut zu senden. Fehlercode:

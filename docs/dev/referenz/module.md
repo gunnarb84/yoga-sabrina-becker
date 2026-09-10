@@ -17,7 +17,7 @@
 | Schicht | Inhalt |
 |---|---|
 | `Domain` | Benutzer, Rollen, Rechte, Verwaltungsmodelle |
-| `Application` | Vorgänge: Anmeldung bearbeiten, Zahlung erfassen, Bareinnahme ohne Anmeldung erfassen (`RecordWalkInCashPayment`), Beleg erzeugen (PDF nach der Papiervorlage mit `AmountInWords`) |
+| `Application` | Vorgänge: Anmeldung bearbeiten, Zahlung erfassen, Bareinnahme ohne Anmeldung erfassen (`RecordWalkInCashPayment`), Barentnahme erfassen (`RecordCashWithdrawal`), Beleg erzeugen (PDF nach der Papiervorlage mit `AmountInWords`), gemischte Kassenbewegungsliste mit laufendem Bestand (`ListCashMovementsQuery`) |
 | `Persistence` | Verwaltungsmigrationen, Eloquent-Modelle, Query-Objekte |
 | `Ui` | Livewire-basiertes Admin-UI, Login, Listen und Masken (u. a. „Bareinnahme erfassen“ für Laufkundschaft und Nachpflege) |
 

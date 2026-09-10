@@ -94,6 +94,9 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 | Barquittung | CashReceipt | Als PDF ausgegebene und per E-Mail versandte Quittung über eine Barzahlung (derselbe Beleg wie Bareinnahmenbeleg) |
 | Bareinnahmenliste | CashReceiptList | Liste aller Bareinnahmenbelege in der Verwaltung |
 | Massenerfassung | CashPaymentBatch | Gemeinsame Erfassung mehrerer Barzahlungen einer Veranstaltung |
+| Barentnahme | CashWithdrawal | Ausgabe aus der Barkasse (z. B. private Entnahme, Barkauf); mindert den Bestand |
+| Fremdbelegnummer | ExternalReference | Nummer eines externen Belegs (z. B. Kassenquittung eines Barkaufs), optional bei einer Barentnahme |
+| Bestand | CashBalance | Laufender Bargeldbestand je Zeile der Bareinnahmenliste (Bareinnahmen − Bar-Rückzahlungen − Barentnahmen) |
 | Rechnung | Invoice | Forlaufend nummerierte Rechnung für eine Überweisung |
 | Gutschrift | CreditNote | Forlaufend nummerierte Gutschrift zu einer Rechnung |
 | Rückgabebestätigung | CashReturn | Forlaufend nummerierter Beleg für Rückzahlung in bar |

@@ -127,6 +127,15 @@ Migrationen regelt `_data.md` und gehören nicht hierher.
 | `recipient` | Empfänger | Text | ja |
 | `amount` | Betrag | Geld | ja |
 
+## Barentnahme (`CashWithdrawal`)
+
+| Bezeichner | Oberfläche | Datentyp | Pflicht |
+|---|---|---|---|
+| `date` | Datum | Datum | ja |
+| `amount` | Betrag | Geld | ja |
+| `purpose` | Zweck | Text | ja |
+| `externalReference` | Fremdbelegnummer | Text | nein |
+
 ## Ausgehende Nachricht (`OutboundMessage`)
 
 | Bezeichner | Oberfläche | Datentyp | Pflicht |
