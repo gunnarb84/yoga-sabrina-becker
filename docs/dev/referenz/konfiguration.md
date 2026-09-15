@@ -16,6 +16,7 @@ Die Anwendung wird über `src/.env` konfiguriert. Mindestens erforderlich sind:
 | `MAIL_MAILER` | `log` für lokale Tests, sonst SMTP |
 | `MAIL_CONTACT_INQUIRY_RECIPIENT` | Empfängerin der Benachrichtigung über neue Kontaktanfragen (Voreinstellung `info@yoga-sabrinabecker.de`) |
 | `QUEUE_CONNECTION` | `database` |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Konto der Administratorin, das das Seeding anlegt (Pflichtangabe je Installation — das Seeding verweigert ohne diese Werte den Lauf; Voreinstellung in `.env.example` nur für lokale Entwicklung) |
 | `CACHE_STORE` | `database` |
 | `SESSION_DRIVER` | `database` |
 

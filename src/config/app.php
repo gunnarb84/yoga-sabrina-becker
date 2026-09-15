@@ -19,6 +19,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Administrator/in der Verwaltung
+    |--------------------------------------------------------------------------
+    |
+    | Das Seeding legt das Konto der Administratorin mit diesen Zugangsdaten an
+    | (Pflichtangabe je Installation). Die Werte stehen nur in der ".env" der
+    | Installation, niemals im Repository.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL'),
+    'admin_password' => env('ADMIN_PASSWORD'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Version
     |--------------------------------------------------------------------------
     |
