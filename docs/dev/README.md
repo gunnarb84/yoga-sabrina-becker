@@ -1,5 +1,5 @@
 > **Typ:** Index · **Für:** Entwickler · **Bezug:** [harness-php/_documentation.md](../../../harness-php/_documentation.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-15
 
 # Entwicklerdokumentation — Yoga Sabrina Becker
 
@@ -24,6 +24,7 @@ Diese Dokumentation richtet sich an Entwickler/innen, die das System weiterbauen
 - [Einen neuen Vorgang anlegen](how-to/neuer-vorgang.md)
 - [Ein neues Modul anlegen](how-to/neues-modul-anlegen.md)
 - [Tests ausführen](how-to/tests-ausfuehren.md)
+- [Auf IONOS Webhosting installieren](how-to/auf-ionos-webhosting-installieren.md)
 
 ## Architekturentscheidungen
 
