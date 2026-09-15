@@ -35,6 +35,7 @@ services:
       DOCKER_SEED_DEMO: "true"
       ADMIN_EMAIL: sabrina@example.com
       ADMIN_PASSWORD: yoga2026
+      COMPOSER_VENDOR_DIR: /var/www/html/vendor
     depends_on:
       db:
         condition: service_healthy

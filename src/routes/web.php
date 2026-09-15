@@ -47,7 +47,6 @@ Route::post('/verwaltung/login', [LoginController::class, 'login'])->name('verwa
 
 Route::middleware('auth')->group(function (): void {
     Route::get('/verwaltung', Dashboard::class)->name('verwaltung.dashboard');
-    Route::get('/verwaltung/dashboard', Dashboard::class)->name('verwaltung.dashboard');
     Route::get('/verwaltung/aktivitaeten', ActivityList::class)->name('verwaltung.activities');
     Route::get('/verwaltung/aktivitaeten/neu', CreateActivity::class)->name('verwaltung.activity.create');
     Route::get('/verwaltung/aktivitaeten/{id}/bearbeiten', EditActivity::class)->name('verwaltung.activity.edit');

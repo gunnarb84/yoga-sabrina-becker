@@ -114,6 +114,9 @@ MAIL_CONTACT_INQUIRY_RECIPIENT=info@<ihre-domain>.de
 
 ADMIN_EMAIL=<e-mail-der-administratorin>
 ADMIN_PASSWORD=<sicheres-passwort>
+
+# Composer liegt wegen vendor-dir=../vendor auf Projektebene — nötig für php artisan tinker
+COMPOSER_VENDOR_DIR=/home/www/yoga/vendor
 ```
 
 `ADMIN_EMAIL` und `ADMIN_PASSWORD` sind Pflichtangaben je Installation: Das Seeding legt
@@ -138,7 +141,32 @@ Das Seeding legt das Admin-Konto (Schritt 5), die Rechtstexte und die CMS-Inhalt
 Demo-Seeder **nicht** ausführen — er erzeugt Testdaten, die in der produktiven Installation
 nichts zu suchen haben.
 
-## 7. Cronjobs einrichten
+## 7. Frontend-Assets bauen und hochladen
+
+Die öffentliche Webseite lädt CSS/JS über Vite (`@vite`). Auf dem Webspace gibt es kein
+Node — die Assets werden lokal gebaut und hochgeladen (im Container-Betrieb erledigt das
+der Dockerfile). `src/public/build` ist git-ignoriert und wird nicht mitgepusht:
+
+```bash
+# lokal, im Projekt-Wurzelverzeichnis
+cd src
+npm install
+npm run build
+```
+
+Hochladen (lokal ausführen; `<Nummer>` ist der IONOS-Benutzer):
+
+```bash
+cd ~/VS_CODE/yoga_sabrina_becker
+tar czf - src/public/build \
+  | ssh su<Nummer>@access-<server>.webspace-host.com 'tar xzf - -C /home/www/yoga'
+```
+
+**Erfolgskriterium:** `ls ~/yoga/src/public/build/manifest.json` auf dem Server zeigt die
+Datei. Fehlt das Verzeichnis, zeigt die öffentliche Webseite einen 500er („Vite manifest
+not found") — die Verwaltung funktioniert auch ohne, sie nutzt statisches CSS.
+
+## 8. Cronjobs einrichten
 
 Im IONOS-Panel zwei **minütliche** Cronjobs anlegen, beide mit PHP 8.4:
 
@@ -155,13 +183,13 @@ Im IONOS-Panel zwei **minütliche** Cronjobs anlegen, beide mit PHP 8.4:
 Der exakte PHP-Pfad kann je Server abweichen; mit `which php` bzw. `php -v` in der
 SSH-Sitzung prüfen und den Pfad aus dem Cronjob-Beispiel des Panels übernehmen.
 
-## 8. HTTPS sicherstellen
+## 9. HTTPS sicherstellen
 
 Im IONOS-Panel das SSL-Zertifikat aktivieren (kostenloses Let’s-Encrypt-Zertifikat
 reicht) und die Domain dauerhaft auf HTTPS umleiten. `APP_URL` aus Schritt 5 muss mit der
 HTTPS-Adresse übereinstimmen, sonst erzeugen erzeugte Links und Beleg-PDFs falsche URLs.
 
-## 9. Rauchtest
+## 10. Rauchtest
 
 - `https://<ihre-domain>.de` zeigt die Webseite mit Kursen und Kontaktformular.
 - `https://<ihre-domain>.de/verwaltung` — Anmeldung mit dem Admin-Konto aus Schritt 5
@@ -184,6 +212,10 @@ php artisan migrate --force
 php artisan config:cache && php artisan route:cache && php artisan view:cache
 ```
 
+Hat sich die Webseite (Blade, CSS, JS) geändert, zusätzlich Schritt 7 wiederholen —
+sonst läuft die Seite weiter mit den alten Assets oder bricht mit „Vite manifest not
+found" ab, falls `public/build` neu angelegt werden muss.
+
 Ein abgebrochener Schritt ist **vollständig zu wiederholen** — nicht nur der scheinbar
 fehlgeschlagene Teil. Das Rückkehrverfahren und die Ablaufregelung stehen in
 `_operations.md` §5.
@@ -194,8 +226,9 @@ fehlgeschlagene Teil. Das Rückkehrverfahren und die Ablaufregelung stehen in
 |---|---|---|
 | `could not open input file: composer.phar` | Composer fehlt auf dem Webspace | Schritt 4: Installer per `php -r "copy(...)"` laden |
 | `Please provide a valid cache path` bei `package:discover` | Leere Framework-Verzeichnisse fehlen (Git legt sie nicht an) | Schritt 3 wiederholen, danach Composer-Lauf komplett neu |
-| `php artisan tinker` bricht mit Meldung zu `autoload_classmap.php` ab | Composer-Install unvollständig | Schritt 4 wiederholen; `dump-autoload --optimize` prüfen |
+| `php artisan tinker` bricht mit Meldung zu `autoload_classmap.php` ab | Composer-Install unvollständig **oder** `COMPOSER_VENDOR_DIR` fehlt (Tinker sucht sonst unterhalb von `src/`) | `ls ~/yoga/vendor/composer/autoload_classmap.php` prüfen; fehlt sie, Schritt 4 wiederholen — liegt sie dort, `COMPOSER_VENDOR_DIR=/home/www/yoga/vendor` in die `.env` setzen |
 | 500er beim ersten Aufruf | `.env` unvollständig oder Caches veraltet | `storage/logs/laravel.log` prüfen, Schritt 6 wiederholen |
+| `Vite manifest not found` im Log, Webseite zeigt 500er | `src/public/build` fehlt auf dem Server (git-ignoriert, kein Node auf dem Webspace) | Schritt 7: Assets lokal bauen und hochladen |
 
 ## Siehe auch
 
