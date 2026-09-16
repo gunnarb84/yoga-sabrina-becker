@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/verwaltung/bareinnahmen', CashReceipts::class)->name('verwaltung.cash-receipts');
     Route::get('/verwaltung/bareinnahmen/erfassen', RecordWalkInCashPayment::class)->name('verwaltung.cash-receipt.record');
     Route::get('/verwaltung/bareinnahmen/{id}/pdf', [CashReceiptController::class, 'download'])->name('verwaltung.bareinnahme.pdf');
+    Route::get('/verwaltung/bareinnahmen/monat/{monat}/pdf', [CashReceiptController::class, 'downloadMonth'])->name('verwaltung.bareinnahmen.monat.pdf');
     Route::get('/verwaltung/aktivitaeten/{id}/barzahlungen/masse', BulkCashPayments::class)->name('verwaltung.payment.bulk');
     Route::get('/verwaltung/nachrichten', OutboundMessageList::class)->name('verwaltung.outbound-messages');
     Route::get('/verwaltung/nachrichten/{id}', OutboundMessageDetail::class)->name('verwaltung.outbound-message.detail');

@@ -13,12 +13,17 @@ final readonly class UpsertParticipant
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
-        $participant = Participant::where('email', $request->email)->first();
+        // E-Mail normalisieren, damit dieselbe Adresse mit anderer Groß-/Klein-
+        // schreibung oder führenden/nachgestellten Leerzeichen denselben
+        // Teilnehmer trifft und nicht doppelt angelegt wird.
+        $email = mb_strtolower(trim($request->email));
+
+        $participant = Participant::where('email', $email)->first();
         $wasCreated = false;
 
         if ($participant === null) {
             $participant = new Participant([
-                'email' => $request->email,
+                'email' => $email,
             ]);
             $wasCreated = true;
         }

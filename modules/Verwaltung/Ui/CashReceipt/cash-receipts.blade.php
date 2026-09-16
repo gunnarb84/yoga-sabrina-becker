@@ -14,10 +14,18 @@
                 <label class="au-field__label" for="empfaengerFilter">Empfänger/in bzw. Zweck</label>
                 <input type="search" id="empfaengerFilter" wire:model.live.debounce.300ms="empfaengerFilter" class="au-field__input">
             </div>
+
+            <div class="au-field">
+                <label class="au-field__label" for="monatFilter">Monat/Jahr</label>
+                <input type="month" id="monatFilter" wire:model.live="monatFilter" class="au-field__input">
+            </div>
         </div>
 
-        <div class="yoga-mb-2">
+        <div class="yoga-form-actions yoga-mb-2">
             <button type="button" wire:click="toggleWithdrawalForm" class="au-btn">Barentnahme erfassen</button>
+            @if ($monatFilter !== '')
+                <a href="{{ route('verwaltung.bareinnahmen.monat.pdf', ['monat' => $monatFilter]) }}" class="au-btn" target="_blank">Monat drucken</a>
+            @endif
         </div>
 
         @if ($showWithdrawalForm)
@@ -64,6 +72,13 @@
         @if (empty($movements))
             <p class="yoga-empty">Noch keine Kassenbewegungen vorhanden.</p>
         @else
+            @if ($uebertrag !== '')
+                <p class="yoga-mb-2">
+                    <strong>Übertrag aus den Vormonaten:</strong>
+                    {{ number_format((float) $uebertrag, 2, ',', '.') }} EUR
+                </p>
+            @endif
+
             <div style="overflow-x:auto">
                 <table class="au-list">
                     <thead>

@@ -25,6 +25,7 @@ Begriffe, die in der Anwendung und in dieser Dokumentation verwendet werden.
 | **Barentnahme** | Ausgabe aus der Barkasse (z. B. private Entnahme, Barkauf); mindert den Bestand. |
 | **Fremdbelegnummer** | Nummer eines externen Belegs (z. B. Kassenquittung eines Barkaufs), optional bei einer Barentnahme. |
 | **Bestand** | Laufender Bargeldbestand je Zeile der Bareinnahmenliste (Bareinnahmen − Bar-Rückzahlungen − Barentnahmen). |
+| **Übertrag** | Bestand zum Ende des Vormonats; eröffnet die monatsweise Bareinnahmenliste und ihren Monatsdruck. |
 | **Bareinnahme erfassen** | Maske zur Erfassung von Bareinnahmen ohne vorherige Anmeldung über die Webseite (Laufkundschaft). |
 | **Nachpflege** | Übernahme bereits handschriftlich vergebener Belegnummern in das System. |
 | **Kontaktanfrage** | Schriftliche Anfrage über das Kontaktformular der Webseite; sie erscheint in der Verwaltung und wird über den Status bearbeitet. |

@@ -12,12 +12,16 @@ final readonly class CreateParticipant
     /** @return Result<Response> */
     public function execute(Request $request): Result
     {
-        if ($request->email !== null && Participant::where('email', $request->email)->exists()) {
+        // E-Mail normalisieren (Trim + Kleinschreibung), damit dieselbe Adresse
+        // unabhängig von der Schreibweise nur einen Teilnehmer ergibt.
+        $email = $request->email !== null ? mb_strtolower(trim($request->email)) : null;
+
+        if ($email !== null && Participant::where('email', $email)->exists()) {
             return Result::failure('participant.email_already_exists');
         }
 
         $participant = new Participant([
-            'email' => $request->email,
+            'email' => $email,
             'vorname' => $request->firstName,
             'nachname' => $request->lastName,
             'adresszeile_1' => $request->addressLine1,

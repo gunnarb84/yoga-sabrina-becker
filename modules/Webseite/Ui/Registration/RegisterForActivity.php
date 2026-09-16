@@ -118,7 +118,7 @@ final class RegisterForActivity extends Component
         ));
 
         if ($registerResult->isFailure()) {
-            $this->error = 'Fehler bei der Anmeldung: '.($registerResult->error()['code'] ?? 'unknown');
+            $this->error = $this->errorFor((string) ($registerResult->error()['code'] ?? 'unknown'));
 
             return;
         }
@@ -129,6 +129,18 @@ final class RegisterForActivity extends Component
         $confirmation->execute(new SendConfirmationRequest(
             registrationId: $registerResult->unwrap()->registrationId,
         ));
+    }
+
+    private function errorFor(string $code): string
+    {
+        return match ($code) {
+            'registration.already_registered' => 'Sie sind für diese Veranstaltung bereits angemeldet.',
+            'registration.invalid_payment_method' => 'Bitte eine gültige Zahlungsart wählen.',
+            'activity.not_found' => 'Diese Veranstaltung existiert nicht.',
+            'activity.not_bookable' => 'Diese Veranstaltung ist zurzeit nicht buchbar.',
+            'participant.not_found' => 'Die Teilnehmerdaten konnten nicht zugeordnet werden.',
+            default => 'Fehler bei der Anmeldung. Bitte versuchen Sie es erneut.',
+        };
     }
 
     public function render(): \Illuminate\Contracts\View\View

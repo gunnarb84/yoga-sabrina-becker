@@ -29,7 +29,15 @@ Liefert alle Zahlungen mit Filter nach Veranstaltung, Teilnehmer/in, Zahlungsart
 Liefert alle Kassenbewegungen — Bareinnahmenbelege, Bar-Rückzahlungen und Barentnahmen —
 gemischt-chronologisch (neueste zuerst) mit dem laufenden `Bestand` je Zeile. Der Bestand
 wird aufsteigend kumuliert: Bareinnahmen als Zugang, Bar-Rückzahlungen und Barentnahmen
-als Abgang. Filter nach Beleg- bzw. Fremdbelegnummer und nach Empfänger/in bzw. Zweck.
+als Abgang. Filter nach Beleg- bzw. Fremdbelegnummer und nach Empfänger/in bzw. Zweck. Mit
+Monatsfilter liefert sie den Kassenbuch-Auszug eines Monats: Bewegungen des Zeitraums
+aufsteigend, Bestand beginnend mit dem Übertrag aus den Vormonaten; Rückgabe von Übertrag
+und Endbestand.
+
+### `GenerateCashReceiptListPdf`
+Erzeugt den Monatsdruck der Bareinnahmenliste als PDF: Bewegungen des Monats aufsteigend,
+Übertrag aus den Vormonaten als Eröffnungszeile, Endbestand als Abschlusszeile. Fehlercode:
+`PERIOD_INVALID`.
 
 ### `ListOpenCashRegistrations`
 Liefert alle Anmeldungen einer Veranstaltung mit Zahlungsart `Bar`, Status `Bestätigt`

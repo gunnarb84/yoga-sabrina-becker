@@ -9,14 +9,15 @@
         @endif
 
         @if ($registered)
-            <div class="au-status au-status--ok yoga-mb-2" role="alert">Die Anmeldung wurde durchgeführt.</div>
+            <div class="au-status au-status--ok yoga-mb-2" role="status">Die Anmeldung wurde durchgeführt.</div>
         @endif
 
-        @if (empty($participants))
-            <p class="yoga-empty">Bitte zuerst einen Teilnehmer anlegen.</p>
-            <p><a href="{{ route('verwaltung.participant.create') }}" class="au-btn au-btn--primary">Teilnehmer anlegen</a></p>
-        @else
-            <form wire:submit="register" class="yoga-form">
+        @if (empty($participants) && ! $showNewParticipant)
+            <p class="yoga-empty">Bitte zuerst einen Teilnehmer anlegen — oder direkt hier erfassen.</p>
+        @endif
+
+        <form wire:submit="register" class="yoga-form">
+            @if (! $showNewParticipant && ! empty($participants))
                 <label class="au-field">
                     <span class="au-field__label">Teilnehmer</span>
                     <select wire:model="participantId" class="au-field__input" required>
@@ -26,21 +27,51 @@
                         @endforeach
                     </select>
                 </label>
+            @endif
 
-                <label class="au-field">
-                    <span class="au-field__label">Zahlungsart</span>
-                    <select wire:model="paymentMethod" class="au-field__input" required>
-                        @foreach ($methods as $method)
-                            <option value="{{ $method->value }}">{{ $method->label }}</option>
-                        @endforeach
-                    </select>
-                </label>
+            <div>
+                <button type="button" wire:click="toggleNewParticipant" class="au-btn">
+                    {{ $showNewParticipant ? 'Vorhandene Teilnehmer/innen anzeigen' : 'Neuen Teilnehmer erfassen' }}
+                </button>
+            </div>
 
-                <div class="yoga-form-actions yoga-mt-3">
-                    <button type="submit" class="au-btn au-btn--primary">Anmelden</button>
-                    <a href="{{ route('verwaltung.activity.registrations', ['id' => $activityId]) }}" class="au-btn">Zurück</a>
+            @if ($showNewParticipant)
+                <div class="yoga-form-grid">
+                    <label class="au-field">
+                        <span class="au-field__label">Vorname *</span>
+                        <input type="text" wire:model="newFirstName" class="au-field__input" required>
+                    </label>
+
+                    <label class="au-field">
+                        <span class="au-field__label">Nachname *</span>
+                        <input type="text" wire:model="newLastName" class="au-field__input" required>
+                    </label>
+
+                    <label class="au-field">
+                        <span class="au-field__label">E-Mail</span>
+                        <input type="email" wire:model="newEmail" class="au-field__input">
+                    </label>
+
+                    <label class="au-field">
+                        <span class="au-field__label">Telefon</span>
+                        <input type="tel" wire:model="newPhone" class="au-field__input">
+                    </label>
                 </div>
-            </form>
-        @endif
+            @endif
+
+            <label class="au-field">
+                <span class="au-field__label">Zahlungsart</span>
+                <select wire:model="paymentMethod" class="au-field__input" required>
+                    @foreach ($methods as $method)
+                        <option value="{{ $method->value }}">{{ $method->label }}</option>
+                    @endforeach
+                </select>
+            </label>
+
+            <div class="yoga-form-actions yoga-mt-3">
+                <button type="submit" class="au-btn au-btn--primary">Anmelden</button>
+                <a href="{{ route('verwaltung.activity.registrations', ['id' => $activityId]) }}" class="au-btn">Zurück</a>
+            </div>
+        </form>
     </div>
 </div>

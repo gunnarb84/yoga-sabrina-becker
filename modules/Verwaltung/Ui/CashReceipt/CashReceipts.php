@@ -36,6 +36,11 @@ final class CashReceipts extends Component
 
     public string $empfaengerFilter = '';
 
+    public string $monatFilter = '';
+
+    /** Bestand zu Beginn des gefilterten Monats (Übertrag aus den Vormonaten). */
+    public string $uebertrag = '';
+
     public function mount(ListCashMovementsQuery $query): void
     {
         $this->movements = $query->execute();
@@ -44,7 +49,7 @@ final class CashReceipts extends Component
 
     public function updated(string $name, string $value, ListCashMovementsQuery $query): void
     {
-        $this->movements = $query->execute($this->nummerFilter, $this->empfaengerFilter);
+        $this->loadMovements($query);
     }
 
     public function toggleWithdrawalForm(): void
@@ -72,7 +77,24 @@ final class CashReceipts extends Component
         $this->withdrawalRecorded = true;
         $this->resetWithdrawalForm();
         $this->showWithdrawalForm = false;
+        $this->loadMovements($query);
+    }
+
+    private function loadMovements(ListCashMovementsQuery $query): void
+    {
+        if ($this->monatFilter !== '') {
+            $period = $query->executeForMonth($this->monatFilter, $this->nummerFilter, $this->empfaengerFilter);
+
+            if ($period !== null) {
+                $this->movements = $period->movements;
+                $this->uebertrag = $period->uebertrag;
+
+                return;
+            }
+        }
+
         $this->movements = $query->execute($this->nummerFilter, $this->empfaengerFilter);
+        $this->uebertrag = '';
     }
 
     private function resetWithdrawalForm(): void

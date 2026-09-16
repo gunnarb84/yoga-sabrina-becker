@@ -1,5 +1,5 @@
 > **Typ:** How-To · **Für:** Anwender · **Bezug:** [specs/E2 CMS & Verwaltung/F4 Zahlungen und Belege verwalten](../../specs/E2%20CMS%20%26%20Verwaltung/F4%20Zahlungen%20und%20Belege%20verwalten)
-> **Stand:** 2026-09-10
+> **Stand:** 2026-09-16
 
 # Barzahlungen erfassen und Quittungen ausstellen
 
@@ -98,7 +98,14 @@ dann nichts erfasst.
 2. Um die Liste einzugrenzen, geben Sie unter **Belegnummer** einen Teil der Nummer oder
    unter **Empfänger/in bzw. Zweck** einen Begriff ein. Die Liste aktualisiert sich
    automatisch.
-3. Wählen Sie bei einer Barquittung **PDF**, um sie herunterzuladen und auszudrucken.
+3. Wählen Sie unter **Monat/Jahr** einen Monat, um nur die Bewegungen dieses Monats zu
+   sehen — aufsteigend sortiert, wie im Kassenbuch. Über der Liste steht der
+   **Übertrag aus den Vormonaten** (der Bestand zum Ende des Vormonats); er bleibt vom
+   Textfilter unberührt. Über der Liste erscheint der Button **Monat drucken**, der die
+   Bareinnahmenliste des Monats als PDF mit Übertrag und **Endbestand** ausdruckt
+   (z. B. `Bareinnahmenliste-2026-09.pdf`). Ein leerer Monatsfilter zeigt wieder alle
+   Kassenbewegungen.
+4. Wählen Sie bei einer Barquittung **PDF**, um sie herunterzuladen und auszudrucken.
    Bar-Rückzahlungen und Barentnahmen erhalten keinen PDF-Download.
 
 Der **Bestand** ergibt sich aus allen Bareinnahmen abzüglich der Bar-Rückzahlungen und

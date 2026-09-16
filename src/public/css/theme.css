@@ -172,3 +172,40 @@
 .yoga-mb-2 { margin-bottom: var(--au-s-2); }
 .yoga-mb-3 { margin-bottom: var(--au-s-3); }
 
+
+.yoga-form {
+  display: grid;
+  gap: var(--au-s-3);
+}
+
+.yoga-ml-2 { margin-left: var(--au-s-2); }
+
+.yoga-error {
+  color: var(--au-error);
+  font-weight: 500;
+}
+
+.yoga-success {
+  color: var(--au-ok);
+  font-weight: 500;
+}
+
+.yoga-activity-sessions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--au-s-2);
+}
+
+.yoga-activity-sessions li {
+  border: 1px solid var(--au-line);
+  border-radius: var(--au-r-sm);
+  padding: var(--au-s-2) var(--au-s-3);
+  background: var(--au-panel);
+}
+
+.yoga-status-not-bookable {
+  color: var(--au-text-3);
+}

@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 
 use Illuminate\Support\Facades\Mail;
+use Livewire\Livewire;
 use Ramsey\Uuid\Uuid;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\GenerateInvoicePdf;
 use Yoga\Modules\Verwaltung\Application\Invoice\GenerateInvoicePdf\Request as GeneratePdfRequest;
@@ -22,6 +23,8 @@ use Yoga\Modules\Verwaltung\Application\Mail\HtmlAttachmentMail;
 use Yoga\Modules\Verwaltung\Application\OutboundMessage\SendOutboundMessage\SendOutboundMessage;
 use Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant\Request as UpsertRequest;
 use Yoga\Modules\Verwaltung\Application\Participant\UpsertParticipant\UpsertParticipant;
+use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\CancelRegistration;
+use Yoga\Modules\Verwaltung\Application\Registration\CancelRegistration\Request as CancelRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\RegisterParticipant;
 use Yoga\Modules\Verwaltung\Application\Registration\RegisterParticipant\Request as RegisterRequest;
 use Yoga\Modules\Verwaltung\Application\Registration\SendRegistrationConfirmation\Request as ConfirmationRequest;
@@ -259,4 +262,131 @@ it('sends a confirmation email without attachment for a free registration', func
     Mail::assertSent(HtmlAttachmentMail::class, function (HtmlAttachmentMail $mail): bool {
         return $mail->attachment === null;
     });
+});
+
+it('matches an existing participant even with different email casing and surrounding spaces', function (): void {
+    $existing = TestFactory::createParticipant(email: 'max.mustermann@example.com');
+
+    $upsert = new UpsertParticipant();
+    $result = $upsert->execute(new UpsertRequest(
+        email: '  Max.Mustermann@Example.COM ',
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: null,
+        healthNotes: null,
+    ));
+
+    expect($result->isSuccess())->toBeTrue();
+    expect($result->unwrap()->wasCreated)->toBeFalse();
+    expect($result->unwrap()->participantId)->toBe((string) $existing->id);
+
+    expect(Participant::where('email', 'max.mustermann@example.com')->count())->toBe(1);
+    expect(Participant::where('email', 'like', '%@example.com')->count())->toBe(1);
+});
+
+it('allows a known email to register for another activity without a duplicate participant', function (): void {
+    $otherActivity = TestFactory::createActivity(maxParticipants: 2);
+
+    $upsert = new UpsertParticipant();
+    $first = $upsert->execute(new UpsertRequest(
+        email: 'wiederholung@example.com',
+        firstName: 'Lena',
+        lastName: 'Wiederholung',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: null,
+        healthNotes: null,
+    ));
+
+    $register = new RegisterParticipant(app(NextNumber::class));
+    $firstRegistration = $register->execute(new RegisterRequest(
+        activityId: $this->activity->id,
+        participantId: $first->unwrap()->participantId,
+        paymentMethod: 'bar',
+    ));
+    expect($firstRegistration->isSuccess())->toBeTrue();
+
+    // Zweite Anmeldung über die Webseite mit derselben E-Mail: die Stammdaten
+    // werden aktualisiert, kein zweiter Teilnehmerdatensatz entsteht.
+    $second = $upsert->execute(new UpsertRequest(
+        email: 'Wiederholung@example.com',
+        firstName: 'Lena',
+        lastName: 'Wiederholung',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: null,
+        healthNotes: null,
+    ));
+
+    expect($second->isSuccess())->toBeTrue();
+    expect($second->unwrap()->wasCreated)->toBeFalse();
+    expect($second->unwrap()->participantId)->toBe($first->unwrap()->participantId);
+
+    $secondRegistration = $register->execute(new RegisterRequest(
+        activityId: $otherActivity->id,
+        participantId: $second->unwrap()->participantId,
+        paymentMethod: 'bar',
+    ));
+
+    expect($secondRegistration->isSuccess())->toBeTrue();
+    expect(Participant::where('email', 'wiederholung@example.com')->count())->toBe(1);
+});
+
+it('allows re-registration for the same activity after the first registration was cancelled', function (): void {
+    $participant = TestFactory::createParticipant(email: 'erneut@example.com');
+
+    $register = new RegisterParticipant(app(NextNumber::class));
+    $first = $register->execute(new RegisterRequest(
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
+    ));
+    expect($first->isSuccess())->toBeTrue();
+
+    app(CancelRegistration::class)->execute(new CancelRequest(
+        registrationId: $first->unwrap()->registrationId,
+    ));
+
+    $second = $register->execute(new RegisterRequest(
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
+    ));
+
+    expect($second->isSuccess())->toBeTrue();
+
+    $record = Registration::findById($second->unwrap()->registrationId);
+    expect($record->status)->toBe(RegistrationStatus::Confirmed);
+});
+
+it('rejects a second registration for the same activity with a clear message', function (): void {
+    Mail::fake();
+
+    $participant = TestFactory::createParticipant(email: 'doppel@example.com');
+
+    $register = new RegisterParticipant(app(NextNumber::class));
+    $register->execute(new RegisterRequest(
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
+    ));
+
+    Livewire::test(\Yoga\Modules\Webseite\Ui\Registration\RegisterForActivity::class, ['slug' => $this->activity->slug])
+        ->set('firstName', 'Max')
+        ->set('lastName', 'Doppel')
+        ->set('email', 'doppel@example.com')
+        ->set('paymentMethod', 'bar')
+        ->call('submit')
+        ->assertSee('Sie sind für diese Veranstaltung bereits angemeldet.');
 });

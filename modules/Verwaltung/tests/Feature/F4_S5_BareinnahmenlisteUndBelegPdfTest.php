@@ -33,6 +33,8 @@ declare(strict_types=1);
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\AmountInWords;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptListPdf\GenerateCashReceiptListPdf as GenerateListPdf;
+use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptListPdf\Request as GenerateListPdfRequest;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\GenerateCashReceiptPdf;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\GenerateCashReceiptPdf\Request as GeneratePdfRequest;
 use Yoga\Modules\Verwaltung\Application\CashReceipt\ListCashMovements\ListCashMovementsQuery;
@@ -275,4 +277,91 @@ it('renders the receipt number, recipient and amount in the receipt document', f
     expect($html)->toContain('02.09.2026');
     expect($html)->toContain('Bergen, 02.09.2026');
     expect($html)->toContain('Kleinunternehmer gemäß § 19 UStG');
+});
+
+it('filters a month and shows the carryover from the previous months', function (): void {
+    erfasseBarzahlung($this->activity, 'august@example.com', 'Anna August', '2026-08-20 10:00:00');
+    erfasseBarzahlung($this->activity, 'september@example.com', 'Berta September', '2026-09-03 10:00:00');
+    erfasseBarentnahme('2026-09-04', '10.00', 'Wechselgeld');
+
+    $query = new ListCashMovementsQuery();
+    $period = $query->executeForMonth('2026-09', null, null);
+
+    expect($period)->not->toBeNull();
+    expect($period->uebertrag)->toBe('45');
+
+    // Aufsteigend: Bareinnahme (+45) → Bestand 90, Barentnahme (−10) → 80.
+    expect($period->movements)->toHaveCount(2);
+    expect($period->movements[0]->typ)->toBe('bareinnahme');
+    expect($period->movements[0]->bestand)->toBe('90');
+    expect($period->movements[1]->typ)->toBe('barentnahme');
+    expect($period->movements[1]->bestand)->toBe('80');
+    expect($period->endbestand)->toBe('80');
+});
+
+it('computes the carryover independently from the text filters', function (): void {
+    erfasseBarzahlung($this->activity, 'vormonat@example.com', 'Anna Vormonat', '2026-08-20 10:00:00');
+    erfasseBarzahlung($this->activity, 'monat@example.com', 'Berta Monat', '2026-09-03 10:00:00');
+
+    $query = new ListCashMovementsQuery();
+    $period = $query->executeForMonth('2026-09', '00001', null);
+
+    // Der Vormonatsbeleg (2026-00001) matcht den Textfilter, liegt aber außer-
+    // halb des Zeitraums — der Übertrag bleibt von dem Filter unberührt.
+    expect($period)->not->toBeNull();
+    expect($period->movements)->toHaveCount(0);
+    expect($period->uebertrag)->toBe('45');
+    expect($period->endbestand)->toBe('45');
+});
+
+it('returns no period for an invalid month', function (): void {
+    $query = new ListCashMovementsQuery();
+
+    expect($query->executeForMonth('2026-13', null, null))->toBeNull();
+    expect($query->executeForMonth('kein-monat', null, null))->toBeNull();
+});
+
+it('fails the monthly list PDF with PERIOD_INVALID for an invalid month', function (): void {
+    $generator = new GenerateListPdf(new ListCashMovementsQuery());
+    $result = $generator->execute(new GenerateListPdfRequest('kein-monat'));
+
+    expect($result->isFailure())->toBeTrue();
+    expect($result->error()['code'])->toBe('cash_receipt_list.period_invalid');
+});
+
+it('generates the monthly cash book PDF with carryover and closing balance', function (): void {
+    erfasseBarzahlung($this->activity, 'druck-vormonat@example.com', 'Anna Druck', '2026-08-20 10:00:00');
+    erfasseBarzahlung($this->activity, 'druck-monat@example.com', 'Berta Druck', '2026-09-03 10:00:00');
+
+    $generator = new GenerateListPdf(new ListCashMovementsQuery());
+    $result = $generator->execute(new GenerateListPdfRequest('2026-09'));
+
+    expect($result->isSuccess())->toBeTrue();
+    expect($result->unwrap()->filename)->toBe('Bareinnahmenliste-2026-09.pdf');
+    expect($result->unwrap()->content)->toStartWith('%PDF');
+
+    $html = view('bareinnahmenbelege.liste-pdf', [
+        'monatLabel' => 'September 2026',
+        'uebertrag' => '45',
+        'endbestand' => '90',
+        'rows' => [
+            (object) [
+                'datum' => '03.09.2026',
+                'art' => 'Bareinnahme',
+                'kennung' => '2026-00002',
+                'beschreibung' => 'Berta Druck',
+                'einnahme' => '45',
+                'ausgabe' => null,
+                'bestand' => '90',
+                'waehrung' => 'EUR',
+            ],
+        ],
+    ])->render();
+
+    expect($html)->toContain('Bareinnahmenliste');
+    expect($html)->toContain('September 2026');
+    expect($html)->toContain('Übertrag aus den Vormonaten');
+    expect($html)->toContain('Endbestand');
+    expect($html)->toContain('03.09.2026');
+    expect($html)->toContain('Berta Druck');
 });

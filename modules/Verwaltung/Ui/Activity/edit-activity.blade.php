@@ -15,43 +15,43 @@
         @endif
 
         <form wire:submit="save" class="yoga-form">
-            <div class="yoga-form-group">
-                <label for="type">Typ</label>
+            <label class="au-field">
+                <span class="au-field__label">type">Typ</span>
                 <select id="type" wire:model="type" class="au-field__select">
                     @foreach ($types as $option)
                         <option value="{{ $option->value }}">{{ $option->label }}</option>
                     @endforeach
                 </select>
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="title">Titel *</label>
+            <label class="au-field">
+                <span class="au-field__label">title">Titel *</span>
                 <input id="title" type="text" wire:model="title" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="shortDescription">Kurzbeschreibung</label>
+            <label class="au-field">
+                <span class="au-field__label">shortDescription">Kurzbeschreibung</span>
                 <textarea id="shortDescription" wire:model="shortDescription" rows="3" class="au-field__textarea"></textarea>
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="longDescription">Langbeschreibung</label>
+            <label class="au-field">
+                <span class="au-field__label">longDescription">Langbeschreibung</span>
                 <textarea id="longDescription" wire:model="longDescription" rows="6" class="au-field__textarea"></textarea>
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="price">Preis (EUR) *</label>
+            <label class="au-field">
+                <span class="au-field__label">price">Preis (EUR) *</span>
                 <input id="price" type="number" step="0.01" min="0" wire:model="price" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="maxParticipants">Maximale Teilnehmerzahl *</label>
+            <label class="au-field">
+                <span class="au-field__label">maxParticipants">Maximale Teilnehmerzahl *</span>
                 <input id="maxParticipants" type="number" min="1" wire:model="maxParticipants" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group yoga-mt-2">
-                <button type="submit" class="yoga-btn-primary">Speichern</button>
-                <a href="{{ route('verwaltung.activities') }}" class="yoga-btn-ghost yoga-ml-2">Zurück zur Liste</a>
+            <div class="yoga-form-actions yoga-mt-3">
+                <button type="submit" class="au-btn au-btn--primary">Speichern</button>
+                <a href="{{ route('verwaltung.activities') }}" class="au-btn yoga-ml-2">Zurück zur Liste</a>
             </div>
         </form>
     </div>
@@ -95,30 +95,30 @@
 
         <h3 style="margin-top:28px">{{ $sessionId === '' ? 'Termin hinzufügen' : 'Termin bearbeiten' }}</h3>
         <form wire:submit.prevent="{{ $sessionId === '' ? 'addSession' : 'saveSession' }}" class="yoga-form">
-            <div class="yoga-form-group">
-                <label for="sessionStartsAt">Beginn *</label>
+            <label class="au-field">
+                <span class="au-field__label">sessionStartsAt">Beginn *</span>
                 <input id="sessionStartsAt" type="datetime-local" wire:model="sessionStartsAt" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="sessionEndsAt">Ende *</label>
+            <label class="au-field">
+                <span class="au-field__label">sessionEndsAt">Ende *</span>
                 <input id="sessionEndsAt" type="datetime-local" wire:model="sessionEndsAt" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="sessionLocation">Ort</label>
+            <label class="au-field">
+                <span class="au-field__label">sessionLocation">Ort</span>
                 <input id="sessionLocation" type="text" wire:model="sessionLocation" class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="sessionNote">Hinweis</label>
+            <label class="au-field">
+                <span class="au-field__label">sessionNote">Hinweis</span>
                 <input id="sessionNote" type="text" wire:model="sessionNote" class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group yoga-mt-2">
-                <button type="submit" class="yoga-btn-primary">{{ $sessionId === '' ? 'Hinzufügen' : 'Aktualisieren' }}</button>
+            <div class="yoga-form-actions yoga-mt-3">
+                <button type="submit" class="au-btn au-btn--primary">{{ $sessionId === '' ? 'Hinzufügen' : 'Aktualisieren' }}</button>
                 @if ($sessionId !== '')
-                    <button type="button" class="yoga-btn-secondary" wire:click="cancelEditSession">Abbrechen</button>
+                    <button type="button" class="au-btn" wire:click="cancelEditSession">Abbrechen</button>
                 @endif
             </div>
         </form>

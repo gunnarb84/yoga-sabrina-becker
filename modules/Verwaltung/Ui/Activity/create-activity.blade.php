@@ -13,42 +13,42 @@
         @endif
 
         <form wire:submit="save" class="yoga-form">
-            <div class="yoga-form-group">
-                <label for="type">Typ</label>
+            <label class="au-field">
+                <span class="au-field__label">type">Typ</span>
                 <select id="type" wire:model="type" class="au-field__select">
                     @foreach ($types as $option)
                         <option value="{{ $option->value }}">{{ $option->label }}</option>
                     @endforeach
                 </select>
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="title">Titel</label>
+            <label class="au-field">
+                <span class="au-field__label">title">Titel</span>
                 <input type="text" id="title" wire:model="title" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="shortDescription">Kurzbeschreibung</label>
+            <label class="au-field">
+                <span class="au-field__label">shortDescription">Kurzbeschreibung</span>
                 <textarea id="shortDescription" wire:model="shortDescription" rows="2" class="au-field__textarea"></textarea>
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="longDescription">Langbeschreibung</label>
+            <label class="au-field">
+                <span class="au-field__label">longDescription">Langbeschreibung</span>
                 <textarea id="longDescription" wire:model="longDescription" rows="4" class="au-field__textarea"></textarea>
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="price">Preis (EUR)</label>
+            <label class="au-field">
+                <span class="au-field__label">price">Preis (EUR)</span>
                 <input type="number" id="price" step="0.01" wire:model="price" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group">
-                <label for="maxParticipants">Maximale Teilnehmerzahl</label>
+            <label class="au-field">
+                <span class="au-field__label">maxParticipants">Maximale Teilnehmerzahl</span>
                 <input type="number" id="maxParticipants" wire:model="maxParticipants" required class="au-field__input">
-            </div>
+            </label>
 
-            <div class="yoga-form-group yoga-mt-2">
-                <button type="submit" class="yoga-btn-primary">Speichern</button>
+            <div class="yoga-form-actions yoga-mt-3">
+                <button type="submit" class="au-btn au-btn--primary">Speichern</button>
             </div>
         </form>
     </div>

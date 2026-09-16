@@ -75,6 +75,86 @@ final readonly class ListCashMovementsQuery
     }
 
     /**
+     * Kassenbuch-Auszug für einen Monat (Format `YYYY-MM`): alle Bewegungen des
+     * Zeitraums aufsteigend, der laufende Bestand beginnt mit dem Übertrag aus
+     * den Vormonaten (unabhängig von den Textfiltern).
+     *
+     * @return object{movements: list<object{id: string, typ: string, richtung: string, datum: string, kennung: string, beschreibung: string, betrag: string, waehrung: string, bestand: string}>, uebertrag: string, endbestand: string}|null
+     */
+    public function executeForMonth(string $monat, ?string $nummerFilter, ?string $empfaengerFilter): ?object
+    {
+        try {
+            $start = \Carbon\Carbon::createFromFormat('Y-m', $monat);
+        } catch (\Carbon\Exceptions\InvalidFormatException) {
+            return null;
+        }
+
+        // Fehlende Tagangabe: der Start des Monats ist der einzige Sinn.
+        if (! $start instanceof \Carbon\Carbon || $start->format('Y-m') !== $monat) {
+            return null;
+        }
+
+        $beginn = $start->startOfMonth();
+        $ende = $start->copy()->startOfMonth()->addMonth();
+
+        $movements = [
+            ...$this->receipts($nummerFilter, $empfaengerFilter, $beginn, $ende),
+            ...$this->returns($nummerFilter, $empfaengerFilter, $beginn, $ende),
+            ...$this->withdrawals($nummerFilter, $empfaengerFilter, $beginn, $ende),
+        ];
+
+        usort($movements, self::sortForCashBook(...));
+
+        $uebertrag = $this->openingBalance($beginn);
+        $bestand = $uebertrag;
+
+        $withBalance = [];
+
+        foreach ($movements as $movement) {
+            $bestand += $movement->richtung === self::DIRECTION_IN
+                ? (float) $movement->betrag
+                : -(float) $movement->betrag;
+
+            $withBalance[] = (object) [
+                'id' => $movement->id,
+                'typ' => $movement->typ,
+                'richtung' => $movement->richtung,
+                'datum' => $movement->datum,
+                'kennung' => $movement->kennung,
+                'beschreibung' => $movement->beschreibung,
+                'betrag' => $movement->betrag,
+                'waehrung' => $movement->waehrung,
+                'bestand' => (string) $bestand,
+            ];
+        }
+
+        return (object) [
+            'movements' => $withBalance,
+            'uebertrag' => (string) $uebertrag,
+            'endbestand' => (string) $bestand,
+        ];
+    }
+
+    /**
+     * Summe aller Bewegungen vor dem Beginn des Zeitraums — der Übertrag aus
+     * den Vormonaten, unabhängig von den Textfiltern.
+     */
+    private function openingBalance(\Carbon\CarbonInterface $beginn): float
+    {
+        $einnahmen = (float) DB::table('verwaltung_bareinnahmenbelege')
+            ->where('ausgestellt_am', '<', $beginn)
+            ->sum('betrag');
+        $rueckzahlungen = (float) DB::table('verwaltung_rueckgabebestaetigungen')
+            ->where('ausgestellt_am', '<', $beginn)
+            ->sum('betrag');
+        $barentnahmen = (float) DB::table('verwaltung_barentnahmen')
+            ->where('datum', '<', $beginn->toDateString())
+            ->sum('betrag');
+
+        return $einnahmen - $rueckzahlungen - $barentnahmen;
+    }
+
+    /**
      * Sortierfolge für das Kassenbuch: aufsteigend nach Datum; innerhalb eines
      * Tages nummerierte Bewegungen nach Belegnummer, dahinter Barentnahmen ohne
      * Belegnummer, untereinander nach Erfassungszeit.
@@ -113,7 +193,7 @@ final readonly class ListCashMovementsQuery
     /**
      * @return list<object{id: string, typ: string, richtung: string, datum: string, kennung: string, beschreibung: string, betrag: string, waehrung: string, angelegt_am: string, bestand: string}>
      */
-    private function receipts(?string $nummerFilter, ?string $empfaengerFilter): array
+    private function receipts(?string $nummerFilter, ?string $empfaengerFilter, ?\Carbon\CarbonInterface $beginn = null, ?\Carbon\CarbonInterface $ende = null): array
     {
         $query = DB::table('verwaltung_bareinnahmenbelege')
             ->select([
@@ -126,6 +206,10 @@ final readonly class ListCashMovementsQuery
                 'angelegt_am',
             ])
             ->limit(self::MAX_PER_TYPE);
+
+        if ($beginn !== null && $ende !== null) {
+            $query->where('ausgestellt_am', '>=', $beginn)->where('ausgestellt_am', '<', $ende);
+        }
 
         if ($nummerFilter !== null && $nummerFilter !== '') {
             $query->where('nummer', 'like', '%'.$nummerFilter.'%');
@@ -162,7 +246,7 @@ final readonly class ListCashMovementsQuery
     /**
      * @return list<object{id: string, typ: string, richtung: string, datum: string, kennung: string, beschreibung: string, betrag: string, waehrung: string, angelegt_am: string, bestand: string}>
      */
-    private function returns(?string $nummerFilter, ?string $empfaengerFilter): array
+    private function returns(?string $nummerFilter, ?string $empfaengerFilter, ?\Carbon\CarbonInterface $beginn = null, ?\Carbon\CarbonInterface $ende = null): array
     {
         $query = DB::table('verwaltung_rueckgabebestaetigungen')
             ->select([
@@ -175,6 +259,10 @@ final readonly class ListCashMovementsQuery
                 'angelegt_am',
             ])
             ->limit(self::MAX_PER_TYPE);
+
+        if ($beginn !== null && $ende !== null) {
+            $query->where('ausgestellt_am', '>=', $beginn)->where('ausgestellt_am', '<', $ende);
+        }
 
         if ($nummerFilter !== null && $nummerFilter !== '') {
             $query->where('nummer', 'like', '%'.$nummerFilter.'%');
@@ -211,7 +299,7 @@ final readonly class ListCashMovementsQuery
     /**
      * @return list<object{id: string, typ: string, richtung: string, datum: string, kennung: string, beschreibung: string, betrag: string, waehrung: string, angelegt_am: string, bestand: string}>
      */
-    private function withdrawals(?string $nummerFilter, ?string $empfaengerFilter): array
+    private function withdrawals(?string $nummerFilter, ?string $empfaengerFilter, ?\Carbon\CarbonInterface $beginn = null, ?\Carbon\CarbonInterface $ende = null): array
     {
         $query = DB::table('verwaltung_barentnahmen')
             ->select([
@@ -223,6 +311,10 @@ final readonly class ListCashMovementsQuery
                 'angelegt_am',
             ])
             ->limit(self::MAX_PER_TYPE);
+
+        if ($beginn !== null && $ende !== null) {
+            $query->where('datum', '>=', $beginn)->where('datum', '<', $ende);
+        }
 
         if ($nummerFilter !== null && $nummerFilter !== '') {
             $query->where('fremdbelegnummer', 'like', '%'.$nummerFilter.'%');

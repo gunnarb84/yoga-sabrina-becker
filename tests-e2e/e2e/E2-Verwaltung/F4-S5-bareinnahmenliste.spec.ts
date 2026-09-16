@@ -4,7 +4,7 @@
  *
  * Geprüfte Kriterien:
  * - Die Bareinnahmenliste ist über den Menüpunkt „Bareinnahmen" erreichbar.
- * - Die Liste zeigt Belegnummer, Datum, Empfänger/in und Betrag, absteigend sortiert.
+ * - Die Liste zeigt alle Kassenbewegungen gemischt-chronologisch mit laufendem Bestand.
  * - Die Liste lässt sich nach Belegnummer und nach Empfänger/in filtern.
  * - Jeder Beleg ist als PDF herunterladbar; die Datei nennt die Belegnummer.
  */
@@ -38,7 +38,7 @@ test('zeigt den erfassten Beleg in der Liste mit allen Spalten', async ({ page }
     const zeile = page.getByRole('row', { name: new RegExp(teilnehmer.nachname, 'i') });
 
     await expect(zeile).toBeVisible();
-    await expect(zeile.locator('td').first()).toHaveText(/^B-\d{4}-\d{5}$/);
+    await expect(zeile.locator('td').nth(2)).toHaveText(/^\d{4}-\d{5}$/);
     await expect(zeile).toContainText('45,00');
     await expect(zeile).toContainText('EUR');
 });
@@ -53,7 +53,7 @@ test('filtert die Liste nach Belegnummer', async ({ page }) => {
     await page.getByLabel('Belegnummer').fill(nummer);
     await expect(zeile).toBeVisible();
 
-    await page.getByLabel('Belegnummer').fill('B-9999-99999');
+    await page.getByLabel('Belegnummer').fill('9999-99999');
     await expect(page.getByRole('row', { name: new RegExp(teilnehmer.nachname, 'i') })).toBeHidden();
 });
 
@@ -73,7 +73,7 @@ test('stellt den Beleg als PDF mit der Belegnummer im Dateinamen bereit', async 
     await page.locator('body[data-livewire-ready="true"]').waitFor();
 
     const zeile = page.getByRole('row', { name: new RegExp(teilnehmer.nachname, 'i') });
-    const nummer = (await zeile.locator('td').first().innerText()).trim();
+    const nummer = (await zeile.locator('td').nth(2).innerText()).trim();
     const href = await zeile.getByRole('link', { name: 'PDF' }).getAttribute('href');
 
     expect(href).toContain('/pdf');
@@ -84,4 +84,29 @@ test('stellt den Beleg als PDF mit der Belegnummer im Dateinamen bereit', async 
     const inhalt = await antwort.text();
     expect(inhalt.slice(0, 4)).toBe('%PDF');
     expect(antwort.headers()['content-disposition']).toContain(`Barquittung-${nummer}.pdf`);
+});
+
+test('filtert die Liste nach Monat/Jahr mit Übertrag und Monatsdruck', async ({ page }) => {
+    await page.goto(`${process.env.APP_URL ?? 'http://127.0.0.1:8001'}/verwaltung/bareinnahmen`);
+    await page.locator('body[data-livewire-ready="true"]').waitFor();
+
+    const monat = new Date().toISOString().slice(0, 7);
+
+    await page.getByLabel('Monat/Jahr').fill(monat);
+
+    const zeile = page.getByRole('row', { name: new RegExp(teilnehmer.nachname, 'i') });
+    await expect(zeile).toBeVisible();
+    await expect(zeile.locator('td').first()).toContainText(/\d{2}\.\d{2}\.\d{4}/);
+    await expect(page.getByText('Übertrag aus den Vormonaten:')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Monat drucken' })).toBeVisible();
+
+    const monatsdruck = await page.getByRole('link', { name: 'Monat drucken' }).getAttribute('href');
+    expect(monatsdruck).toContain(`/monat/${monat}/pdf`);
+
+    const antwort = await page.request.get(monatsdruck ?? '');
+    expect(antwort.status()).toBe(200);
+
+    const inhalt = await antwort.text();
+    expect(inhalt.slice(0, 4)).toBe('%PDF');
+    expect(antwort.headers()['content-disposition']).toContain(`Bareinnahmenliste-${monat}.pdf`);
 });

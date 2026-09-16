@@ -34,6 +34,18 @@ im Design der Vorlage (warmes Beige, Gold-Akzente, dunkle Farbfläche, Schrift L
 - Der Menüpunkt „Bareinnahmen" ist unter der Modulgruppe „Verwaltung" erreichbar.
 - Die Bareinnahmenliste kann nach Beleg- bzw. Fremdbelegnummer und nach Empfänger/in
   bzw. Zweck gefiltert werden.
+- Die Bareinnahmenliste kann nach Monat/Jahr gefiltert werden; im gefilterten Zustand zeigt
+  sie die Bewegungen des Monats aufsteigend und ergänzt den Übertrag aus den Vormonaten als
+  Eröffnungsangabe.
+- Der Übertrag ist der Bestand zum Ende des Vormonats und wird unabhängig von den Textfiltern
+  nach Beleg- bzw. Fremdbelegnummer und Empfänger/in bzw. Zweck berechnet.
+- Die Abfrage `GenerateCashReceiptListPdf` erzeugt den Monatsdruck der Bareinnahmenliste
+  (`CashReceiptList`) als PDF; sie scheitert mit dem Fehlercode `PERIOD_INVALID`, wenn der
+  Monat kein gültiger Monat im Format `YYYY-MM` ist.
+- Der Monatsdruck zeigt die Bewegungen des Monats aufsteigend mit Datum, Art, Beleg- bzw.
+  Fremdbelegnummer, Empfänger/in bzw. Zweck, Einnahme, Ausgabe und Bestand je Zeile, beginnt
+  mit der Eröffnungszeile „Übertrag aus den Vormonaten" und endet mit der Abschlusszeile
+  „Endbestand".
 - Die Abfrage `GenerateCashReceiptPdf` erzeugt das PDF eines `CashReceipt`; sie scheitert
   mit dem Fehlercode `RECEIPT_NOT_FOUND`, wenn der Beleg nicht existiert.
 - Ein Bareinnahmenbeleg kann aus der Bareinnahmenliste als PDF heruntergeladen werden;

@@ -43,7 +43,7 @@ test('protokolliert die Barquittung als versandte Nachricht an die Teilnehmerin'
     const zeile = page.getByRole('row', { name: new RegExp(teilnehmer.email, 'i') });
 
     await expect(zeile).toBeVisible();
-    await expect(zeile).toContainText(/Barquittung B-\d{4}-\d{5}/);
+    await expect(zeile).toContainText(/Barquittung \d{4}-\d{5}/);
     await expect(zeile).toContainText('versandt');
 });
 
@@ -53,7 +53,7 @@ test('zeigt Empfänger, Betreff, Status und Inhalt im Nachrichtendetail', async 
     await page.locator('body[data-livewire-ready="true"]').waitFor();
 
     await expect(page.getByText(teilnehmer.email)).toBeVisible();
-    await expect(page.getByText(/Barquittung B-\d{4}-\d{5}/).first()).toBeVisible();
+    await expect(page.getByText(/Barquittung \d{4}-\d{5}/).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Inhalt' })).toBeVisible();
     await expect(page.locator('.yoga-pre')).toContainText('Barquittung');
 });

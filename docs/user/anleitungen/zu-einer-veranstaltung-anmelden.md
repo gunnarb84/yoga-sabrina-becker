@@ -1,5 +1,5 @@
 > **Typ:** Anleitung · **Für:** Anwender · **Bezug:** [specs/E1 Öffentliche Webseite/F3 Online-Anmeldung/S2 Anmeldung absenden](../../specs/E1%20Öffentliche%20Webseite/F3%20Online-Anmeldung/S2%20Anmeldung%20absenden.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-16
 
 # Zu einer Veranstaltung anmelden
 
@@ -25,6 +25,10 @@ Melden Sie sich für einen Kurs, ein Event oder einen Workshop an.
 - Ist ein Platz frei, wird Ihnen **Ihr Platz ist bestätigt** angezeigt.
 - Ist die Veranstaltung ausgebucht, erhalten Sie einen Wartelistenplatz.
 - Der Preis und der Anmeldestatus werden auf der Bestätigungsseite angezeigt.
+- Mit derselben E-Mail-Adresse können Sie sich mehrfach anmelden — für andere
+  Veranstaltungen und erneut nach einer Stornierung. Für dieselbe Veranstaltung mit
+  bestehender Anmeldung erhalten Sie den Hinweis „Sie sind für diese Veranstaltung
+  bereits angemeldet."
 
 ## Siehe auch
 
