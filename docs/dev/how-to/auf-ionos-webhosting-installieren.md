@@ -10,7 +10,8 @@ Webhosting: PHP-FPM, kein Daemon, Cron für Scheduler und Warteschlange).
 ## Voraussetzungen
 
 - IONOS-Webspace mit **SSH-Zugang** (im Panel unter „Sicherheit“ aktivieren).
-- **PHP 8.4** als CLI-Version (im Panel unter „PHP-Einstellungen“ setzen).
+- **PHP 8.3 oder neuer** als CLI-Version (im Panel unter „PHP-Einstellungen“ setzen;
+  `php -v` in der SSH-Sitzung prüfen).
 - **MySQL 8** bzw. MariaDB 10.6+ — im Panel eine Datenbank anlegen und die Zugangsdaten
   notieren (Host, Datenbankname, Benutzer, Passwort).
 - **Minütlicher Cron** verfügbar (IONOS bietet Cronjobs ab 1 Minute Abstand).
