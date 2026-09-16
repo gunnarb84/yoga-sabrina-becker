@@ -97,6 +97,7 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 | Barentnahme | CashWithdrawal | Ausgabe aus der Barkasse (z. B. private Entnahme, Barkauf); mindert den Bestand |
 | Fremdbelegnummer | ExternalReference | Nummer eines externen Belegs (z. B. Kassenquittung eines Barkaufs), optional bei einer Barentnahme |
 | Bestand | CashBalance | Laufender Bargeldbestand je Zeile der Bareinnahmenliste (Bareinnahmen − Bar-Rückzahlungen − Barentnahmen) |
+| Übertrag | Carryover | Bestand zum Ende des Vormonats; eröffnet die monatsweise Bareinnahmenliste und ihren Monatsdruck |
 | Rechnung | Invoice | Forlaufend nummerierte Rechnung für eine Überweisung |
 | Gutschrift | CreditNote | Forlaufend nummerierte Gutschrift zu einer Rechnung |
 | Rückgabebestätigung | CashReturn | Forlaufend nummerierter Beleg für Rückzahlung in bar |
