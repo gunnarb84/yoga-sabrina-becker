@@ -65,17 +65,22 @@ php composer-setup.php
 rm composer-setup.php
 ```
 
-Danach liegt `~/composer.phar`. Alle Composer-Aufrufe erfolgen über diese Datei:
+Danach liegt `~/composer.phar`. Alle Composer-Aufrufe erfolgen über diese Datei — und
+immer **aus der Projekt-Wurzel** `~/yoga`: Die maßgebliche `composer.json` mit
+`composer.lock` liegt dort, nicht unter `src/`. Ein Lauf aus `src/` installiert ein
+unvollständiges Paketset (z. B. fehlt `dompdf/dompdf` für die Beleg-PDFs):
 
 ```bash
-cd ~/yoga/src
+cd ~/yoga
 php ~/composer.phar install --no-dev --optimize-autoloader
 ```
 
-**Erfolgskriterium:** `ls -l vendor/composer/autoload_classmap.php` zeigt die Datei. Fehlt
-sie (etwa weil ein früherer Lauf abgebrochen war), den Aufruf vollständig wiederholen und
-notfalls `php ~/composer.phar dump-autoload --optimize` nachziehen. Ohne Classmap scheitert
-später auch `php artisan tinker` mit einer Meldung zu `autoload_classmap.php`.
+**Erfolgskriterium:** `ls -l ~/yoga/vendor/composer/autoload_classmap.php` zeigt die Datei
+und `ls ~/yoga/vendor/dompdf/dompdf/lib` existiert. Fehlt eines davon (etwa weil ein
+früherer Lauf abgebrochen oder aus dem falschen Verzeichnis gestartet war), den Aufruf
+vollständig aus `~/yoga` wiederholen und notfalls
+`php ~/composer.phar dump-autoload --optimize` nachziehen. Ohne Classmap scheitert später
+auch `php artisan tinker` mit einer Meldung zu `autoload_classmap.php`.
 
 Die PSR-4-Warnung zu `Yoga\Modules\Verwaltung\Tests\TestFactory` ist harmlos — sie betrifft
 nur die Test-Läufer, die ohne `--no-dev` gar nicht installiert werden.
@@ -205,12 +210,14 @@ Bei Fehlern zuerst `~/yoga/src/storage/logs/laravel.log` prüfen.
 Für spätere Aktualisierungen der Installation:
 
 ```bash
-cd ~/yoga/src
+cd ~/yoga
 git pull
 php ~/composer.phar install --no-dev --optimize-autoloader
 php artisan migrate --force
 php artisan config:cache && php artisan route:cache && php artisan view:cache
 ```
+
+`artisan`-Aufrufe erfolgen wie gehabt aus `~/yoga/src`, Composer immer aus `~/yoga`.
 
 Hat sich die Webseite (Blade, CSS, JS) geändert, zusätzlich Schritt 7 wiederholen —
 sonst läuft die Seite weiter mit den alten Assets oder bricht mit „Vite manifest not
@@ -229,6 +236,7 @@ fehlgeschlagene Teil. Das Rückkehrverfahren und die Ablaufregelung stehen in
 | `php artisan tinker` bricht mit Meldung zu `autoload_classmap.php` ab | Composer-Install unvollständig **oder** `COMPOSER_VENDOR_DIR` fehlt (Tinker sucht sonst unterhalb von `src/`) | `ls ~/yoga/vendor/composer/autoload_classmap.php` prüfen; fehlt sie, Schritt 4 wiederholen — liegt sie dort, `COMPOSER_VENDOR_DIR=/home/www/yoga/vendor` in die `.env` setzen |
 | 500er beim ersten Aufruf | `.env` unvollständig oder Caches veraltet | `storage/logs/laravel.log` prüfen, Schritt 6 wiederholen |
 | `Vite manifest not found` im Log, Webseite zeigt 500er | `src/public/build` fehlt auf dem Server (git-ignoriert, kein Node auf dem Webspace) | Schritt 7: Assets lokal bauen und hochladen |
+| `Class "Dompdf\Options" not found` beim PDF-Download (Log) | Composer-Lauf aus `src/` statt aus der Projekt-Wurzel — die `composer.json` unter `src/` enthält `dompdf/dompdf` nicht | Schritt 4 aus `~/yoga` wiederholen |
 
 ## Siehe auch
 

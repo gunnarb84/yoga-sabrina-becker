@@ -23,10 +23,10 @@ Diese Anleitung beschreibt die lokale Entwicklungsumgebung.
 
 2. **PHP-Abhängigkeiten installieren**
    ```bash
-   cd src
    composer install
-   cd ..
    ```
+   Die `composer.json` liegt in der Projekt-Wurzel (nicht unter `src/`) — Composer-Aufrufe
+   erfolgen immer aus dem Wurzelverzeichnis.
 
 3. **Umgebungsvariablen anlegen**
    ```bash

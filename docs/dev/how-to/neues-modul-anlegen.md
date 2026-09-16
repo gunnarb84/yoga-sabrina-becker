@@ -13,10 +13,10 @@
    ```
 
 2. **Composer-Autoloading ergänzen**
-   In `src/composer.json` unter `autoload.psr-4` und `autoload-dev.psr-4` einen Eintrag für das neue Modul hinzufügen:
+   In der `composer.json` der Projekt-Wurzel unter `autoload.psr-4` und `autoload-dev.psr-4` einen Eintrag für das neue Modul hinzufügen:
    ```json
-   "Yoga\\Modules\\{Modul}\\": "../modules/{Modul}/",
-   "Yoga\\Modules\\{Modul}\\Tests\\": "../modules/{Modul}/tests/"
+   "Yoga\\Modules\\{Modul}\\": "modules/{Modul}/",
+   "Yoga\\Modules\\{Modul}\\Tests\\": "modules/{Modul}/tests/"
    ```
 
 3. **Service-Provider anlegen**
