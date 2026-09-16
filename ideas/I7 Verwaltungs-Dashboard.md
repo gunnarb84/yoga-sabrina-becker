@@ -1,7 +1,13 @@
 # Verwaltungs-Dashboard
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
+
+## Specs
+- [specs/E2 CMS & Verwaltung/F6 Dashboard/S1 Nächste Termine anzeigen.md](../specs/E2%20CMS%20%26%20Verwaltung/F6%20Dashboard/S1%20N%C3%A4chste%20Termine%20anzeigen.md)
+- [specs/E2 CMS & Verwaltung/F6 Dashboard/S2 Offene Aufgaben anzeigen.md](../specs/E2%20CMS%20%26%20Verwaltung/F6%20Dashboard/S2%20Offene%20Aufgaben%20anzeigen.md)
+- [specs/E2 CMS & Verwaltung/F6 Dashboard/S3 Kennzahlen anzeigen.md](../specs/E2%20CMS%20%26%20Verwaltung/F6%20Dashboard/S3%20Kennzahlen%20anzeigen.md)
+- [specs/E2 CMS & Verwaltung/F6 Dashboard/S4 Schnellzugriffe.md](../specs/E2%20CMS%20%26%20Verwaltung/F6%20Dashboard/S4%20Schnellzugriffe.md)
 
 ## Problem
 Beim Öffnen der Verwaltung landet die Anwenderin (Sabrina Becker) auf einem

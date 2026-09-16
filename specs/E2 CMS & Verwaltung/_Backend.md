@@ -49,6 +49,19 @@ Erzeugt das PDF eines Bareinnahmenbelegs. Fehlercode: `RECEIPT_NOT_FOUND`.
 ### `ListOutboundMessages`
 Liefert alle ausgehenden Nachrichten mit Filter nach Empfänger, Status und Anmeldung.
 
+### `ListUpcomingSessions`
+Liefert die Termine vom heutigen Datum bis zum Ende des laufenden Monats, aufsteigend
+nach `startsAt`, je Zeile mit Veranstaltungstitel, `maxParticipants` der Veranstaltung
+und Anzahl der bestätigten Anmeldungen der Veranstaltung.
+
+### `ListDashboardMetrics`
+Liefert die Kennzahlen und Zähler des Dashboards: Anzahl der im laufenden Monat
+entstandenen, nicht stornierten Anmeldungen, Summe der im laufenden Monat
+ausgestellten Bareinnahmenbelege, den Kassenbestand (Bareinnahmenbelege abzüglich
+Rückgabebestätigungen und Barentnahmen, ohne Zeitbegrenzung) sowie die Zähler der
+offenen Aufgaben — Rechnungen mit Status `Offen`, ausgehende Nachrichten mit Status
+`Fehlgeschlagen` und Anmeldungen mit Status `Warteliste`.
+
 ## Vorgänge
 
 ### `CreateActivity`

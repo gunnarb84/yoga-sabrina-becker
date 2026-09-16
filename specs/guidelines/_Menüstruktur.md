@@ -12,7 +12,7 @@ Backend-Menü in der Verwaltung, sondern werden über die CMS-Funktion in E2 gep
 
 | Reihenfolge | Menüpunkt | Zugeordnete Ansicht | Herkunft |
 |---|---|---|---|
-| 2.1 | Dashboard | Übersicht anstehender Veranstaltungen und offener Zahlungen | E2 F1 |
+| 2.1 | Dashboard | Übersicht anstehender Termine, offener Aufgaben und Kennzahlen | E2 F6 |
 | 2.2 | Veranstaltungen | Liste und Maske aller Kurse/Events/Workshops | E2 F1 |
 | 2.3 | Termine | Kalenderansicht der Veranstaltungstermine | E2 F1 |
 | 2.4 | Teilnehmer | Liste und Maske der Teilnehmer/innen | E2 F2 |

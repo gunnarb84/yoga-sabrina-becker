@@ -26,6 +26,9 @@ Begriffe, die in der Anwendung und in dieser Dokumentation verwendet werden.
 | **Fremdbelegnummer** | Nummer eines externen Belegs (z. B. Kassenquittung eines Barkaufs), optional bei einer Barentnahme. |
 | **Bestand** | Laufender Bargeldbestand je Zeile der Bareinnahmenliste (Bareinnahmen − Bar-Rückzahlungen − Barentnahmen). |
 | **Übertrag** | Bestand zum Ende des Vormonats; eröffnet die monatsweise Bareinnahmenliste und ihren Monatsdruck. |
+| **Dashboard** | Startseite der Verwaltung mit anstehenden Terminen, offenen Aufgaben, Kennzahlen und Schnellzugriffen. |
+| **Kennzahl** | Zähler oder Betrag der Kennzahlen-Kacheln des Dashboards (Anmeldungen/Bareinnahmen im laufenden Monat, Kassenbestand). |
+| **Freie Plätze** | Plätze einer Veranstaltung: Maximale Teilnehmerzahl abzüglich bestätigter Anmeldungen. |
 | **Bareinnahme erfassen** | Maske zur Erfassung von Bareinnahmen ohne vorherige Anmeldung über die Webseite (Laufkundschaft). |
 | **Nachpflege** | Übernahme bereits handschriftlich vergebener Belegnummern in das System. |
 | **Kontaktanfrage** | Schriftliche Anfrage über das Kontaktformular der Webseite; sie erscheint in der Verwaltung und wird über den Status bearbeitet. |
