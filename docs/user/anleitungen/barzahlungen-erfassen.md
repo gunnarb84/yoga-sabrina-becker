@@ -93,7 +93,8 @@ dann nichts erfasst.
 1. Wählen Sie im oberen Menü **Bareinnahmen**. Die Liste zeigt alle Kassenbewegungen
    gemischt-chronologisch — Barquittungen, Bar-Rückzahlungen und Barentnahmen — mit
    Beleg- bzw. Fremdbelegnummer, Datum, Empfänger/in bzw. Zweck, Betrag und dem laufenden
-   **Bestand** je Zeile; die neueste Bewegung steht oben.
+   **Bestand** je Zeile; die neueste Bewegung steht oben. Bewegungen desselben Tages
+   stehen in der Reihenfolge ihrer Belegnummern, Barentnahmen ohne Belegnummer dahinter.
 2. Um die Liste einzugrenzen, geben Sie unter **Belegnummer** einen Teil der Nummer oder
    unter **Empfänger/in bzw. Zweck** einen Begriff ein. Die Liste aktualisiert sich
    automatisch.

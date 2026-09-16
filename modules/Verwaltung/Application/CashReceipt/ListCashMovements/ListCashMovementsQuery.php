@@ -47,7 +47,7 @@ final readonly class ListCashMovementsQuery
             ...$this->withdrawals($nummerFilter, $empfaengerFilter),
         ];
 
-        usort($movements, fn (object $a, object $b): int => [$a->datum, $a->angelegt_am] <=> [$b->datum, $b->angelegt_am]);
+        usort($movements, self::sortForCashBook(...));
 
         $bestand = 0.0;
         $withBalance = [];
@@ -72,6 +72,42 @@ final readonly class ListCashMovementsQuery
 
         // Neueste zuerst: die aufsteigend kumulierten Bewegungen werden umgedreht.
         return array_slice(array_reverse($withBalance), 0, self::PAGE_SIZE);
+    }
+
+    /**
+     * Sortierfolge für das Kassenbuch: aufsteigend nach Datum; innerhalb eines
+     * Tages nummerierte Bewegungen nach Belegnummer, dahinter Barentnahmen ohne
+     * Belegnummer, untereinander nach Erfassungszeit.
+     *
+     * @param object{datum: string, typ: string, kennung: string, angelegt_am: string} $a
+     * @param object{datum: string, typ: string, kennung: string, angelegt_am: string} $b
+     */
+    private static function sortForCashBook(object $a, object $b): int
+    {
+        // Belege führen Datum mit Uhrzeit, Barentnahmen nur das Datum — der
+        // Tagesvergleich nutzt den Datumsteil.
+        $byDate = substr($a->datum, 0, 10) <=> substr($b->datum, 0, 10);
+
+        if ($byDate !== 0) {
+            return $byDate;
+        }
+
+        $aNumbered = $a->typ !== self::TYPE_WITHDRAWAL;
+        $bNumbered = $b->typ !== self::TYPE_WITHDRAWAL;
+
+        if ($aNumbered !== $bNumbered) {
+            return $aNumbered ? -1 : 1;
+        }
+
+        if ($aNumbered) {
+            $byNumber = strcmp($a->kennung, $b->kennung);
+
+            if ($byNumber !== 0) {
+                return $byNumber;
+            }
+        }
+
+        return $a->angelegt_am <=> $b->angelegt_am;
     }
 
     /**

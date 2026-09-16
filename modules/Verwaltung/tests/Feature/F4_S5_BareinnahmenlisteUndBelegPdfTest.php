@@ -8,7 +8,9 @@ declare(strict_types=1);
  *
  * Geprüfte Kriterien:
  * - Die Abfrage ListCashMovements liefert alle Kassenbewegungen gemischt-
- *   chronologisch, neueste zuerst.
+ *   chronologisch, neueste zuerst; Bewegungen desselben Tages sind nach
+ *   Belegnummer sortiert, Barentnahmen ohne Belegnummer folgen den
+ *   nummerierten Bewegungen.
  * - Die Bareinnahmenliste zeigt je Zeile den laufenden Bestand: Bareinnahmen als
  *   Zugang, Bar-Rückzahlungen und Barentnahmen als Abgang.
  * - Die Bareinnahmenliste kann nach Beleg- bzw. Fremdbelegnummer und nach
@@ -121,6 +123,27 @@ it('lists cash movements newest first with a running balance', function (): void
     expect($movements[0]->typ)->toBe('barentnahme');
     expect($movements[0]->bestand)->toBe('60');
     expect($movements[1]->typ)->toBe('bareinnahme');
+    expect($movements[1]->kennung)->toBe('2026-00002');
+    expect($movements[1]->bestand)->toBe('90');
+    expect($movements[2]->kennung)->toBe('2026-00001');
+    expect($movements[2]->bestand)->toBe('45');
+});
+
+it('orders movements of the same day by receipt number before unnumbered withdrawals', function (): void {
+    erfasseBarzahlung($this->activity, 'morgen@example.com', 'Anna Morgen', '2026-09-05 10:00:00');
+    erfasseBarentnahme('2026-09-05', '15.00', 'Wechselgeld');
+    erfasseBarzahlung($this->activity, 'abend@example.com', 'Berta Abend', '2026-09-05 18:00:00');
+
+    $query = new ListCashMovementsQuery();
+    $movements = $query->execute();
+
+    expect($movements)->toHaveCount(3);
+
+    // Aufsteigend 2026-00001 (+45), 2026-00002 (+90), Wechselgeld (75) —
+    // angezeigt neueste zuerst; die Barentnahme folgt den Belegen des Tages
+    // und steht daher oben.
+    expect($movements[0]->typ)->toBe('barentnahme');
+    expect($movements[0]->bestand)->toBe('75');
     expect($movements[1]->kennung)->toBe('2026-00002');
     expect($movements[1]->bestand)->toBe('90');
     expect($movements[2]->kennung)->toBe('2026-00001');

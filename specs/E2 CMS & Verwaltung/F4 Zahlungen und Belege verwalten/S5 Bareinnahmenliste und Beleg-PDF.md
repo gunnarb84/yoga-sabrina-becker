@@ -27,7 +27,8 @@ im Design der Vorlage (warmes Beige, Gold-Akzente, dunkle Farbfläche, Schrift L
 - Die Bareinnahmenliste zeigt alle `CashWithdrawal` als Abgang mit Datum, Zweck und
   optionaler Fremdbelegnummer.
 - Die Abfrage `ListCashMovements` liefert alle Kassenbewegungen gemischt-chronologisch,
-  neueste zuerst.
+  neueste zuerst; Bewegungen desselben Tages sind nach Belegnummer sortiert, Barentnahmen
+  ohne Belegnummer folgen den nummerierten Bewegungen.
 - Die Bareinnahmenliste zeigt je Zeile den laufenden `Bestand`: Bareinnahmen als Zugang,
   Bar-Rückzahlungen und Barentnahmen als Abgang.
 - Der Menüpunkt „Bareinnahmen" ist unter der Modulgruppe „Verwaltung" erreichbar.
