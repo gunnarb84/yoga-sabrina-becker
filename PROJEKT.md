@@ -80,6 +80,9 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 
 | Oberfläche | Code | Bedeutung |
 |---|---|---|
+| Dashboard | Dashboard | Startseite der Verwaltung mit Übersicht und Sprüngen zu Listen und Masken |
+| Kennzahl | Metric | Zähler oder Betrag der Kennzahlen-Kacheln des Dashboards (Anmeldungen/Bareinnahmen im laufenden Monat, Kassenbestand) |
+| Freie Plätze | FreeSeats | Plätze einer Veranstaltung: Maximale Teilnehmerzahl abzüglich bestätigter Anmeldungen |
 | Kurs | Course | Wiederkehrender Yoga-Kurs mit Terminserie |
 | Event | Event | Einmalige Veranstaltung |
 | Workshop | Workshop | Meist längere, thematisch fokussierte Veranstaltung |
