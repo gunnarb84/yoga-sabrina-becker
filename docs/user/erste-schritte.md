@@ -1,5 +1,5 @@
 > **Typ:** Tutorial · **Für:** Anwender · **Bezug:** [specs/E1 Öffentliche Webseite/F1 Seiten und Navigation/S1 Startseite anzeigen](../../specs/E1%20Öffentliche%20Webseite/F1%20Seiten%20und%20Navigation/S1%20Startseite%20anzeigen.md)
-> **Stand:** 2026-09-03
+> **Stand:** 2026-09-19
 
 # Erste Schritte auf der Webseite
 
@@ -13,6 +13,8 @@ Dieses Tutorial begleitet Sie durch den ersten Besuch der Yoga-Webseite. Am Ende
 ## Schritte
 
 1. Öffnen Sie die Startseite. Sie sehen das Logo **Yoga Sabrina Becker** und die Hauptnavigation.
+   Auf dem Smartphone öffnen Sie die Hauptnavigation über die Menü-Schaltfläche (Burger) im
+   Seitenkopf; ein erneutes Antippen schließt sie.
 2. Wählen Sie **Veranstaltungen** in der Navigation. Die Übersicht zeigt alle zukünftigen, veröffentlichten Kurse, Events und Workshops.
 3. Wählen Sie im Dropdown **Filter** einen Typ, um die Liste einzugrenzen.
 4. Klicken Sie auf eine Veranstaltung. Die Detailseite zeigt Termine, Preis, freie Plätze und einen **Jetzt anmelden**-Button.
