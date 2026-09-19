@@ -22,12 +22,12 @@
                 <span class="yoga-brand-text">Yoga Sabrina Becker</span>
             </a>
 
-            <button class="yoga-menu-btn" type="button" aria-label="Menü öffnen" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false')">
+            <button class="yoga-menu-btn" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="yoga-nav-list" onclick="document.getElementById('yoga-nav-list').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false')">
                 ☰
             </button>
 
             <nav class="yoga-nav" aria-label="Hauptnavigation">
-                <ul class="yoga-nav-list">
+                <ul class="yoga-nav-list" id="yoga-nav-list">
                     <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                         <a href="{{ route('home') }}">Meine Idee</a>
                     </li>
@@ -38,7 +38,7 @@
                         @foreach ($navigation as $item)
                             <li class="{{ request()->url() === url($item->url) ? 'active' : '' }}">
                                 @if ($item->extern)
-                                    <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">{{ $item->bezeichnung }}</a>
+                                    <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">{{ $item->bezeichnung }}<span aria-hidden="true"> ↗</span></a>
                                 @else
                                     <a href="{{ $item->url }}">{{ $item->bezeichnung }}</a>
                                 @endif

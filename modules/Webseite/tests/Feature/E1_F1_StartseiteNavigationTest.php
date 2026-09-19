@@ -52,6 +52,20 @@ it('renders navigation items from the cms', function (): void {
         ->assertDontSeeText('Inaktiver Link');
 });
 
+it('opens external navigation items in a new tab and marks them as external', function (): void {
+    new NavigationItem([
+        'bezeichnung' => 'Externes Angebot',
+        'url' => 'https://example.com/angebot',
+        'sortierung' => 40,
+        'extern' => true,
+        'aktiv' => true,
+    ])->save();
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('<a href="https://example.com/angebot" target="_blank" rel="noopener noreferrer">Externes Angebot<span aria-hidden="true"> ↗</span></a>', false);
+});
+
 it('renders a published static page under its slug', function (): void {
     new Page([
         'slug' => 'impressum',

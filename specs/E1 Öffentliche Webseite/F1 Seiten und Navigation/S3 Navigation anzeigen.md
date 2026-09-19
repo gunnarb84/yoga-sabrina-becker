@@ -1,7 +1,7 @@
 # Navigation anzeigen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Besucher möchte ich jederzeit eine klare Navigation sehen, damit ich zwischen den
