@@ -1,7 +1,14 @@
 # Mobilfähigkeit Webseite und Verwaltung
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
+
+## Specs
+- [specs/E1 Öffentliche Webseite/F1 Seiten und Navigation/S3 Navigation anzeigen.md](../specs/E1%20%C3%96ffentliche%20Webseite/F1%20Seiten%20und%20Navigation/S3%20Navigation%20anzeigen.md)
+- [specs/E2 CMS & Verwaltung/F7 Mobilfähigkeit/S1 Burger-Navigation am Smartphone.md](../specs/E2%20CMS%20%26%20Verwaltung/F7%20Mobilf%C3%A4higkeit/S1%20Burger-Navigation%20am%20Smartphone.md)
+- [specs/E2 CMS & Verwaltung/F7 Mobilfähigkeit/S2 Login und Formulare am Smartphone.md](../specs/E2%20CMS%20%26%20Verwaltung/F7%20Mobilf%C3%A4higkeit/S2%20Login%20und%20Formulare%20am%20Smartphone.md)
+- [specs/E2 CMS & Verwaltung/F7 Mobilfähigkeit/S3 Listen am Smartphone.md](../specs/E2%20CMS%20%26%20Verwaltung/F7%20Mobilf%C3%A4higkeit/S3%20Listen%20am%20Smartphone.md)
+- [specs/E2 CMS & Verwaltung/F7 Mobilfähigkeit/S4 PDF-Ausgaben am Smartphone.md](../specs/E2%20CMS%20%26%20Verwaltung/F7%20Mobilf%C3%A4higkeit/S4%20PDF-Ausgaben%20am%20Smartphone.md)
 
 ## Problem
 Die Verwaltung wird auch vom Smartphone aus genutzt, ist dort aber kaum
