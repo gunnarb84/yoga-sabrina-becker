@@ -1,7 +1,7 @@
 # Listen am Smartphone
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich die Listen der Verwaltung (Veranstaltungen, Anmeldungen,

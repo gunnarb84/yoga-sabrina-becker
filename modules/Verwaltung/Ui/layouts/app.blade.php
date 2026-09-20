@@ -19,17 +19,21 @@
                 <span>Verwaltung</span>
             </a>
 
-            <nav class="au-topbar__nav" aria-label="Hauptnavigation">
-                <a href="{{ route('verwaltung.dashboard') }}">Dashboard</a>
-                <a href="{{ route('verwaltung.activities') }}">Aktivitäten</a>
-                <a href="{{ route('verwaltung.course-templates') }}">Kursvorlagen</a>
-                <a href="{{ route('verwaltung.registrations') }}">Anmeldungen</a>
-                <a href="{{ route('verwaltung.participants') }}">Teilnehmer</a>
-                <a href="{{ route('verwaltung.contact-inquiries') }}">Kontaktanfragen</a>
-                <a href="{{ route('verwaltung.invoices') }}">Rechnungen</a>
-                <a href="{{ route('verwaltung.cash-receipts') }}">Bareinnahmen</a>
-                <a href="{{ route('verwaltung.cash-receipt.record') }}">Bareinnahme erfassen</a>
-                <a href="{{ route('verwaltung.outbound-messages') }}">Nachrichten</a>
+            <button type="button" class="au-menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="au-topbar-nav" onclick="document.getElementById('au-topbar-nav').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false')">
+                ☰
+            </button>
+
+            <nav class="au-topbar__nav" id="au-topbar-nav" aria-label="Hauptnavigation">
+                <a href="{{ route('verwaltung.dashboard') }}" @if (request()->is('verwaltung') || request()->is('verwaltung/')) class="is-active" @endif>Dashboard</a>
+                <a href="{{ route('verwaltung.activities') }}" @if (request()->is('verwaltung/aktivitaeten*')) class="is-active" @endif>Aktivitäten</a>
+                <a href="{{ route('verwaltung.course-templates') }}" @if (request()->is('verwaltung/kursvorlagen*')) class="is-active" @endif>Kursvorlagen</a>
+                <a href="{{ route('verwaltung.registrations') }}" @if (request()->is('verwaltung/anmeldungen*')) class="is-active" @endif>Anmeldungen</a>
+                <a href="{{ route('verwaltung.participants') }}" @if (request()->is('verwaltung/teilnehmer*')) class="is-active" @endif>Teilnehmer</a>
+                <a href="{{ route('verwaltung.contact-inquiries') }}" @if (request()->is('verwaltung/kontaktanfragen*')) class="is-active" @endif>Kontaktanfragen</a>
+                <a href="{{ route('verwaltung.invoices') }}" @if (request()->is('verwaltung/rechnungen*')) class="is-active" @endif>Rechnungen</a>
+                <a href="{{ route('verwaltung.cash-receipts') }}" @if (request()->is('verwaltung/bareinnahmen') || request()->is('verwaltung/bareinnahmen/*') && !request()->is('verwaltung/bareinnahmen/erfassen')) class="is-active" @endif>Bareinnahmen</a>
+                <a href="{{ route('verwaltung.cash-receipt.record') }}" @if (request()->is('verwaltung/bareinnahmen/erfassen')) class="is-active" @endif>Bareinnahme erfassen</a>
+                <a href="{{ route('verwaltung.outbound-messages') }}" @if (request()->is('verwaltung/nachrichten*')) class="is-active" @endif>Nachrichten</a>
 
                 @auth
                     <form method="POST" action="{{ route('verwaltung.logout') }}" style="display:inline">

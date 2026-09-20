@@ -239,6 +239,31 @@ html, body {
   color: var(--au-text);
 }
 
+.au-topbar__nav a.is-active {
+  background: var(--au-accent-soft);
+  color: var(--au-text);
+}
+
+/* ---- Burger-Schaltfläche (nur Mobil, siehe Media Query unten) ---- */
+.au-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: var(--au-control-h);
+  min-width: var(--au-control-h);
+  padding: 0 var(--au-s-2);
+  border: 1px solid var(--au-line-strong);
+  border-radius: var(--au-r-md);
+  background: var(--au-panel);
+  color: var(--au-text-2);
+  font-size: var(--au-fs-lg);
+  cursor: pointer;
+}
+
+.au-menu-btn:hover {
+  background: var(--au-panel-hover);
+}
+
 .au-work {
   flex: 1;
   padding: var(--au-s-3);
@@ -432,6 +457,7 @@ html, body {
 
 .au-login__card {
   width: var(--au-login-w);
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--au-s-4);
@@ -501,31 +527,58 @@ html, body {
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
   .au-topbar {
-    height: auto;
-    min-height: var(--au-topbar-h);
-    flex-wrap: wrap;
     gap: var(--au-s-2);
-    padding: var(--au-s-2);
+  }
+
+  .au-menu-btn {
+    display: inline-flex;
   }
 
   .au-topbar__nav {
-    width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--au-panel);
+    border-bottom: 1px solid var(--au-line);
+    box-shadow: var(--au-shadow-pop);
+    padding: var(--au-s-2);
+  }
+
+  .au-topbar__nav.open {
+    display: flex;
+  }
+
+  .au-topbar__nav a,
+  .au-topbar__nav button {
+    display: flex;
+    align-items: center;
+    min-height: var(--au-touch-h);
+    padding: 0 var(--au-s-2);
   }
 
   .au-work {
     padding: var(--au-s-2);
   }
 
-  .au-list {
-    display: block;
-    overflow-x: auto;
-  }
-
   .au-panel__header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--au-s-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .au-login {
+    padding: var(--au-s-3);
+  }
+
+  /* Tabellen bleiben Tabellen und scrollen horizontal im Wrapper,
+     statt die Spalten unlesbar zu quetschen. */
+  .au-list {
+    min-width: 640px;
   }
 }

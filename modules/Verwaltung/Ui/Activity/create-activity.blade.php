@@ -14,7 +14,7 @@
 
         <form wire:submit="save" class="yoga-form">
             <label class="au-field">
-                <span class="au-field__label">type">Typ</span>
+                <span class="au-field__label">Typ</span>
                 <select id="type" wire:model="type" class="au-field__select">
                     @foreach ($types as $option)
                         <option value="{{ $option->value }}">{{ $option->label }}</option>
@@ -23,27 +23,27 @@
             </label>
 
             <label class="au-field">
-                <span class="au-field__label">title">Titel</span>
+                <span class="au-field__label">Titel</span>
                 <input type="text" id="title" wire:model="title" required class="au-field__input">
             </label>
 
             <label class="au-field">
-                <span class="au-field__label">shortDescription">Kurzbeschreibung</span>
+                <span class="au-field__label">Kurzbeschreibung</span>
                 <textarea id="shortDescription" wire:model="shortDescription" rows="2" class="au-field__textarea"></textarea>
             </label>
 
             <label class="au-field">
-                <span class="au-field__label">longDescription">Langbeschreibung</span>
+                <span class="au-field__label">Langbeschreibung</span>
                 <textarea id="longDescription" wire:model="longDescription" rows="4" class="au-field__textarea"></textarea>
             </label>
 
             <label class="au-field">
-                <span class="au-field__label">price">Preis (EUR)</span>
+                <span class="au-field__label">Preis (EUR)</span>
                 <input type="number" id="price" step="0.01" wire:model="price" required class="au-field__input">
             </label>
 
             <label class="au-field">
-                <span class="au-field__label">maxParticipants">Maximale Teilnehmerzahl</span>
+                <span class="au-field__label">Maximale Teilnehmerzahl</span>
                 <input type="number" id="maxParticipants" wire:model="maxParticipants" required class="au-field__input">
             </label>
 

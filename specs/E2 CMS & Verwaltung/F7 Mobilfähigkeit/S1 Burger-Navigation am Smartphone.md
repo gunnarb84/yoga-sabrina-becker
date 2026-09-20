@@ -1,7 +1,7 @@
 # Burger-Navigation am Smartphone
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich die Verwaltungsnavigation am Smartphone über ein
@@ -16,12 +16,12 @@ Liste zusammengefasst. Die Desktop-Darstellung bleibt unverändert. Grundlage: I
 [I8](../../../ideas/I8%20Mobilf%C3%A4higkeit%20Webseite%20und%20Verwaltung.md).
 
 ## Akzeptanzkriterien
-- Bei einer Viewport-Breite von höchstens 640 px ist die Topbar-Navigation ausgeblendet
+- Bei einer Viewport-Breite von höchstens 768 px ist die Topbar-Navigation ausgeblendet
   und eine Burger-Schaltfläche sichtbar.
 - Die Betätigung der Burger-Schaltfläche zeigt alle Navigationseinträge — einschließlich
   Abmelden — als aufklappbare Liste in der festgelegten Reihenfolge.
 - Jeder Navigationseintrag ist im geöffneten Menü per Antippen aufrufbar.
 - Die Betätigung der Burger-Schaltfläche bei geöffnetem Menü schließt es.
 - Der aktive Bereich ist im geöffneten Menü visuell hervorgehoben.
-- Bei einer Viewport-Breite von mehr als 640 px bleibt die Desktop-Darstellung der
+- Bei einer Viewport-Breite von mehr als 768 px bleibt die Desktop-Darstellung der
   Topbar unverändert (keine Burger-Schaltfläche).

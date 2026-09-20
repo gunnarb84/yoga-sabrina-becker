@@ -1,7 +1,7 @@
 # PDF-Ausgaben am Smartphone
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich die PDF-Ausgaben (Rechnung, Bareinnahmenbeleg,

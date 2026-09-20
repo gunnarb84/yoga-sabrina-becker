@@ -1,5 +1,5 @@
 > **Typ:** Index · **Für:** Anwender · **Bezug:** [PROJEKT.md](../../PROJEKT.md), [Specs](../../specs)
-> **Stand:** 2026-09-08
+> **Stand:** 2026-09-19
 
 # Endkunden-Dokumentation — Yoga Sabrina Becker
 
@@ -16,6 +16,7 @@ Diese Dokumentation richtet sich an Besucher/innen und Teilnehmer/innen der Webs
 - [Kontaktanfrage senden](anleitungen/kontaktanfrage-senden.md)
 - [Kontaktanfragen bearbeiten](anleitungen/kontaktanfragen-bearbeiten.md)
 - [Barzahlungen erfassen und Quittungen ausstellen](anleitungen/barzahlungen-erfassen.md)
+- [Die Verwaltung am Smartphone nutzen](anleitungen/verwaltung-am-smartphone-nutzen.md)
 
 ## Referenz
 
