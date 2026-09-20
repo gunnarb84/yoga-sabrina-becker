@@ -20,6 +20,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property \Carbon\Carbon $angelegt_am
  * @property string|null $angelegt_von
  * @property \Carbon\Carbon $angemeldet_am
+ * @property \Carbon\Carbon|null $datenschutz_einwilligung_am
+ * @property bool $datenschutz_einwilligung
  * @property \Carbon\Carbon|null $geaendert_am
  * @property string|null $geaendert_von
  * @property string $id
@@ -50,6 +52,8 @@ class Registration extends BaseModel
         'angelegt_von' => UuidCast::class,
         'geaendert_von' => UuidCast::class,
         'angemeldet_am' => 'datetime',
+        'datenschutz_einwilligung' => 'boolean',
+        'datenschutz_einwilligung_am' => 'datetime',
         'herkunft' => RegistrationSource::class,
         'status' => RegistrationStatus::class,
         'zahlungsart' => RegistrationPaymentMethod::class,

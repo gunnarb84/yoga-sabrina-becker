@@ -69,7 +69,7 @@
 
             <div class="yoga-form-group">
                 <label for="dateOfBirth">Geburtsdatum</label>
-                <input type="date" id="dateOfBirth" wire:model="dateOfBirth">
+                <input type="date" id="dateOfBirth" wire:model.live="dateOfBirth">
             </div>
 
             <div class="yoga-form-group">
@@ -81,6 +81,31 @@
                 <label class="yoga-checkbox-label">
                     <input type="checkbox" wire:model="healthNotesConsent">
                     Ich stimme der Speicherung der Gesundheitsinformationen für den Kursbetrieb zu.
+                </label>
+            </div>
+
+            @if (! $this->isMinor())
+                <div class="yoga-form-group">
+                    <p>Die Foto- und Video-Einwilligung ist freiwillig; die Veröffentlichung erfolgt auf der Website und in Social Media der Yoga-Angebote. Aus einer verweigerten Einwilligung entstehen keine Nachteile.</p>
+                    <label class="yoga-checkbox-label">
+                        <input type="checkbox" wire:model="photoConsent">
+                        Ich stimme der Veröffentlichung von Fotos zu.
+                    </label>
+                    <label class="yoga-checkbox-label">
+                        <input type="checkbox" wire:model="videoConsent">
+                        Ich stimme der Veröffentlichung von Videos zu.
+                    </label>
+                </div>
+            @else
+                <div class="yoga-form-group">
+                    <p>Für Minderjährige erfolgt die Einwilligung zu Foto- und Videoaufnahmen über das Papierformular, das die Sorgeberechtigten unterschreiben.</p>
+                </div>
+            @endif
+
+            <div class="yoga-form-group">
+                <label class="yoga-checkbox-label">
+                    <input type="checkbox" wire:model="privacyConsent" required>
+                    Ich habe die <a href="/datenschutz">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *
                 </label>
             </div>
 

@@ -18,6 +18,8 @@ final readonly class Request
         public ?string $dateOfBirth,
         public ?string $healthNotes,
         public bool $healthNotesConsent = false,
+        public bool $photoConsent = false,
+        public bool $videoConsent = false,
     ) {
     }
 }

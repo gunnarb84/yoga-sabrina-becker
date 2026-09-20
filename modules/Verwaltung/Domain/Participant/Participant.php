@@ -21,6 +21,8 @@ use Yoga\Platform\Identity\UuidCast;
  * @property \Carbon\Carbon|null $geburtsdatum
  * @property string|null $gesundheitsinformationen
  * @property bool $gesundheitsinformationen_einwilligung
+ * @property \Carbon\Carbon|null $foto_einwilligung_am
+ * @property bool $foto_einwilligung
  * @property string $id
  * @property string $nachname
  * @property string|null $postleitzahl
@@ -28,6 +30,10 @@ use Yoga\Platform\Identity\UuidCast;
  * @property string|null $telefon
  * @property int $version
  * @property string $vorname
+ * @property \Carbon\Carbon|null $video_einwilligung_am
+ * @property bool $video_einwilligung
+ * @property \Carbon\Carbon|null $widerruf_am
+ * @property string|null $widerrufsvermerk
  */
 class Participant extends BaseModel
 {
@@ -46,6 +52,11 @@ class Participant extends BaseModel
         'geaendert_von' => UuidCast::class,
         'geburtsdatum' => 'date',
         'gesundheitsinformationen_einwilligung' => 'boolean',
+        'foto_einwilligung' => 'boolean',
+        'foto_einwilligung_am' => 'datetime',
+        'video_einwilligung' => 'boolean',
+        'video_einwilligung_am' => 'datetime',
+        'widerruf_am' => 'datetime',
         'version' => 'int',
     ];
 

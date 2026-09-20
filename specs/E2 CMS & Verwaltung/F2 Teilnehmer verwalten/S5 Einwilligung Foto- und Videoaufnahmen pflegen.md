@@ -1,7 +1,7 @@
 # Einwilligung Foto- und Videoaufnahmen pflegen
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Administratorin möchte ich die Foto- und Video-Einwilligung einer

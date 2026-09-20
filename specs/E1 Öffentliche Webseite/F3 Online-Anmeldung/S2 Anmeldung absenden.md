@@ -1,7 +1,7 @@
 # Anmeldung absenden
 
 ## Meta
-- **State:** Modified
+- **State:** Implemented
 
 ## User Story
 Als Besucher möchte ich meine Anmeldung absenden können, damit ich einen festen Platz oder

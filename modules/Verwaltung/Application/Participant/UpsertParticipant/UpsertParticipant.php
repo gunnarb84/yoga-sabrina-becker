@@ -42,8 +42,22 @@ final readonly class UpsertParticipant
             $participant->gesundheitsinformationen_einwilligung = true;
         }
 
+        // Für Minderjährige unterschreiben die Sorgeberechtigten den Papierbogen;
+        // die Online-Einwilligung wird dann weder gesetzt noch überschrieben.
+        if (! $this->isMinor($request->dateOfBirth)) {
+            $participant->foto_einwilligung = $request->photoConsent;
+            $participant->foto_einwilligung_am = $request->photoConsent ? now() : null;
+            $participant->video_einwilligung = $request->videoConsent;
+            $participant->video_einwilligung_am = $request->videoConsent ? now() : null;
+        }
+
         $participant->save();
 
         return Result::success(new Response($participant->id, $wasCreated));
+    }
+
+    private function isMinor(?string $dateOfBirth): bool
+    {
+        return $dateOfBirth !== null && Carbon::parse($dateOfBirth)->age < 18;
     }
 }

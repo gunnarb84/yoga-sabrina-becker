@@ -42,6 +42,10 @@ final readonly class RegisterParticipant
             return Result::failure('activity.not_found');
         }
 
+        if (! $request->privacyConsent) {
+            return Result::failure('registration.privacy_consent_required');
+        }
+
         $participant = Participant::findById($request->participantId);
 
         if ($participant === null) {
@@ -76,6 +80,8 @@ final readonly class RegisterParticipant
                 'zahlungsart' => $method->value,
                 'zahlungsstatus' => $this->initialPaymentStatus($method)->value,
                 'herkunft' => (RegistrationSource::tryFrom($request->source) ?? RegistrationSource::Website)->value,
+                'datenschutz_einwilligung' => true,
+                'datenschutz_einwilligung_am' => now(),
             ]);
 
             $registration->save();

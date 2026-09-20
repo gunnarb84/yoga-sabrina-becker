@@ -387,6 +387,153 @@ it('rejects a second registration for the same activity with a clear message', f
         ->set('lastName', 'Doppel')
         ->set('email', 'doppel@example.com')
         ->set('paymentMethod', 'bar')
+        ->set('privacyConsent', true)
         ->call('submit')
         ->assertSee('Sie sind für diese Veranstaltung bereits angemeldet.');
+});
+
+it('rejects a registration without the privacy consent', function (): void {
+    $participant = TestFactory::createParticipant(email: 'ohneeinwilligung@example.com');
+
+    $register = new RegisterParticipant(app(NextNumber::class));
+    $registration = $register->execute(new RegisterRequest(
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
+        source: RegisterRequest::SOURCE_WEBSITE,
+        privacyConsent: false,
+    ));
+
+    expect($registration->isFailure())->toBeTrue();
+    expect($registration->error()['code'])->toBe('registration.privacy_consent_required');
+    expect(Registration::whereRaw('teilnehmer_id = ?', [Uuid::fromString($participant->id)->getBytes()])->count())->toBe(0);
+});
+
+it('persists the privacy consent with its timestamp on the registration', function (): void {
+    $participant = TestFactory::createParticipant(email: 'einwilligung@example.com');
+
+    $register = new RegisterParticipant(app(NextNumber::class));
+    $registration = $register->execute(new RegisterRequest(
+        activityId: $this->activity->id,
+        participantId: $participant->id,
+        paymentMethod: 'bar',
+    ));
+
+    expect($registration->isSuccess())->toBeTrue();
+
+    $record = Registration::findById($registration->unwrap()->registrationId);
+    expect($record->datenschutz_einwilligung)->toBeTrue();
+    expect($record->datenschutz_einwilligung_am)->not->toBeNull();
+});
+
+it('persists the photo and video consents with their timestamps on the participant', function (): void {
+    $upsert = new UpsertParticipant();
+    $result = $upsert->execute(new UpsertRequest(
+        email: 'fotos@example.com',
+        firstName: 'Lena',
+        lastName: 'Fotogen',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: null,
+        healthNotes: null,
+        healthNotesConsent: false,
+        photoConsent: true,
+        videoConsent: true,
+    ));
+
+    $participant = Participant::findById($result->unwrap()->participantId);
+    expect($participant->foto_einwilligung)->toBeTrue();
+    expect($participant->foto_einwilligung_am)->not->toBeNull();
+    expect($participant->video_einwilligung)->toBeTrue();
+    expect($participant->video_einwilligung_am)->not->toBeNull();
+});
+
+it('updates the photo and video consents for a known email', function (): void {
+    TestFactory::createParticipant(email: 'bekannt@example.com');
+
+    $upsert = new UpsertParticipant();
+    $result = $upsert->execute(new UpsertRequest(
+        email: 'Bekannt@Example.com',
+        firstName: 'Lena',
+        lastName: 'Bekannt',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: null,
+        healthNotes: null,
+        healthNotesConsent: false,
+        photoConsent: true,
+        videoConsent: false,
+    ));
+
+    expect($result->unwrap()->wasCreated)->toBeFalse();
+
+    $participant = Participant::findById($result->unwrap()->participantId);
+    expect($participant->foto_einwilligung)->toBeTrue();
+    expect($participant->foto_einwilligung_am)->not->toBeNull();
+    expect($participant->video_einwilligung)->toBeFalse();
+    expect($participant->video_einwilligung_am)->toBeNull();
+});
+
+it('does not persist photo or video consents for a minor', function (): void {
+    $upsert = new UpsertParticipant();
+    $result = $upsert->execute(new UpsertRequest(
+        email: 'minderjaehrig@example.com',
+        firstName: 'Mia',
+        lastName: 'Kind',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: '2012-03-01',
+        healthNotes: null,
+        healthNotesConsent: false,
+        photoConsent: true,
+        videoConsent: true,
+    ));
+
+    $participant = Participant::findById($result->unwrap()->participantId);
+    expect($participant->foto_einwilligung)->toBeFalse();
+    expect($participant->foto_einwilligung_am)->toBeNull();
+    expect($participant->video_einwilligung)->toBeFalse();
+    expect($participant->video_einwilligung_am)->toBeNull();
+});
+
+it('keeps an existing consent untouched for a minor registering online', function (): void {
+    $participant = new Participant([
+        'email' => 'papier@example.com',
+        'vorname' => 'Mia',
+        'nachname' => 'Kind',
+        'geburtsdatum' => '2012-03-01',
+        'foto_einwilligung' => true,
+        'foto_einwilligung_am' => '2026-01-15 10:00:00',
+    ]);
+    $participant->save();
+
+    $upsert = new UpsertParticipant();
+    $result = $upsert->execute(new UpsertRequest(
+        email: 'papier@example.com',
+        firstName: 'Mia',
+        lastName: 'Kind',
+        addressLine1: null,
+        addressLine2: null,
+        postalCode: null,
+        city: null,
+        phone: null,
+        dateOfBirth: '2012-03-01',
+        healthNotes: null,
+        healthNotesConsent: false,
+    ));
+
+    expect($result->isSuccess())->toBeTrue();
+
+    $updated = Participant::findById($result->unwrap()->participantId);
+    expect($updated->foto_einwilligung)->toBeTrue();
+    expect($updated->foto_einwilligung_am->format('Y-m-d'))->toBe('2026-01-15');
 });

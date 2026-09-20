@@ -37,6 +37,18 @@ final class EditParticipant extends Component
 
     public bool $healthNotesConsent = false;
 
+    public bool $photoConsent = false;
+
+    public string $photoConsentAt = '';
+
+    public bool $videoConsent = false;
+
+    public string $videoConsentAt = '';
+
+    public string $revocationAt = '';
+
+    public string $revocationNote = '';
+
     public string $message = '';
 
     public bool $saved = false;
@@ -68,6 +80,12 @@ final class EditParticipant extends Component
         $this->dateOfBirth = $participant->geburtsdatum;
         $this->healthNotes = $participant->gesundheitsinformationen;
         $this->healthNotesConsent = $participant->gesundheitsinformationen_einwilligung;
+        $this->photoConsent = $participant->foto_einwilligung;
+        $this->photoConsentAt = $participant->foto_einwilligung_am;
+        $this->videoConsent = $participant->video_einwilligung;
+        $this->videoConsentAt = $participant->video_einwilligung_am;
+        $this->revocationAt = $participant->widerruf_am;
+        $this->revocationNote = $participant->widerrufsvermerk;
         $this->registrations = $participant->anmeldungen;
     }
 
@@ -89,6 +107,12 @@ final class EditParticipant extends Component
             dateOfBirth: $this->dateOfBirth === '' ? null : $this->dateOfBirth,
             healthNotes: $this->healthNotes === '' ? null : $this->healthNotes,
             healthNotesConsent: $this->healthNotesConsent,
+            photoConsent: $this->photoConsent,
+            photoConsentAt: $this->photoConsentAt === '' ? null : $this->photoConsentAt,
+            videoConsent: $this->videoConsent,
+            videoConsentAt: $this->videoConsentAt === '' ? null : $this->videoConsentAt,
+            revocationAt: $this->revocationAt === '' ? null : $this->revocationAt,
+            revocationNote: $this->revocationNote === '' ? null : $this->revocationNote,
         ));
 
         if ($result->isFailure()) {

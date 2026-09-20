@@ -17,6 +17,7 @@ final readonly class Request
         public string $participantId,
         public string $paymentMethod,
         public string $source = self::SOURCE_WEBSITE,
+        public bool $privacyConsent = true,
     ) {
     }
 }

@@ -62,8 +62,22 @@ final readonly class UpdateParticipant
             $participant->gesundheitsinformationen_einwilligung = false;
         }
 
+        // Die Einwilligung gilt auch für Minderjährige — sie wird über den
+        // unterschriebenen Papierbogen der Sorgeberechtigten erfasst.
+        $participant->foto_einwilligung = $request->photoConsent;
+        $participant->foto_einwilligung_am = $request->photoConsent ? $this->timestamp($request->photoConsentAt) : null;
+        $participant->video_einwilligung = $request->videoConsent;
+        $participant->video_einwilligung_am = $request->videoConsent ? $this->timestamp($request->videoConsentAt) : null;
+        $participant->widerruf_am = $this->timestamp($request->revocationAt);
+        $participant->widerrufsvermerk = $request->revocationNote;
+
         $participant->save();
 
         return Result::success(new Response($participant->id));
+    }
+
+    private function timestamp(?string $value): ?Carbon
+    {
+        return $value !== null && $value !== '' ? Carbon::parse($value) : null;
     }
 }

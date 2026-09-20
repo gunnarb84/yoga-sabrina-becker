@@ -77,6 +77,36 @@
                 </div>
             @endif
 
+            <h2 class="au-field__label yoga-mt-3">Einwilligung Foto- und Videoaufnahmen</h2>
+            <p class="yoga-empty">Verwendung auf der Website und in Social Media der Yoga-Angebote. Die Einwilligung ist freiwillig; für Minderjährige genügt der unterschriebene Papierbogen.</p>
+
+            <label class="au-field yoga-mt-2" style="display:flex;align-items:center;gap:var(--au-s-2)">
+                <input type="checkbox" wire:model="photoConsent">
+                <span class="au-field__label" style="margin:0">Einwilligung Fotos liegt vor</span>
+            </label>
+            <div class="au-field yoga-mt-2">
+                <label class="au-field__label" for="photoConsentAt">Einwilligung Fotos am</label>
+                <input id="photoConsentAt" type="date" wire:model="photoConsentAt" class="au-field__input">
+            </div>
+
+            <label class="au-field yoga-mt-2" style="display:flex;align-items:center;gap:var(--au-s-2)">
+                <input type="checkbox" wire:model="videoConsent">
+                <span class="au-field__label" style="margin:0">Einwilligung Videos liegt vor</span>
+            </label>
+            <div class="au-field yoga-mt-2">
+                <label class="au-field__label" for="videoConsentAt">Einwilligung Videos am</label>
+                <input id="videoConsentAt" type="date" wire:model="videoConsentAt" class="au-field__input">
+            </div>
+
+            <div class="au-field yoga-mt-2">
+                <label class="au-field__label" for="revocationAt">Widerruf am</label>
+                <input id="revocationAt" type="date" wire:model="revocationAt" class="au-field__input">
+            </div>
+            <div class="au-field yoga-mt-2">
+                <label class="au-field__label" for="revocationNote">Widerrufsvermerk</label>
+                <input id="revocationNote" type="text" wire:model="revocationNote" class="au-field__input">
+            </div>
+
             <div class="yoga-form-actions yoga-mt-3">
                 <button type="submit" class="au-btn au-btn--primary">Speichern</button>
                 <a href="{{ route('verwaltung.participants') }}" class="au-btn">Zurück zur Liste</a>

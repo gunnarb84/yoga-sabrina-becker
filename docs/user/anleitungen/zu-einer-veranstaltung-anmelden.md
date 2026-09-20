@@ -1,5 +1,5 @@
 > **Typ:** Anleitung · **Für:** Anwender · **Bezug:** [specs/E1 Öffentliche Webseite/F3 Online-Anmeldung/S2 Anmeldung absenden](../../specs/E1%20Öffentliche%20Webseite/F3%20Online-Anmeldung/S2%20Anmeldung%20absenden.md)
-> **Stand:** 2026-09-16
+> **Stand:** 2026-09-20
 
 # Zu einer Veranstaltung anmelden
 
@@ -18,7 +18,14 @@ Melden Sie sich für einen Kurs, ein Event oder einen Workshop an.
 4. Wählen Sie eine **Zahlungsart**:
    - **Überweisung** – Sie erhalten eine Rechnung per E-Mail.
    - **Barzahlung vor Ort** – Sie zahlen beim ersten Termin.
-5. Klicken Sie auf **Anmeldung absenden**.
+5. Entscheiden Sie zur Foto- und Video-Einwilligung: Die beiden Haken für
+   **Fotos** und **Videos** sind freiwillig; die Veröffentlichung erfolgt auf der
+   Website und in Social Media der Yoga-Angebote. Aus einer verweigerten
+   Einwilligung entstehen keine Nachteile. (Für Minderjährige unterschreiben die
+   Sorgeberechtigten das Papierformular; die Haken erscheinen dann nicht.)
+6. Setzen Sie den Haken **Ich habe die Datenschutzerklärung gelesen** — ohne diesen
+   Haken kann die Anmeldung nicht abgesendet werden.
+7. Klicken Sie auf **Anmeldung absenden**.
 
 ## Ergebnis
 

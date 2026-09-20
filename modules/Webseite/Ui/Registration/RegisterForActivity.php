@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoga\Modules\Webseite\Ui\Registration;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -47,6 +48,12 @@ final class RegisterForActivity extends Component
 
     public bool $healthNotesConsent = false;
 
+    public bool $photoConsent = false;
+
+    public bool $videoConsent = false;
+
+    public bool $privacyConsent = false;
+
     public string $paymentMethod = '';
 
     public string $error = '';
@@ -79,6 +86,12 @@ final class RegisterForActivity extends Component
     {
         $this->error = '';
 
+        if (! $this->privacyConsent) {
+            $this->error = 'Bitte bestätigen Sie die Datenverarbeitung gemäß Datenschutzerklärung.';
+
+            return;
+        }
+
         if ($this->healthNotes !== '' && ! $this->healthNotesConsent) {
             $this->error = 'Bitte bestaetigen Sie die Speicherung der Gesundheitsinformationen.';
 
@@ -103,6 +116,8 @@ final class RegisterForActivity extends Component
             dateOfBirth: $this->dateOfBirth === '' ? null : $this->dateOfBirth,
             healthNotes: $this->healthNotes === '' ? null : $this->healthNotes,
             healthNotesConsent: $this->healthNotesConsent,
+            photoConsent: $this->photoConsent,
+            videoConsent: $this->videoConsent,
         ));
 
         if ($upsertResult->isFailure()) {
@@ -115,6 +130,7 @@ final class RegisterForActivity extends Component
             activityId: $this->activityId,
             participantId: $upsertResult->unwrap()->participantId,
             paymentMethod: $this->paymentMethod,
+            privacyConsent: $this->privacyConsent,
         ));
 
         if ($registerResult->isFailure()) {
@@ -135,12 +151,22 @@ final class RegisterForActivity extends Component
     {
         return match ($code) {
             'registration.already_registered' => 'Sie sind für diese Veranstaltung bereits angemeldet.',
+            'registration.privacy_consent_required' => 'Bitte bestätigen Sie die Datenverarbeitung gemäß Datenschutzerklärung.',
             'registration.invalid_payment_method' => 'Bitte eine gültige Zahlungsart wählen.',
             'activity.not_found' => 'Diese Veranstaltung existiert nicht.',
             'activity.not_bookable' => 'Diese Veranstaltung ist zurzeit nicht buchbar.',
             'participant.not_found' => 'Die Teilnehmerdaten konnten nicht zugeordnet werden.',
             default => 'Fehler bei der Anmeldung. Bitte versuchen Sie es erneut.',
         };
+    }
+
+    /**
+     * Für Minderjährige unterschreiben die Sorgeberechtigten den Papierbogen;
+     * die Online-Einwilligung wird deshalb nicht angeboten.
+     */
+    public function isMinor(): bool
+    {
+        return $this->dateOfBirth !== '' && Carbon::parse($this->dateOfBirth)->age < 18;
     }
 
     public function render(): \Illuminate\Contracts\View\View

@@ -16,6 +16,7 @@ Diese Dokumentation richtet sich an Besucher/innen und Teilnehmer/innen der Webs
 - [Kontaktanfrage senden](anleitungen/kontaktanfrage-senden.md)
 - [Kontaktanfragen bearbeiten](anleitungen/kontaktanfragen-bearbeiten.md)
 - [Barzahlungen erfassen und Quittungen ausstellen](anleitungen/barzahlungen-erfassen.md)
+- [Einwilligungen zu Foto- und Videoaufnahmen pflegen](anleitungen/einwilligungen-foto-video-pflegen.md)
 - [Die Verwaltung am Smartphone nutzen](anleitungen/verwaltung-am-smartphone-nutzen.md)
 
 ## Referenz
