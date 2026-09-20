@@ -1,7 +1,11 @@
 # Datenschutzerklärung in der Online-Anmeldung
 
 ## Meta
-- **State:** Draft
+- **State:** Übernommen
+
+## Specs
+- [specs/E1 Öffentliche Webseite/F3 Online-Anmeldung/S1 Anmeldeformular anzeigen.md](../specs/E1%20%C3%96ffentliche%20Webseite/F3%20Online-Anmeldung/S1%20Anmeldeformular%20anzeigen.md)
+- [specs/E1 Öffentliche Webseite/F3 Online-Anmeldung/S2 Anmeldung absenden.md](../specs/E1%20%C3%96ffentliche%20Webseite/F3%20Online-Anmeldung/S2%20Anmeldung%20absenden.md)
 
 ## Problem
 Das Anmeldeformular der öffentlichen Webseite nimmt Gesundheitsinformationen
@@ -69,4 +73,4 @@ am", Datum und Uhrzeit) — automatisch beim Absenden, keine manuelle Erfassung.
   (E1/F4/S1) abgedeckt; keine Änderung dort.
 
 ## Offene Punkte
-- (leer — Stakeholder-Bestätigung der finalen Fassung steht aus)
+- (leer)

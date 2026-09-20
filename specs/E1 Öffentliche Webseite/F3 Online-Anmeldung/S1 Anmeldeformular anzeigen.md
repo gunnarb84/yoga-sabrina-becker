@@ -1,7 +1,7 @@
 # Anmeldeformular anzeigen
 
 ## Meta
-- **State:** Implemented
+- **State:** Modified
 
 ## User Story
 Als Besucher möchte ich mich für eine Veranstaltung über ein Formular anmelden können, damit
@@ -24,3 +24,11 @@ für die Anmeldung erforderlichen Daten ab, ohne dass ein Benutzer-Account nöti
   EinwilligungsCheckbox (`healthNotesConsent`).
 - Sind `healthNotes` ausgefüllt, ohne dass die Einwilligung gesetzt ist, wird das Formular
   nicht übermittelt und der Hinweis auf die erforderliche Zustimmung angezeigt.
+- Das Formular enthält den Pflicht-Haken `privacyConsent` mit einem Link auf die
+  Datenschutzerklärung (`/datenschutz`) direkt beim Text des Hakens.
+- Das Formular enthält die optionalen Haken `photoConsent` und `videoConsent` mit dem
+  Hinweis, dass die Veröffentlichung auf „Website und Social Media" der Yoga-Angebote
+  erfolgt und dass die Einwilligung freiwillig ist.
+- Bei einem Geburtsdatum unter 18 Jahren sind die Haken `photoConsent` und `videoConsent`
+  ausgeblendet und es wird ein Hinweis angezeigt, dass die Einwilligung für Minderjährige
+  per Papierformular durch die Sorgeberechtigten erfolgt.

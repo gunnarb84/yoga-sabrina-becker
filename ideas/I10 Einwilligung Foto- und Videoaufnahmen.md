@@ -1,7 +1,12 @@
 # Einwilligung Foto- und Videoaufnahmen
 
 ## Meta
-- **State:** Ready
+- **State:** Übernommen
+
+## Specs
+- [specs/E1 Öffentliche Webseite/F3 Online-Anmeldung/S1 Anmeldeformular anzeigen.md](../specs/E1%20%C3%96ffentliche%20Webseite/F3%20Online-Anmeldung/S1%20Anmeldeformular%20anzeigen.md)
+- [specs/E1 Öffentliche Webseite/F3 Online-Anmeldung/S2 Anmeldung absenden.md](../specs/E1%20%C3%96ffentliche%20Webseite/F3%20Online-Anmeldung/S2%20Anmeldung%20absenden.md)
+- [specs/E2 CMS & Verwaltung/F2 Teilnehmer verwalten/S5 Einwilligung Foto- und Videoaufnahmen pflegen.md](../specs/E2%20CMS%20%26%20Verwaltung/F2%20Teilnehmer%20verwalten/S5%20Einwilligung%20Foto-%20und%20Videoaufnahmen%20pflegen.md)
 
 ## Problem
 Für die Veröffentlichung von Foto- und Videoaufnahmen aus dem Yogaunterricht

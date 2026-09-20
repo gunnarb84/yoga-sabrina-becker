@@ -107,6 +107,10 @@ liegt in `projekt/_domaene.md` und wird von dort aus den Regeldateien zugeordnet
 | Vorlage | CourseTemplate | Wiederverwendbare Vorlage für wiederkehrende Kurse |
 | Ausgehende Nachricht | OutboundMessage | Im System protokolliert versandte E-Mail |
 | Kontaktanfrage | ContactInquiry | Schriftliche Anfrage über das Kontaktformular der Webseite |
+| Datenschutz-Einwilligung | PrivacyConsent | Pflicht-Haken zur Datenverarbeitung vor dem Absenden der Online-Anmeldung; wird mit Zeitpunkt an der Anmeldung protokolliert |
+| Einwilligung Fotos | PhotoConsent | Freiwillige Einwilligung zur Veröffentlichung von Fotos auf Website und Social Media; je Teilnehmer/in mit Zeitpunkt |
+| Einwilligung Videos | VideoConsent | Freiwillige Einwilligung zur Veröffentlichung von Videos auf Website und Social Media; je Teilnehmer/in mit Zeitpunkt |
+| Widerrufsvermerk | RevocationNote | Datum und Text eines Widerrufs der Foto-/Video-Einwilligung; in der Teilnehmermaske erfasst |
 
 ## Stakeholder und Rollen
 

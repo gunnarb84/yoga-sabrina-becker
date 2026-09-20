@@ -1,7 +1,7 @@
 # Anmeldung absenden
 
 ## Meta
-- **State:** Implemented
+- **State:** Modified
 
 ## User Story
 Als Besucher möchte ich meine Anmeldung absenden können, damit ich einen festen Platz oder
@@ -37,3 +37,15 @@ storniert ist.
 - Bei einer Anmeldung, die bereits als `CONFIRMED` oder `WAITING_LIST` für dieselbe
   Veranstaltung vorliegt, scheitert der Vorgang mit dem Fehlercode
   `REGISTRATION_ALREADY_REGISTERED` und die Maske zeigt eine verständliche Meldung an.
+- Ohne gesetzten Haken `privacyConsent` scheitert der Vorgang mit dem Fehlercode
+  `PRIVACY_CONSENT_REQUIRED` und die Maske zeigt eine verständliche Meldung an.
+- Bei erfolgreicher Anmeldung werden `privacyConsent` und der Zeitpunkt
+  `privacyConsentAt` an der Anmeldung (`Registration`) persistiert; der Zeitpunkt wird
+  systemseitig beim Absenden gesetzt.
+- Bei erfolgreicher Anmeldung werden `photoConsent` und `videoConsent` mit den
+  zugehörigen Zeitpunkten `photoConsentAt` und `videoConsentAt` am Teilnehmerdatensatz
+  (`Participant`) persistiert; ohne gesetzten Haken bleibt der zugehörige Zeitpunkt leer.
+- Bei einer bereits bekannten `email` werden die Foto- und Video-Einwilligung mit ihren
+  Zeitpunkten am bestehenden Teilnehmerdatensatz aktualisiert.
+- Bei einem Geburtsdatum unter 18 Jahren werden keine Foto- oder Video-Einwilligung und
+  keine zugehörigen Zeitpunkte persistiert.

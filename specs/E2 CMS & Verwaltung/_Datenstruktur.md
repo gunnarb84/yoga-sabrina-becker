@@ -56,6 +56,12 @@ Migrationen regelt `_data.md` und gehören nicht hierher.
 | `dateOfBirth` | Geburtsdatum | Datum | nein |
 | `healthNotes` | Gesundheitsinformationen | Text | nein |
 | `healthNotesConsent` | Einwilligung Gesundheitsdaten | Ja/Nein | ja, wenn `healthNotes` gesetzt |
+| `photoConsent` | Einwilligung Fotos | Ja/Nein | nein |
+| `photoConsentAt` | Einwilligung Fotos am | Zeitpunkt | ja, wenn `photoConsent` gesetzt |
+| `videoConsent` | Einwilligung Videos | Ja/Nein | nein |
+| `videoConsentAt` | Einwilligung Videos am | Zeitpunkt | ja, wenn `videoConsent` gesetzt |
+| `revocationAt` | Widerruf am | Zeitpunkt | nein |
+| `revocationNote` | Widerrufsvermerk | Text | nein |
 
 ## Anmeldung (`Registration`)
 
@@ -67,6 +73,8 @@ Migrationen regelt `_data.md` und gehören nicht hierher.
 | `source` | Herkunft (Webseite/Verwaltung) | Aufzählung | ja |
 | `status` | Status (Bestätigt/Warteliste/Storniert) | Aufzählung | ja |
 | `paymentMethod` | Zahlungsart (Bar/Überweisung/Kostenlos) | Aufzählung | ja |
+| `privacyConsent` | Datenschutz-Einwilligung | Ja/Nein | ja |
+| `privacyConsentAt` | Datenschutz-Einwilligung am | Zeitpunkt | ja |
 | `payment` | Zahlung | Referenz | nein |
 
 ## Warteliste (`WaitingList`)
