@@ -11,29 +11,47 @@ Aufbewahrungs- und Informationspflicht: Die anmeldende Person muss vor dem
 Absenden erkennen, welche Daten zu welchem Zweck verarbeitet werden und wo
 die Datenschutzerklärung lesbar ist.
 
+## Zielgruppe
+Anmeldende Personen auf der öffentlichen Webseite; Sabrina Becker als
+Verantwortliche für die Datenverarbeitung.
+
 ## Lösungsidee
 Vor dem Absenden des Anmeldeformulars bestätigt die anmeldende Person die
-Datenverarbeitung mit einem Pflicht-Haken; der zugehörige Text verweist auf
-die Datenschutzerklärung der Webseite. Zweiter Punkt aus der Anforderungsnotiz:
-„Datenschutz von Vorlage übernehmen" — wie die Datenschutzerklärung selbst
-entsteht bzw. verwaltet wird (CMS-Seite, Vorlage, Verweis in der Anmeldung),
-ist im Dialog zu klären.
+Datenverarbeitung mit einem **Pflicht-Haken**. Der Haken-Text verweist mit
+einem Link auf die bestehende Datenschutzerklärung unter `/datenschutz`.
+Ohne gesetzten Haken lässt sich das Formular nicht absenden.
+
+Die Datenschutzerklärung selbst bleibt, wie sie ist: eine CMS-Seite
+(`/datenschutz`, in der Verwaltung pflegbar), deren Inhalt aus dem
+`LegalPagesSeeder` stammt und auf der Vorlage `vorlagen/datenschutz.md`
+beruht. **Kein neuer Vorlagen-Mechanismus** — die Anmeldung verweist nur auf
+die bestehende Seite.
+
+**Nachweisbarkeit:** Das System speichert an der Anmeldung, ob die
+Einwilligung erteilt wurde und zu welchem Zeitpunkt („Datenschutz-Einwilligung
+am", Datum und Uhrzeit) — automatisch beim Absenden, keine manuelle Erfassung.
 
 ## Scope
-- **In Scope:** Einwilligungs-Haken als Pflichtangabe im Online-Anmeldeformular
-  mit Verweis auf die Datenschutzerklärung; Klärung des Vorlagen-Mechanismus.
-- **Out of Scope:** Noch offen — ergibt sich aus dem Dialog.
+- **In Scope:** Pflicht-Haken mit Verweis auf `/datenschutz` im
+  Online-Anmeldeformular; Speicherung von Einwilligung (Ja/Nein) und
+  Zeitpunkt an der Anmeldung.
+- **Out of Scope:** Inhalt und Pflege der Datenschutzerklärung selbst
+  (bestehende CMS-Seite); Kontaktformular (bleibt beim bestehenden Link
+  neben der Versandaktion); Verwaltungserfassung des Einwilligungszeitpunkts
+  (geschieht systemseitig); Haken zu Gesundheitsinformationen (bestehend).
 
 ## Auswirkungen auf den Bestand
-- **Specs:** Betrifft die Online-Anmeldung der Webseite (Epic E1, Feature
-  Registrierung) — betroffene Stories und ein ggf. neues Kriterium werden im
-  Dialog festgelegt.
-- **Datenstruktur:** Möglicherweise ein Feld zur Protokollierung des
-  Einverständnisses (Zeitpunkt) an der Anmeldung — im Dialog klären.
-- **Backend:** Mögliche Pflichtprüfung des Einverständnisses im Vorgang
-  Registrierung — im Dialog klären.
-- **Quellcode:** Anmeldeformular der Webseite
-  (`modules/Webseite/Ui/**`), ggf. Vorgang in `modules/Webseite/Application/**`.
+- **Specs:** Betrifft die Online-Anmeldung (Epic E1, Feature Registrierung,
+  Stories zum Anmeldeformular und -absenden) — ein neues Pflichtkriterium und
+  Anpassung der Formular-Story.
+- **Datenstruktur:** Neue Felder an der Anmeldung:
+  Datenschutz-Einwilligung (Ja/Nein) und Datenschutz-Einwilligung am
+  (Datum/Zeit).
+- **Backend:** Pflichtprüfung der Einwilligung im Vorgang Registrierung
+  (Webseite) — ohne Haken wird die Anmeldung nicht angenommen.
+- **Quellcode:** Anmeldeformular (`modules/Webseite/Ui/Registration/**`),
+  Vorgang Registrierung (`modules/Webseite/Application/**`), Migration an der
+  Anmeldung.
 
 ## Entscheidungen
 - 19.09.2026: Idee angelegt, Nummer I9 reserviert.
@@ -41,12 +59,14 @@ ist im Dialog zu klären.
   bestehenden Story — der Einwilligungs-Haken ist eine Pflichtangabe mit
   Protokollierungsfrage, „Datenschutz von Vorlage übernehmen" ist ein
   eigener Mechanismus.
+- 20.09.2026: Kein neuer Vorlagen-Mechanismus — die Datenschutzerklärung
+  existiert bereits als CMS-Seite `/datenschutz` (aus dem `LegalPagesSeeder`,
+  Vorlage `vorlagen/datenschutz.md`); die Anmeldung verweist nur darauf.
+- 20.09.2026: Einwilligung wird mit Zeitpunkt protokolliert (Option a) —
+  Ja/Nein und Datum/Zeit an der Anmeldung, systemseitig beim Absenden gesetzt.
+- 20.09.2026: Geltungsbereich nur das Anmeldeformular (Option a) — das
+  Kontaktformular ist mit dem bestehenden Link und seinen Kriterien
+  (E1/F4/S1) abgedeckt; keine Änderung dort.
 
 ## Offene Punkte
-- Dialog noch nicht geführt. Erste Fragen:
-  - Ist mit „Datenschutz von Vorlage übernehmen" gemeint, dass die
-    Datenschutzerklärung als CMS-Seite aus einer Textvorlage erzeugt wird,
-    oder dass die Anmeldung nur auf die bestehende Datenschutzseite verweist?
-  - Muss das Einverständnis nachweisbar protokolliert werden (Zeitpunkt an
-    der Anmeldung), oder reicht der Haken im Formular?
-  - Gilt der Haken auch für das Kontaktformular oder nur für die Anmeldung?
+- (leer — Stakeholder-Bestätigung der finalen Fassung steht aus)
