@@ -1,7 +1,7 @@
 # Einwilligung Foto- und Videoaufnahmen
 
 ## Meta
-- **State:** Draft
+- **State:** Ready
 
 ## Problem
 Für die Veröffentlichung von Foto- und Videoaufnahmen aus dem Yogaunterricht
@@ -100,4 +100,4 @@ werden online nicht abgebildet; dafür bleibt der Papierbogen gültig.
   zurückgesetzt; keine Widerrufshistorie, der Ablauf bleibt im Postfach.
 
 ## Offene Punkte
-- (leer — Stakeholder-Bestätigung der finalen Fassung steht aus)
+- (leer)
